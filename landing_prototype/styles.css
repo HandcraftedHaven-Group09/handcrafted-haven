@@ -106,12 +106,14 @@ h3 {
 }
 #content {
   padding: 1rem;
+  width: 100%;
 }
 
 .listing-grid {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
   gap: 1rem;
 }
 .listing-grid > div {
