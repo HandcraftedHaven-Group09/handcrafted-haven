@@ -41,19 +41,22 @@ model Seller {
   lastName    String
   // Reverse relations
   Product     Product[]
+  Image       Image[]
 }
 
 model Product {
-  id              Int      @id @default(autoincrement())
-  name            String
-  price           Int
-  discountPercent Float
-  discountLiteral Int
+  id               Int    @id @default(autoincrement())
+  name             String
+  price            Int
+  discountPercent  Float
+  discountAbsolute Int
+  description      String
   //Relations
-  seller          Seller   @relation(fields: [sellerId], references: [id])
-  sellerId        Int
+  seller           Seller @relation(fields: [sellerId], references: [id])
+  sellerId         Int
+
   // Reverse relations
-  Review          Review[]
+  Review Review[]
 }
 
 model Review {
@@ -73,8 +76,16 @@ model PaymentMethod {
   expirationMonth Int
   expirationYear  Int
   paymentMethod   PaymentType
-  validation String
+  validation      String
 
   User   User? @relation(fields: [userId], references: [id])
   userId Int?
+}
+
+model Image {
+  id          Int    @id @default(autoincrement())
+  url         String
+  description String
+  owner       Seller @relation(fields: [ownerId], references: [id])
+  ownerId     Int
 }
