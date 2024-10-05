@@ -6,7 +6,7 @@ export default async function Page() {
     <main>
       <ul>
         {testProduct?.map((product) => (
-          <li>{product.name}</li>
+          <li key={product.id}>{product.name}</li>
         ))}
       </ul>
     </main>
