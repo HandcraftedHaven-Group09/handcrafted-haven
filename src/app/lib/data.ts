@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, Product } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function getProductsBySimpleQuery(query: string, max: number) {
@@ -26,7 +26,7 @@ export async function getProductById(productId: number) {
     },
   });
 }
-export async function getProductsAll(max?: number) {
+export async function getProductsAll(max?: number): Promise<Product[]> {
   const products = await prisma.product.findMany({
     take: max,
   });
