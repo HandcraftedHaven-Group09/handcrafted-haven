@@ -1,4 +1,4 @@
-import { getProductsAll } from "../lib/data";
+import { getProductsAll } from "@/app/lib/data";
 
 export default async function Page() {
   const testProduct = await getProductsAll(5);
@@ -9,6 +9,10 @@ export default async function Page() {
           <li key={product.id}>{product.name}</li>
         ))}
       </ul>
+      <form>
+        <label></label>
+        <input></input>
+      </form>
     </main>
   );
 }
