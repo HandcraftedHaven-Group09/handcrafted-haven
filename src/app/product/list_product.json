@@ -1,0 +1,323 @@
+[
+    {
+      "id": 1,
+      "name": "Handwoven Cotton Scarf",
+      "description": "A cozy and soft cotton scarf handwoven with vibrant colors.",
+      "price": 35,
+      "image": "/product/scarf_cotton.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 2,
+      "name": "Ceramic Coffee Mug",
+      "description": "Handcrafted ceramic mug with a rustic, earthy finish.",
+      "price": 20,
+      "image": "/product/mug_ceramic.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 3,
+      "name": "Recycled Paper Notebook",
+      "description": "Eco-friendly notebook made from 100% recycled paper.",
+      "price": 12,
+      "image": "/product/notebook_recycled.webp",
+      "category": "Stationery"
+    },
+    {
+      "id": 4,
+      "name": "Wooden Jewelry Box",
+      "description": "Hand-carved wooden box perfect for storing jewelry.",
+      "price": 45,
+      "image": "/product/jewelry_box_wooden.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 5,
+      "name": "Organic Soy Candle",
+      "description": "A soothing candle made from organic soy wax with lavender scent.",
+      "price": 18,
+      "image": "/product/candle_soy.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 6,
+      "name": "Leather Wallet",
+      "description": "Hand-stitched leather wallet with multiple compartments.",
+      "price": 50,
+      "image": "/product/wallet_leather.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 7,
+      "name": "Embroidered Pillow Cover",
+      "description": "A colorful pillow cover with intricate embroidery design.",
+      "price": 25,
+      "image": "/product/pillow_cover_embroidery.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 8,
+      "name": "Macrame Wall Hanging",
+      "description": "A beautiful macrame wall hanging made with organic cotton.",
+      "price": 40,
+      "image": "/product/wall_hanging_macrame.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 9,
+      "name": "Bamboo Cutting Board",
+      "description": "Durable and eco-friendly bamboo cutting board with a smooth finish.",
+      "price": 30,
+      "image": "/product/cutting_board_bamboo.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 10,
+      "name": "Knitted Wool Beanie",
+      "description": "A warm and cozy beanie made from 100% wool.",
+      "price": 22,
+      "image": "/product/beanie_wool.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 11,
+      "name": "Glass Pendant Necklace",
+      "description": "A delicate handmade glass pendant on a silver chain.",
+      "price": 28,
+      "image": "/product/pendant_necklace_glass.webp",
+      "category": "Jewelry"
+    },
+    {
+      "id": 12,
+      "name": "Hand-painted Tote Bag",
+      "description": "Unique hand-painted canvas tote bag with floral designs.",
+      "price": 35,
+      "image": "/product/tote_bag_painted.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 13,
+      "name": "Beaded Bracelet",
+      "description": "A vibrant beaded bracelet made with natural stones.",
+      "price": 15,
+      "image": "/product/bracelet_beaded.webp",
+      "category": "Jewelry"
+    },
+    {
+      "id": 14,
+      "name": "Organic Cotton Baby Blanket",
+      "description": "Soft and breathable organic cotton baby blanket.",
+      "price": 40,
+      "image": "/product/baby_blanket_cotton.webp",
+      "category": "Baby Products"
+    },
+    {
+      "id": 15,
+      "name": "Ceramic Plant Pot",
+      "description": "Hand-thrown ceramic pot perfect for indoor plants.",
+      "price": 25,
+      "image": "/product/plant_pot_ceramic.webp",
+      "category": "Home and Garden"
+    },
+    {
+      "id": 16,
+      "name": "Reclaimed Wood Picture Frame",
+      "description": "A rustic picture frame made from reclaimed wood.",
+      "price": 32,
+      "image": "/product/picture_frame_wood.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 17,
+      "name": "Crochet Coasters Set",
+      "description": "A set of handmade crochet coasters, perfect for any table.",
+      "price": 15,
+      "image": "/product/coasters_crochet.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 18,
+      "name": "Hand-dyed Silk Scarf",
+      "description": "A luxurious silk scarf hand-dyed with natural pigments.",
+      "price": 50,
+      "image": "/product/scarf_silk.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 19,
+      "name": "Wooden Cooking Utensils Set",
+      "description": "Set of 3 hand-carved wooden cooking utensils.",
+      "price": 25,
+      "image": "/product/utensils_wood.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 20,
+      "name": "Handmade Soap Bars",
+      "description": "Set of 3 organic soap bars with essential oils.",
+      "price": 20,
+      "image": "/product/soap_bars.webp",
+      "category": "Beauty and Health"
+    },
+    {
+      "id": 21,
+      "name": "Felted Wool Slippers",
+      "description": "Cozy slippers made from felted wool, ideal for cold weather.",
+      "price": 35,
+      "image": "/product/slippers_wool.webp",
+      "category": "Footwear"
+    },
+    {
+      "id": 22,
+      "name": "Hand-painted Ceramic Vase",
+      "description": "Beautiful ceramic vase with intricate hand-painted designs.",
+      "price": 45,
+      "image": "/product/vase_ceramic.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 23,
+      "name": "Knitted Blanket",
+      "description": "Soft and warm knitted blanket made from chunky yarn.",
+      "price": 60,
+      "image": "/product/blanket_knitted.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 24,
+      "name": "Recycled Glass Earrings",
+      "description": "Delicate earrings made from recycled glass beads.",
+      "price": 18,
+      "image": "/product/earrings_glass.webp",
+      "category": "Jewelry"
+    },
+    {
+      "id": 25,
+      "name": "Cork Wallet",
+      "description": "Eco-friendly cork wallet with a minimalist design.",
+      "price": 30,
+      "image": "/product/wallet_cork.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 26,
+      "name": "Patchwork Quilt",
+      "description": "A handmade quilt with beautiful patchwork patterns.",
+      "price": 120,
+      "image": "/product/quilt_patchwork.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 27,
+      "name": "Woven Jute Basket",
+      "description": "Sturdy jute basket, perfect for storage or decor.",
+      "price": 25,
+      "image": "/product/basket_jute.webp",
+      "category": "Home and Garden"
+    },
+    {
+      "id": 28,
+      "name": "Hand-carved Wooden Spoon",
+      "description": "A beautiful hand-carved wooden spoon for cooking or display.",
+      "price": 12,
+      "image": "/product/spoon_wood.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 29,
+      "name": "Cotton Rope Plant Hanger",
+      "description": "Macrame plant hanger made from durable cotton rope.",
+      "price": 20,
+      "image": "/product/plant_hanger_rope.webp",
+      "category": "Home and Garden"
+    },
+    {
+      "id": 30,
+      "name": "Hand-poured Beeswax Candle",
+      "description": "Pure beeswax candle with a natural honey scent.",
+      "price": 22,
+      "image": "/product/candle_beeswax.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 31,
+      "name": "Embroidered Linen Tablecloth",
+      "description": "Elegant linen tablecloth with hand-embroidered floral designs.",
+      "price": 80,
+      "image": "/product/tablecloth_linen.webp",
+      "category": "Home and Kitchen"
+    },
+    {
+      "id": 32,
+      "name": "Resin Keychain",
+      "description": "Unique keychain made from resin with embedded flowers.",
+      "price": 10,
+      "image": "/product/keychain_resin.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 33,
+      "name": "Hand-painted Greeting Cards",
+      "description": "Set of 5 hand-painted greeting cards for special occasions.",
+      "price": 18,
+      "image": "/product/greeting_cards_painted.webp",
+      "category": "Stationery"
+    },
+    {
+      "id": 34,
+      "name": "Leather-bound Journal",
+      "description": "Rustic journal bound in hand-stitched leather.",
+      "price": 45,
+      "image": "/product/journal_leather.webp",
+      "category": "Stationery"
+    },
+    {
+      "id": 35,
+      "name": "Crochet Baby Booties",
+      "description": "Adorable baby booties crocheted from soft cotton yarn.",
+      "price": 18,
+      "image": "/product/booties_crochet.webp",
+      "category": "Baby Products"
+    },
+    {
+      "id": 36,
+      "name": "Recycled Fabric Tote Bag",
+      "description": "A sustainable tote bag made from recycled fabrics.",
+      "price": 25,
+      "image": "/product/tote_bag_fabric.webp",
+      "category": "Fashion Accessories"
+    },
+    {
+      "id": 37,
+      "name": "Stone Pendant Necklace",
+      "description": "Natural stone pendant necklace with adjustable leather cord.",
+      "price": 28,
+      "image": "/product/pendant_stone.webp",
+      "category": "Jewelry"
+    },
+    {
+      "id": 38,
+      "name": "Woven Wool Rug",
+      "description": "Handwoven wool rug with traditional patterns.",
+      "price": 150,
+      "image": "/product/rug_wool.webp",
+       "category": "Home Decor"
+    },
+    {
+      "id": 39,
+      "name": "Ceramic Incense Holder",
+      "description": "Elegant ceramic incense holder with a minimalist design.",
+      "price": 15,
+      "image": "/product/incense_holder_ceramic.webp",
+      "category": "Home Decor"
+    },
+    {
+      "id": 40,
+      "name": "Hand-blown Glass Vase",
+      "description": "Delicate hand-blown glass vase, perfect for flowers.",
+      "price": 56,
+      "image": "/product/vase_glass.webp",
+      "category": "Home Decor"
+    }
+  ]
+  
