@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 
 type Product = {
@@ -11,56 +11,69 @@ type Product = {
     category: string
 }
 
-const product: Product = {
-    id: 1,
-    name: 'Handwoven Cotton Scarf',
-    description: 'A cozy and soft cotton scarf handwoven with vibrant colors.',
-    price: 35,
-    image: "/product/scarf_cotton.webp",
-    category: 'Fashion Accessories'
-}
-
 export default function ProductPage() {
-    const [quantity, setQuantity] = useState(1)
+    const [products, setProducts] = useState<Product[]>([])
+    const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
 
-    const handleAddToCart = () => {
-        console.log(`${quantity} of ${product.name} added to the cart`)
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const response = await fetch("/product/list_products/list_product.json") 
+            const data = await response.json()
+            setProducts(data)
+        }
+
+        fetchProducts()
+    }, [])
+
+    const handleAddToCart = (product: Product) => {
+        console.log(`${quantities[product.id] || 1} of ${product.name} added to the cart`)
+    }
+
+    const handleQuantityChange = (productId: number, value: number) => {
+        setQuantities((prev) => ({
+            ...prev,
+            [productId]: value
+        }))
     }
 
     return (
         <div className="container">
-            <div className="image-section">
-                <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={400} 
-                    height={400} 
-                    className="product-image"
-                    priority 
-                />
-            </div>
+            {products.map((product) => (
+                <div key={product.id} className="product">
+                    <div className="image-section">
+                        <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={400}
+                            height={400}
+                            className="product-image"
+                            priority
+                        />
+                    </div>
 
-            <div className="details-section">
-                <h1>{product.name}</h1>
-                <p className="category">{product.category}</p>
-                <p className="description">{product.description}</p>
-                <p className="price">${product.price.toFixed(2)}</p>
+                    <div className="details-section">
+                        <h1>{product.name}</h1>
+                        <p className="category">{product.category}</p>
+                        <p className="description">{product.description}</p>
+                        <p className="price">${product.price.toFixed(2)}</p>
 
-                <div className="cart-section">
-                    <label htmlFor="quantity">Quantity: </label>
-                    <input
-                        type="number"
-                        id="quantity"
-                        name="quantity"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Number(e.target.value))}
-                        min="1"
-                    />
-                    <button onClick={handleAddToCart} className="add-to-cart-button">
-                        Add to Cart
-                    </button>
+                        <div className="cart-section">
+                            <label htmlFor={`quantity-${product.id}`}>Quantity: </label>
+                            <input
+                                type="number"
+                                id={`quantity-${product.id}`}
+                                name="quantity"
+                                value={quantities[product.id] || 1}
+                                onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}
+                                min="1"
+                            />
+                            <button onClick={() => handleAddToCart(product)} className="add-to-cart-button">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            ))}
         </div>
     )
 }
