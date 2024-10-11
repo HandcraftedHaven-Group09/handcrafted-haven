@@ -9,6 +9,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg" // Specify output file, it can be PNG, SVG, etc.
+  format   = "svg" // Choose the desired format (png, svg)
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
@@ -21,27 +27,38 @@ enum PaymentType {
   PAYPAL
 }
 
+enum ShippingType {
+  USPS
+  UPS
+  FEDEX
+}
+
 // MODELS**************
 model User {
-  id          Int    @id @default(autoincrement())
-  displayName String
-  firstName   String
-  lastName    String
-  bio         String
-
+  id               Int             @id @default(autoincrement())
+  displayName      String
+  firstName        String
+  lastName         String
+  bio              String?
+  userId           String
+  credential       String
+  // Relation
+  profilePicture   Image?          @relation(fields: [profilePictureId], references: [id])
+  profilePictureId Int?
   // Reverse relations
-  Review         Review[]
-  PaymentMethods PaymentMethod[]
+  Reviews          Review[]
+  PaymentMethods   PaymentMethod[]
+  Invoices         Invoice[]
 }
 
 model Seller {
-  id          Int       @id @default(autoincrement())
-  displayName String
-  firstName   String
-  lastName    String
+  id             Int       @id @default(autoincrement())
+  displayName    String
+  firstName      String
+  lastName       String
   // Reverse relations
-  Product     Product[]
-  Image       Image[]
+  PostedProducts Product[]
+  PostedImages   Image[]
 }
 
 model Product {
@@ -52,11 +69,12 @@ model Product {
   discountAbsolute Int
   description      String
   //Relations
-  seller           Seller @relation(fields: [sellerId], references: [id])
+  seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId         Int
 
   // Reverse relations
-  Review Review[]
+  Reviews  Review[]
+  Invoices Invoice[]
 }
 
 model Review {
@@ -64,8 +82,8 @@ model Review {
   rating    Int
   review    String?
   // Relations
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   userId    Int
   productId Int
 }
@@ -75,17 +93,43 @@ model PaymentMethod {
   identifier      String // Card or Paypal id
   expirationMonth Int
   expirationYear  Int
-  paymentMethod   PaymentType
+  paymentType     PaymentType
+  street1         String
+  street2         String
+  city            String
+  State           String
+  zip             String
   validation      String
+  // Relations
+  User            User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int?
+  // Reverse relations
+  Invoices        Invoice[]
+}
 
-  User   User? @relation(fields: [userId], references: [id])
-  userId Int?
+model Invoice {
+  id              Int           @id @default(autoincrement())
+  subtotal        Int
+  tax             Int
+  shipping        Int
+  shippingType    ShippingType
+  totalCost       Int
+  // Relations
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
+  paymentMethodId Int
+  // Reverse relations
+  Products        Product[]
 }
 
 model Image {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   url         String
   description String
-  owner       Seller @relation(fields: [ownerId], references: [id])
-  ownerId     Int
+  //Relations
+  Owner       Seller? @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     Int?
+  // Reverse relations
+  Users       User[]
 }
