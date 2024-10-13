@@ -1,65 +1,71 @@
 {
-    "Sellers": [
-        {
-            "displayName": "Stand's Stools",
-            "firstName": "Orzibald",
-            "lastName": "von Schonberg"
-        }
-    ],
-    "Users": [
-        {
-            "userId": "ChairFiend32@gmail.com",
-            "displayName": "Chair Fiend",
-            "firstName": "Jame",
-            "lastName": "Jones",
-            "bio": "I love chairs. I have so many.",
-            "profilePictureId": 1,
-            "credential": "2a45b29af"
-        }
-    ],
-    "Products": [
-        {
-            "name": "Fancy stool",
-            "price": 4999,
-            "discountPercent": 10,
-            "sellerId": 2,
-            "description": "A nice stool that is fancy. Not very durable."
-        }
-    ],
-    "Reviews": [
-        {
-            "rating": 4,
-            "review": "It's alright.",
-            "userId": 1,
-            "productId": 1
-        }
-    ],
-    "Invoices": [
-        {
-            "subtotal": 12300,
-            "shipping": 2000,
-            "tax": 1107,
-            "shippingType": "USPS",
-            "totalCost": 13407,
-            "userId": 2,
-            "paymentMethod": 1
-        }
-    ],
-    "PaymentMethods": [
-        {
-            "identifier": "4111111111111111",
-            "expirationMonth": 2,
-            "expirationYear": 26,
-            "paymentType": "CARD",
-            "validation": "2623fa24b62d4f6",
-            "userId": 1
-        }
-    ],
-    "Images": [
-        {
-            "url": "https://k87g89olmcekxaqo.public.blob.vercel-storage.com/img1-mJVfdbY5xGPK71N4auFzZo5ziCSQfm.jpg",
-            "description": "Some wood shoes.",
-            "ownerId": 1
-        }
-    ]
+  "Sellers": [
+    {
+      "displayName": "Stand's Stools",
+      "firstName": "Orzibald",
+      "lastName": "von Schonberg"
+    }
+  ],
+  "Users": [
+    {
+      "userId": "ChairFiend32@gmail.com",
+      "displayName": "Chair Fiend",
+      "firstName": "Jame",
+      "lastName": "Jones",
+      "bio": "I love chairs. I have so many.",
+      "profilePictureId": 1,
+      "credential": "2a45b29af"
+    }
+  ],
+  "Products": [
+    {
+      "name": "Fancy stool",
+      "price": 4999,
+      "discountPercent": 10,
+      "discountAbsolute": 0.1,
+      "sellerId": 1,
+      "description": "A nice stool that is fancy. Not very durable."
+    }
+  ],
+  "Reviews": [
+    {
+      "rating": 4,
+      "review": "It's alright.",
+      "userId": 1,
+      "productId": 1
+    }
+  ],
+  "Invoices": [
+    {
+      "subtotal": 12300,
+      "shipping": 2000,
+      "tax": 1107,
+      "shippingType": "USPS",
+      "totalCost": 13407,
+      "userId": 1,
+      "paymentMethodId": 1
+    }
+  ],
+  "PaymentMethods": [
+    {
+      "identifier": "4111111111111111",
+      "expirationMonth": 2,
+      "expirationYear": 26,
+      "paymentType": "CREDIT",
+      "street1": "123 Street St.",
+      "street2": "Apt. 321",
+      "city": "Townsville",
+      "state": "Rhode Island",
+      "zip": "02864",
+      "validation": "2623fa24b62d4f6",
+      "userId": 1
+    }
+  ],
+  "Images": [
+    {
+      "url": "https://k87g89olmcekxaqo.public.blob.vercel-storage.com/img1-mJVfdbY5xGPK71N4auFzZo5ziCSQfm.jpg",
+      "description": "Some wood shoes.",
+      "ownerId": 1
+    }
+  ]
 }
