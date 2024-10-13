@@ -9,11 +9,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.svg" // Specify output file, it can be PNG, SVG, etc.
-  format   = "svg" // Choose the desired format (png, svg)
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "./ERD.svg" // Specify output file, it can be PNG, SVG, etc.
+//   format   = "svg" // Choose the desired format (png, svg)
+// }
 
 datasource db {
   provider  = "postgresql"
