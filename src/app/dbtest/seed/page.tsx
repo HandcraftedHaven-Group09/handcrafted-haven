@@ -1,5 +1,5 @@
 import seedData from "@/app/lib/seed.json";
-import { Prisma, PrismaClient, PaymentType, ShippingType } from "@prisma/client";
+import { PrismaClient, PaymentType, ShippingType } from "@prisma/client";
 
 async function main() {
   console.log("Writing needed seed data");
