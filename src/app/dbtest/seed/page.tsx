@@ -9,7 +9,7 @@ client.image.deleteMany({}).catch((e) => console.log(e));
 client.product.deleteMany({});
 client.seller.deleteMany({});
 
-for (let seller of seedData.Sellers) {
+for (const seller of seedData.Sellers) {
   client.seller
     .create({
       data: {
@@ -26,7 +26,7 @@ for (let seller of seedData.Sellers) {
     });
 }
 
-for (let image of seedData.Images) {
+for (const image of seedData.Images) {
   client.image
     .create({
       data: {
@@ -43,7 +43,7 @@ for (let image of seedData.Images) {
     });
 }
 
-for (let user of seedData.Users) {
+for (const user of seedData.Users) {
   client.user
     .create({
       data: {
