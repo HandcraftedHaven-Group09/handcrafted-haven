@@ -1,4 +1,5 @@
 import seedData from "@/app/lib/seed.json";
+import { list } from "@vercel/blob";
 import { PrismaClient, PaymentType, ShippingType } from "@prisma/client";
 
 async function main() {
@@ -135,6 +136,31 @@ async function main() {
         console.log(error);
       });
   }
+  console.log("Importing BLOB images")
+  const files = await list();
+  files.blobs.forEach((file) => {
+
+    console.log("FILE:", file);
+    const description = file.pathname.replace(/\.(webp|jpeg|png)/g, "").replaceAll("_", " ");
+    console.log(description)
+
+    client.image.create({
+      data: {
+        url: file.url,
+        description: description,
+        ownerId: 1
+      },
+    })
+      .then(() => {
+        console.log(`${description} created from blob`);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  });
+
+
+
 
   console.log("Seeding completed");
   client.$disconnect();
