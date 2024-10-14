@@ -1,4 +1,4 @@
-import seedData from "@/app/lib/seed.json";
+import seedData from "../../../../prisma/seed.json";
 import { list } from "@vercel/blob";
 import { PrismaClient, PaymentType, ShippingType } from "@prisma/client";
 
