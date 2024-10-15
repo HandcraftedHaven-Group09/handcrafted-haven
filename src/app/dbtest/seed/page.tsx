@@ -15,7 +15,7 @@ async function main() {
   await client.paymentMethod.deleteMany({}).catch((e) => console.log(e));
   await client.invoice.deleteMany({}).catch((e) => console.log(e));
 
-  // Reset all the auto increment ids
+  // Reset all the auto increment ids yep
   await client.$executeRawUnsafe('ALTER SEQUENCE "Image_id_seq" RESTART WITH 1');
   await client.$executeRawUnsafe('ALTER SEQUENCE "User_id_seq" RESTART WITH 1');
   await client.$executeRawUnsafe('ALTER SEQUENCE "Seller_id_seq" RESTART WITH 1');
