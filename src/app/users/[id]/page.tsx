@@ -1,14 +1,13 @@
-import { User } from 'prisma/prisma-client'
+import { User } from 'prisma/prisma-client';
 import { getUserById } from '@/app/lib/data';
-
-import UserBio from "@/app/ui/users/user-bio"
+import UserBio from '@/app/ui/users/user-bio';
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const user = (await getUserById(Number(params.id))) as User;
 
-    const user = await getUserById(Number(params.id)) as User
-
-    return <>
-        <UserBio user={user}></UserBio>
+  return (
+    <>
+      <UserBio userData={user}></UserBio>
     </>
-
+  );
 }

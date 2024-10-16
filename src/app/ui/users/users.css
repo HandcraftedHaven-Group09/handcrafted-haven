@@ -1,0 +1,42 @@
+.bio-card {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  background-color: #ffffff9c;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  gap: 1rem;
+}
+.bio-card img {
+  border-radius: 0.4rem;
+  box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.382);
+}
+.bio-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.bio-card dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem;
+}
+
+.bio-card dl > dt,
+.bio-card dl > dd,
+.bio-card p {
+  background-color: white;
+  padding: 0.5rem;
+  color: black;
+}
+
+.bio-card dl > dt {
+  border-radius: 0.5rem 0 0 0.5rem;
+  font-weight: bold;
+}
+.bio-card dl > dd {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.bio-card p {
+  border-radius: 0.5rem;
+  height: 100%;
+}
