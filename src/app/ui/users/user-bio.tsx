@@ -1,22 +1,9 @@
-import { User, Image } from '@prisma/client';
+import { User } from '@prisma/client';
 import { getImageById } from '@/app/lib/data';
 import './users.css';
 import NextImage from 'next/image';
-import { useEffect, useState } from 'react';
 
 export default async function UserBio({ userData }: { userData: User }) {
-  //   const [profilePic, changeProfilePic] = useState({} as Image);
-
-  //   useEffect(() => {
-  //     async function getPic() {
-  //       const image = await getImageById(userData.profilePictureId || 1);
-  //       if (image) {
-  //         changeProfilePic(image);
-  //       }
-  //     }
-  //     getPic();
-  //   });
-
   const profilePic = await getImageById(userData.profilePictureId || 1);
 
   return (
