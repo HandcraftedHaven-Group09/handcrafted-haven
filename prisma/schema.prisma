@@ -39,6 +39,7 @@ model User {
   displayName      String
   firstName        String
   lastName         String
+  email            String
   bio              String?
   userId           String
   credential       String
