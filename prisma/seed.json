@@ -19,14 +19,6 @@
   ],
   "Products": [
     {
-      "name": "Fancy stool",
-      "price": 4999,
-      "discountPercent": 10,
-      "discountAbsolute": 0.1,
-      "sellerId": 1,
-      "description": "A nice stool that is fancy. Not very durable."
-    },
-    {
       "name": "Handwoven Cotton Scarf",
       "price": 35,
       "discountPercent": 10,

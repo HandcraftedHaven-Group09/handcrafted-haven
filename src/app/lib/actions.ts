@@ -2,7 +2,12 @@
 
 import { put } from '@vercel/blob';
 import { number, z } from 'zod';
-import { getSellersAll, getProductsAll, createImage } from './data';
+import {
+  getSellersAll,
+  getProductsAll,
+  createImage,
+  getImageById,
+} from './data';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -49,6 +54,11 @@ export async function postImage(
   } catch (error) {
     return { errors: {}, message: 'Error adding file' };
   }
+}
+
+export async function fetchImageById(id: number) {
+  const image = await getImageById(id);
+  return image;
 }
 
 export async function fetchSellerAll() {

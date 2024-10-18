@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { fetchProductAll } from '../lib/actions';
+import { fetchProductAll, fetchImageById } from '../lib/actions';
 
 type Product = {
   id: number;
@@ -18,21 +18,26 @@ export default function ProductPage() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      //   const response = await fetch('/product/list_products/list_product.json');
-      const response = await fetchProductAll();
-      //   const data = await response.json();
-      const data = response.map((product) => {
-        return {
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          image: '', //TODO fix image and category
-          category: '',
-        };
-      });
+      const response = await fetchProductAll(); // Get all the products from server action
 
-      setProducts(data);
+      const productData = await Promise.all(
+        response.map(async (product) => {
+          // Map all the responses from fetchProductAll
+          // Map the data format
+          const imageRecord = await fetchImageById(product.imageId); // Get the image record from db
+
+          return {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: imageRecord?.url || '/default.jpg',
+            category: product.category,
+          };
+        })
+      );
+
+      setProducts(productData);
     };
 
     fetchProducts();
@@ -63,6 +68,7 @@ export default function ProductPage() {
               height={400}
               className="product-image"
               priority
+              unoptimized
             />
           </div>
 
