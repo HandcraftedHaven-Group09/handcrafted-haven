@@ -13,7 +13,8 @@
   width: max-content;
 }
 
-.nav-buttons a {
+.nav-buttons a,
+.nav-button {
   padding: 0.5rem;
   border-radius: 0.5rem;
   background-color: rgb(218, 135, 11);

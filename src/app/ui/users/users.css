@@ -40,3 +40,17 @@
   border-radius: 0.5rem;
   height: 100%;
 }
+.bio-card input {
+  background-color: unset;
+  border: unset;
+  color: black;
+  width: 100%;
+}
+.bio-card textarea {
+  background-color: white;
+  color: black;
+  padding: 0.5rem;
+  border: unset;
+  border-radius: 0.5rem;
+  height: 10rem;
+}

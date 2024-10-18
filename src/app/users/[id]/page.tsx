@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const rightConfig = [
     {
       text: 'Edit',
-      href: '/users',
+      href: `/users/${params.id}/edit`,
     },
     {
       text: 'Delete',
