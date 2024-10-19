@@ -9,6 +9,8 @@ import {
   getImageById,
 } from './data';
 
+import prisma from './prisma.ts';
+
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
   id: z.string(),
@@ -68,5 +70,27 @@ export async function fetchSellerAll() {
 }
 
 export async function fetchProductAll() {
-  return await getProductsAll(10);
+  const products = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      discountPercent: true,
+      discountAbsolute: true,
+      sellerId: true,
+      // image: {
+      //   select: {
+      //     url: true, // Obtém a URL da imagem
+      //   },
+      // },
+    },
+  });
+
+  return products;
 }
+
+
+
+
+
