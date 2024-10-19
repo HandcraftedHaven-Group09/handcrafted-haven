@@ -90,6 +90,31 @@ export async function fetchProductAll() {
   return products;
 }
 
+// Função para criar um novo produto no banco de dados
+export async function createNewProduct(productData: any, images: FileList | null) {
+  const { name, description, price, category, discountPercent, sellerId } = productData;
+
+  // Primeiro, cria o produto no banco de dados
+  const product = await prisma.product.create({
+    data: {
+      name,
+      description,
+      price: parseFloat(price), // Converte para número
+      category,
+      discountPercent: parseFloat(discountPercent),
+      sellerId: parseInt(sellerId),
+      image: {
+        create: images ? Array.from(images).map((img) => ({
+          url: `/uploads/${img.name}` // Exemplo: gerencia os uploads conforme necessário
+        })) : [],
+      },
+    },
+  });
+  // Aqui você pode adicionar a lógica para lidar com o upload das imagens, se necessário
+  return product;
+}
+
+
 
 
 
