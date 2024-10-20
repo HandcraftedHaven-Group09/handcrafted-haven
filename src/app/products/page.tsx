@@ -32,13 +32,13 @@ export default function ProductPage() {
           name: product.name,
           description: product.description,
           price: product.price,
-          // category: product.category,
-          category: 'FIX LATER',
+          category: product.category,
+          // category: 'FIX LATER',
           discountPercent: product.discountPercent,
           discountAbsolute: product.discountAbsolute,
           sellerId: product.sellerId,
-          // image: product.image
-          image: '/default.jpg',
+          image: product.image.url,
+          // image: '/default.jpg',
         };
       });
 
@@ -75,6 +75,7 @@ export default function ProductPage() {
             width={400}
             height={400}
             className={styles.productImage}
+            unoptimized
           />
           {/* ))} */}
 

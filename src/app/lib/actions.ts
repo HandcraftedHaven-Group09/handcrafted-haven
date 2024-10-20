@@ -80,11 +80,13 @@ export async function fetchProductAll() {
       discountPercent: true,
       discountAbsolute: true,
       sellerId: true,
-      // image: {
-      //   select: {
-      //     url: true, // Obtém a URL da imagem
-      //   },
-      // },
+      category: true,
+      // image: true,
+      image: {
+        select: {
+          url: true, // Obtém a URL da imagem
+        },
+      },
     },
   });
 
