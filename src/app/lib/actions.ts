@@ -9,7 +9,7 @@ import {
   getImageById,
 } from './data';
 
-import prisma from './prisma.ts';
+import prisma from './prisma';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -89,8 +89,3 @@ export async function fetchProductAll() {
 
   return products;
 }
-
-
-
-
-

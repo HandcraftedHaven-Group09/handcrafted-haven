@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { fetchProductAll } from '../lib/actions';
-import styles from './product_page.module.css'
+import styles from './product_page.module.css';
 
 type Product = {
   id: number;
@@ -13,10 +13,10 @@ type Product = {
   discountPercent?: number;
   discountAbsolute?: number;
   sellerId?: number;
-  image: {
-    url: string;
-  }[];
-}
+  image: string;
+  // image: {
+  //   url: string;
+};
 
 export default function ProductPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,54 +32,59 @@ export default function ProductPage() {
           name: product.name,
           description: product.description,
           price: product.price,
-          category: product.category,
+          // category: product.category,
+          category: 'FIX LATER',
           discountPercent: product.discountPercent,
           discountAbsolute: product.discountAbsolute,
           sellerId: product.sellerId,
-          image: product.image
+          // image: product.image
+          image: '/default.jpg',
         };
       });
 
-      setProducts(productData)
+      setProducts(productData);
     };
 
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product: Product) => {
     console.log(
       `${quantities[product.id] || 1} of ${product.name} added to the cart`
-    )
-  }
+    );
+  };
 
   const handleQuantityChange = (productId: number, value: number) => {
     setQuantities((prev) => ({
       ...prev,
       [productId]: value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div className={styles.container}>
       {products.map((product) => (
         <div key={product.id} className={styles.product}>
-  
-          {product.image?.map((img, index) => (
-            <Image
-              key={index}
-              src={img.url}
-              alt={product.name}
-              width={400}
-              height={400}
-              className={styles.productImage}
-            />
-          ))}
-  
+          {/* {product.image?.map((img, index) => ( */}
+          <Image
+            // key={index}
+            key={product.id}
+            // src={img.url}
+            src={product.image}
+            alt={product.name}
+            width={400}
+            height={400}
+            className={styles.productImage}
+          />
+          {/* ))} */}
+
           <h1 className={styles.title}>{product.name}</h1>
           <p className={styles.category}>Category: {product.category}</p>
           <p className={styles.description}>{product.description}</p>
-  
-          <p className={styles.price}>Original Price: ${product.price.toFixed(2)}</p>
+
+          <p className={styles.price}>
+            Original Price: ${product.price.toFixed(2)}
+          </p>
           {product.discountPercent && product.discountPercent > 0 && (
             <>
               <p className={styles.discount}>
@@ -94,9 +99,9 @@ export default function ProductPage() {
               </p>
             </>
           )}
-  
+
           <p className={styles.seller}>Seller ID: {product.sellerId}</p>
-  
+
           <div className={styles.cartSection}>
             <label htmlFor={`quantity-${product.id}`}>Quantity: </label>
             <input

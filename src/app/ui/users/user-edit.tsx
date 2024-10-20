@@ -2,11 +2,11 @@
 import { User, Image } from '@prisma/client';
 import { getImageById } from '@/app/lib/data';
 import { fetchImageById } from '@/app/lib/actions';
-import './users.css';
+// import './users.css';
 import NextImage from 'next/image';
 import { Suspense, useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
-import NavButton, { ButtonConfig } from '../nav-button';
+// import NavButton, { ButtonConfig } from '../nav-button';
 
 export default function UserEdit({ userData }: { userData: User }) {
   userData.bio = userData.bio ? userData.bio : ''; // Workaround for text area
