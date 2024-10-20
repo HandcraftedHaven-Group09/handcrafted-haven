@@ -5,6 +5,7 @@ import NavButtons from '@/app/ui/nav-buttons';
 import { ButtonConfig } from '@/app/ui/nav-button';
 
 export default async function Page({ params }: { params: { id: string } }) {
+  params = await params;
   const user = (await getUserById(Number(params.id))) as User;
   const leftConfig = [
     {
