@@ -10,6 +10,7 @@ import {
   getImageById,
 } from './data';
 
+
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
   id: z.string(),
@@ -57,6 +58,11 @@ export async function postImage(
   }
 }
 
+export async function fetchImageById(id: number) {
+  const image = await getImageById(id);
+  return image;
+}
+
 export async function fetchSellerAll() {
   const sellers = await getSellersAll(10);
   console.log('Sellers@actions ', sellers);
@@ -64,7 +70,24 @@ export async function fetchSellerAll() {
 }
 
 export async function fetchProductAll() {
-  return await getProductsAll(10);
+  const products = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      discountPercent: true,
+      discountAbsolute: true,
+      sellerId: true,
+      // image: {
+      //   select: {
+      //     url: true, // Obtém a URL da imagem
+      //   },
+      // },
+    },
+  });
+
+  return products;
 }
 
 export async function fetchImageById(id: number) {

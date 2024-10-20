@@ -69,9 +69,13 @@ model Product {
   discountPercent  Float
   discountAbsolute Int
   description      String
-  //Relations 
+  category         String
+  //Relations
+
   seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId         Int
+  image            Image  @relation(fields: [imageId], references: [id])
+  imageId          Int
 
   // Reverse relations
   Reviews  Review[]
@@ -125,12 +129,13 @@ model Invoice {
 }
 
 model Image {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   url         String
   description String
   //Relations
-  Owner       Seller? @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  Owner       Seller?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int?
   // Reverse relations
   Users       User[]
+  Product     Product[]
 }
