@@ -9,7 +9,8 @@ import {
   createImage,
   getImageById,
 } from './data';
-
+import { PrismaClient, Product, Seller, Image } from '@prisma/client';
+const prisma = new PrismaClient();
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -90,8 +91,8 @@ export async function fetchProductAll() {
   return products;
 }
 
-export async function fetchImageById(id: number) {
-  // Vercel seeing ghosts
-  //TODO: Fallback to a default image
-  return await getImageById(id);
-}
+// export async function fetchImageById(id: number) {
+//   // Vercel seeing ghosts
+//   //TODO: Fallback to a default image
+//   return await getImageById(id);
+// }
