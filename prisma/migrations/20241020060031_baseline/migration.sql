@@ -10,6 +10,7 @@ CREATE TABLE "User" (
     "displayName" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "bio" TEXT,
     "userId" TEXT NOT NULL,
     "credential" TEXT NOT NULL,

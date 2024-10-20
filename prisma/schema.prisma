@@ -69,7 +69,7 @@ model Product {
   discountPercent  Float
   discountAbsolute Int
   description      String
-  //Relations
+  //Relations 
   seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId         Int
 

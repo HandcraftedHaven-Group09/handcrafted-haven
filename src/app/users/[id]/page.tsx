@@ -3,9 +3,19 @@ import { getUserById } from '@/app/lib/data';
 import UserBio from '@/app/ui/users/user-bio';
 import NavButtons from '@/app/ui/nav-buttons';
 import { ButtonConfig } from '@/app/ui/nav-button';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
+  params = await params;
+
   const user = (await getUserById(Number(params.id))) as User;
+  if (!user) {
+    console.log('User not found');
+    notFound();
+  } else {
+    console.log('User Found');
+  }
+
   const leftConfig = [
     {
       text: 'Back',
