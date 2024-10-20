@@ -68,6 +68,7 @@ export async function fetchProductAll() {
 }
 
 export async function fetchImageById(id: number) {
+  // Vercel seeing ghosts
   //TODO: Fallback to a default image
   return await getImageById(id);
 }
