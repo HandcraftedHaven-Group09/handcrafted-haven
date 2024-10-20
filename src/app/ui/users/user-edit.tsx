@@ -1,4 +1,5 @@
 'use client';
+
 import { Image, User } from '@prisma/client';
 // import { getImageById } from '@/app/lib/data';
 import { fetchImageById } from '@/app/lib/actions';
@@ -11,6 +12,7 @@ export default function UserBio({ userData }: { userData: User }) {
   const [firstName, changeFirstName] = useState(userData.firstName);
   const [lastName, changeLastName] = useState(userData.lastName);
   const [bio, changeBio] = useState(userData.bio);
+
   const [profilePic, changeProfilePic] = useState({} as Image);
 
   useEffect(() => {
@@ -74,6 +76,7 @@ export default function UserBio({ userData }: { userData: User }) {
           </dd>
         </dl>
         <textarea
+
           key="bio"
           value={bio ? bio : ''}
           onChange={(event) => {

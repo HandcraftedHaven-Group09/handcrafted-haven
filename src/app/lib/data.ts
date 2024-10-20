@@ -119,3 +119,12 @@ export async function createImage(imageData: {
   console.log('Wrote', imageData.url);
   return result;
 }
+
+export async function getImageById(imageId: number) {
+  const image = prisma.image.findFirst({
+    where: {
+      id: imageId,
+    },
+  });
+  return image;
+}
