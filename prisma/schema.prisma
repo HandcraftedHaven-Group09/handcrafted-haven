@@ -39,6 +39,7 @@ model User {
   displayName      String
   firstName        String
   lastName         String
+  email            String
   bio              String?
   userId           String
   credential       String
@@ -70,6 +71,7 @@ model Product {
   description      String
   category         String
   //Relations
+
   seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId         Int
   image            Image  @relation(fields: [imageId], references: [id])

@@ -1,5 +1,6 @@
 'use server';
 
+// import { signIn } from '@/auth';
 import { put } from '@vercel/blob';
 import { number, z } from 'zod';
 import {
@@ -9,7 +10,6 @@ import {
   getImageById,
 } from './data';
 
-import prisma from './prisma';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -88,4 +88,9 @@ export async function fetchProductAll() {
   });
 
   return products;
+}
+
+export async function fetchImageById(id: number) {
+  //TODO: Fallback to a default image
+  return await getImageById(id);
 }

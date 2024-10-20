@@ -1,14 +1,21 @@
-
 import { User } from 'prisma/prisma-client';
 import { getUserById } from '@/app/lib/data';
-import UserEdit from '@/app/ui/users/user-edit';
+import UserBio from '@/app/ui/users/user-bio';
 import NavButtons from '@/app/ui/nav-buttons';
 import { ButtonConfig } from '@/app/ui/nav-button';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  // params = await params;
+  params = await params;
 
   const user = (await getUserById(Number(params.id))) as User;
+  if (!user) {
+    console.log('User not found');
+    notFound();
+  } else {
+    console.log('User Found');
+  }
+
   const leftConfig = [
     {
       text: 'Back',
@@ -29,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <UserEdit userData={user}></UserEdit>
+      <UserBio userData={user}></UserBio>
       <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
     </div>
   );
