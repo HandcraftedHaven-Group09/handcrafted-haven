@@ -39,6 +39,7 @@ model User {
   displayName      String
   firstName        String
   lastName         String
+  email            String
   bio              String?
   userId           String
   credential       String
@@ -68,7 +69,7 @@ model Product {
   discountPercent  Float
   discountAbsolute Int
   description      String
-  //Relations
+  //Relations 
   seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId         Int
 

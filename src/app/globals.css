@@ -36,6 +36,13 @@ a {
   text-decoration: none;
 }
 
+.center-children {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

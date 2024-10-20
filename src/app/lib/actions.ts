@@ -1,8 +1,14 @@
 'use server';
 
+// import { signIn } from '@/auth';
 import { put } from '@vercel/blob';
 import { number, z } from 'zod';
-import { getSellersAll, getProductsAll, createImage } from './data';
+import {
+  getSellersAll,
+  getProductsAll,
+  createImage,
+  getImageById,
+} from './data';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -59,4 +65,9 @@ export async function fetchSellerAll() {
 
 export async function fetchProductAll() {
   return await getProductsAll(10);
+}
+
+export async function fetchImageById(id: number) {
+  //TODO: Fallback to a default image
+  return await getImageById(id);
 }
