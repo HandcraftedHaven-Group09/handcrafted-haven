@@ -10,6 +10,15 @@ export async function getUserById(userId: number) {
   return user;
 }
 
+export async function getUserByEmail(userEmail: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: userEmail,
+    },
+  });
+  return user;
+}
+
 export async function getProductsBySimpleQuery(query: string, max: number) {
   const products = await prisma.product.findMany({
     where: {

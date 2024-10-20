@@ -13,12 +13,14 @@
     "@prisma/client": "^5.20.0",
     "@vercel/blob": "^0.25.0",
     "next": "^15.0.0-canary.56",
+    "next-auth": "^5.0.0-beta.23",
     "prisma": "^5.20.0",
     "react": "^19.0.0-rc.0",
     "react-dom": "^19.0.0-rc.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
