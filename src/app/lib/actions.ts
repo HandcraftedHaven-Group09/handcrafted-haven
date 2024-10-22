@@ -4,8 +4,9 @@ import { put } from '@vercel/blob';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { createImage } from './data'
-import { signIn } from 'next-auth/react'
+import { createImage } from './data';
+import { signIn } from 'next-auth/react';
+import { AuthError } from 'next-auth';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -66,7 +67,7 @@ export async function fetchImageById(id: number) {
 export async function uploadImage(formData: FormData) {
   try {
     const imageFile = formData.get('file') as File;
-    
+
     // Check if the file exists
     if (!imageFile) {
       throw new Error('No file found in form data');
@@ -88,9 +89,9 @@ export async function uploadImage(formData: FormData) {
 export async function fetchSellerAll() {
   const sellers = await prisma.seller.findMany({
     take: 10,
-  })
-  console.log('Sellers@actions ', sellers)
-  return sellers
+  });
+  console.log('Sellers@actions ', sellers);
+  return sellers;
 }
 
 // Fetch all products
@@ -111,26 +112,27 @@ export async function fetchProductAll() {
         },
       },
     },
-  })
+  });
 
-  return products
+  return products;
 }
 
 // Create a new product in the database
 export async function createNewProduct(productData: {
-  name: string
-  description: string
-  price: number
-  category: string
-  discountPercent?: number
-  discountAbsolute?: number
-  sellerId: number
-  image: string 
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  discountPercent?: number;
+  discountAbsolute?: number;
+  sellerId: number;
+  image: string;
 }) {
   try {
-    let discountAbsolute = productData.discountAbsolute
+    let discountAbsolute = productData.discountAbsolute;
     if (!discountAbsolute && productData.discountPercent) {
-      discountAbsolute = (productData.price * productData.discountPercent) / 100
+      discountAbsolute =
+        (productData.price * productData.discountPercent) / 100;
     }
 
     // Create the new product with a single associated image
@@ -141,23 +143,23 @@ export async function createNewProduct(productData: {
         price: productData.price,
         category: productData.category,
         discountPercent: productData.discountPercent || 0,
-        discountAbsolute: discountAbsolute || 0, 
+        discountAbsolute: discountAbsolute || 0,
         seller: {
-          connect: { id: productData.sellerId }, 
+          connect: { id: productData.sellerId },
         },
         image: {
           create: {
-            url: productData.image, 
-            description: productData.name, 
+            url: productData.image,
+            description: productData.name,
           },
         },
       },
-    })
+    });
 
-    return product
+    return product;
   } catch (error) {
-    console.error('Error creating product:', error)
-    throw error
+    console.error('Error creating product:', error);
+    throw error;
   }
 }
 
