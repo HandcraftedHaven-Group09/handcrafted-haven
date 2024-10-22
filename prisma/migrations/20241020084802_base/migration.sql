@@ -10,6 +10,7 @@ CREATE TABLE "User" (
     "displayName" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "bio" TEXT,
     "userId" TEXT NOT NULL,
     "credential" TEXT NOT NULL,
@@ -36,7 +37,9 @@ CREATE TABLE "Product" (
     "discountPercent" DOUBLE PRECISION NOT NULL,
     "discountAbsolute" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
     "sellerId" INTEGER NOT NULL,
+    "imageId" INTEGER NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -111,6 +114,9 @@ ALTER TABLE "User" ADD CONSTRAINT "User_profilePictureId_fkey" FOREIGN KEY ("pro
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "Seller"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Product" ADD CONSTRAINT "Product_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "Image"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

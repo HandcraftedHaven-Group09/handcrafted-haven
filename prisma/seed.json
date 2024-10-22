@@ -1,20 +1,21 @@
 {
   "Sellers": [
     {
-      "displayName": "Stand's Stools",
-      "firstName": "Orzibald",
-      "lastName": "von Schonberg"
+      "displayName": "Default",
+      "firstName": "Default",
+      "lastName": "Default"
     }
   ],
   "Users": [
     {
-      "userId": "ChairFiend32@gmail.com",
-      "displayName": "Chair Fiend",
-      "firstName": "Jame",
-      "lastName": "Jones",
-      "bio": "I love chairs. I have so many.",
+      "userId": "Default",
+      "displayName": "Default",
+      "firstName": "Default",
+      "lastName": "Default",
+      "email": "a@b.com",
+      "bio": "This is the default user at index 1.",
       "profilePictureId": 1,
-      "credential": "2a45b29af"
+      "credential": "123456"
     }
   ],
   "Products": [
