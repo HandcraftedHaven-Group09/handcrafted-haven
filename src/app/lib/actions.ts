@@ -1,18 +1,12 @@
 'use server';
 
 import { put } from '@vercel/blob';
-import { number, z } from 'zod';
-import {
-  getSellersAll,
-  getProductsAll,
-  createImage,
-  getImageById,
-} from './data';
-import { PrismaClient, Product, Seller, Image } from '@prisma/client';
+import { z } from 'zod';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { signIn } from '@/app/auth';
+import { createImage } from './data';
+import { signIn } from 'next-auth/react';
 import { AuthError } from 'next-auth';
-import { redirect } from 'next/navigation';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -53,7 +47,7 @@ export async function postImage(
       ownerId: ownerId,
     });
     return {
-      message: `Success: ${blob.downloadUrl} create`,
+      message: `Success: ${blob.downloadUrl} created`,
       errors: {},
     };
   } catch (error) {
@@ -61,17 +55,46 @@ export async function postImage(
   }
 }
 
+// Fetch image by ID
 export async function fetchImageById(id: number) {
-  const image = await getImageById(id);
+  const image = await prisma.image.findUnique({
+    where: { id },
+  });
   return image;
 }
 
+// Upload Image to Blob Storage
+export async function uploadImage(formData: FormData) {
+  try {
+    const imageFile = formData.get('file') as File;
+
+    // Check if the file exists
+    if (!imageFile) {
+      throw new Error('No file found in form data');
+    }
+
+    // Upload image to Blob storage
+    const blob = await put(imageFile.name, imageFile, {
+      access: 'public',
+    });
+
+    return { url: blob.url }; // Return the uploaded image URL
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+}
+
+// Fetch all sellers (limit 10)
 export async function fetchSellerAll() {
-  const sellers = await getSellersAll(10);
+  const sellers = await prisma.seller.findMany({
+    take: 10,
+  });
   console.log('Sellers@actions ', sellers);
   return sellers;
 }
 
+// Fetch all products
 export async function fetchProductAll() {
   const products = await prisma.product.findMany({
     select: {
@@ -83,10 +106,9 @@ export async function fetchProductAll() {
       discountAbsolute: true,
       sellerId: true,
       category: true,
-      // image: true,
       image: {
         select: {
-          url: true, // Obtém a URL da imagem
+          url: true,
         },
       },
     },
@@ -95,6 +117,53 @@ export async function fetchProductAll() {
   return products;
 }
 
+// Create a new product in the database
+export async function createNewProduct(productData: {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  discountPercent?: number;
+  discountAbsolute?: number;
+  sellerId: number;
+  image: string;
+}) {
+  try {
+    let discountAbsolute = productData.discountAbsolute;
+    if (!discountAbsolute && productData.discountPercent) {
+      discountAbsolute =
+        (productData.price * productData.discountPercent) / 100;
+    }
+
+    // Create the new product with a single associated image
+    const product = await prisma.product.create({
+      data: {
+        name: productData.name,
+        description: productData.description,
+        price: productData.price,
+        category: productData.category,
+        discountPercent: productData.discountPercent || 0,
+        discountAbsolute: discountAbsolute || 0,
+        seller: {
+          connect: { id: productData.sellerId },
+        },
+        image: {
+          create: {
+            url: productData.image,
+            description: productData.name,
+          },
+        },
+      },
+    });
+
+    return product;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+}
+
+// Handle authentication
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData
