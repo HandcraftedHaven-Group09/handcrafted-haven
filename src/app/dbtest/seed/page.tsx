@@ -219,11 +219,11 @@ async function main() {
   client.$disconnect();
 }
 
-if (process.env.DEV) {
-  main();
-}
-
 export default async function Page() {
+  if (process.env.DEV) {
+    main();
+  }
+
   return (
     <>
       <p>SEEDING</p>
