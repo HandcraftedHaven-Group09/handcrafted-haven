@@ -1,80 +1,115 @@
-'use client'
+'use client';
 
-import { postImage, CreateImageState, fetchSellerAll, fetchProductAll } from "../lib/actions";
-import { useActionState, useEffect, useState } from "react";
+import {
+  postImage,
+  CreateImageState,
+  fetchSellerAll,
+  fetchProductAll,
+} from '../lib/actions';
+import { useActionState, useEffect, useState } from 'react';
+import { SessionProvider, useSession } from 'next-auth/react';
 
 export default function Page() {
+  const { data: session, status } = useSession();
 
-  const [products, updateProducts] = useState<{
-    name: string;
-    id: number;
-    price: number;
-    discountPercent: number;
-    discountAbsolute: number;
-    description: string;
-    sellerId: number;
-  }[]>([]);
+  const [products, updateProducts] = useState<
+    {
+      name: string;
+      id: number;
+      price: number;
+      discountPercent: number;
+      discountAbsolute: number;
+      description: string;
+      sellerId: number;
+    }[]
+  >([]);
 
-  const [sellers, updateSellers] = useState<{
-    id: number;
-    displayName: string;
-    firstName: string;
-    lastName: string;
-  }[]>([])
+  const [sellers, updateSellers] = useState<
+    {
+      id: number;
+      displayName: string;
+      firstName: string;
+      lastName: string;
+    }[]
+  >([]);
 
   useEffect(() => {
-
     async function doit() {
-      console.log("DO IT!")
+      console.log('DO IT!');
 
       const product = await fetchProductAll();
       const sellers = await fetchSellerAll();
 
       updateProducts(() => product);
       updateSellers(() => sellers);
-
-    };
+    }
     doit();
-
-
-  }, [])
+  }, []);
   console.log(products);
   console.log(sellers);
 
   const initialCreateImageState: CreateImageState = {
     message: null,
-    errors: {}
-  }
+    errors: {},
+  };
 
-  const [state, formAction] = useActionState(postImage, initialCreateImageState);
+  const [state, formAction] = useActionState(
+    postImage,
+    initialCreateImageState
+  );
 
   return (
-    <main style={{ padding: "1rem" }}>
+    <main style={{ padding: '1rem' }}>
       <h2>Database Testing Sandbox</h2>
+      <div>
+        {session ? (
+          <span>{session.user?.email} logged in</span>
+        ) : (
+          <span>No session</span>
+        )}
+      </div>
 
       <form action={formAction}>
-        <fieldset style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <fieldset
+          style={{
+            padding: '1rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
           <legend>IMAGE</legend>
           <dl>
             <dt>Description</dt>
-            <dd><input type="text" name="description" required></input></dd>
+            <dd>
+              <input type="text" name="description" required></input>
+            </dd>
             <dt>Owner</dt>
             <dd>
               <select name="ownerId" required>
-                {sellers.map((seller) =>
-                  <option key={seller.id} value={seller.id}>{seller.displayName}</option>
-                )}
+                {sellers.map((seller) => (
+                  <option key={seller.id} value={seller.id}>
+                    {seller.displayName}
+                  </option>
+                ))}
               </select>
             </dd>
             <dt>Image</dt>
-            <dd><input type="file" name="imageFile" accept="image/png, image/webp, image/jpg" required></input></dd>
+            <dd>
+              <input
+                type="file"
+                name="imageFile"
+                accept="image/png, image/webp, image/jpg"
+                required
+              ></input>
+            </dd>
           </dl>
-          <input type="submit" value={"SUBMIT"} />
+          <input type="submit" value={'SUBMIT'} />
         </fieldset>
       </form>
 
       <form>
-        <fieldset style={{ padding: "1rem" }}>
+        <fieldset style={{ padding: '1rem' }}>
           <legend>PRODUCT</legend>
           <dl>
             <dt>

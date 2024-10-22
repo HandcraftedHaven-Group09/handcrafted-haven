@@ -9,6 +9,7 @@ import {
 import { blob } from 'stream/consumers';
 import { fetchExternalImage } from 'next/dist/server/image-optimizer';
 import { createImage } from '@/app/lib/data';
+import bcrypt from 'bcrypt';
 
 async function main() {
   console.log('Writing needed seed data');
@@ -71,6 +72,8 @@ async function main() {
   }
 
   for (const user of seedData.Users) {
+    user.credential = await bcrypt.hash(user.credential, 10);
+
     await client.user
       .create({
         data: user,
