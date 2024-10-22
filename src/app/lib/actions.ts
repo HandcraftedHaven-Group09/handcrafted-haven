@@ -193,3 +193,15 @@ export async function authenticate(
     throw error;
   }
 }
+
+// Listing products category
+export async function fetchCategories() {
+  const categories = await prisma.product.findMany({
+    select: {
+      category: true,
+    },
+    distinct: ['category'], 
+  });
+
+  return categories;
+}
