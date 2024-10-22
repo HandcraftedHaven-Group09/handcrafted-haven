@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
-import Credentials from 'next-auth/providers/credentials';
+import Credentials from 'next-auth/providers/credentials'; // Email/Password
+import GitHub from 'next-auth/providers/github'; // GitHub Oauth
 import { z } from 'zod';
 import type { User } from '@prisma/client';
 import { getUserByEmail } from '@/app/lib/data';
@@ -16,7 +17,7 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -44,5 +45,6 @@ export const { auth, signIn, signOut } = NextAuth({
         return null;
       },
     }),
+    GitHub,
   ],
 });
