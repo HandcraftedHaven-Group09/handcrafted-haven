@@ -1,0 +1,26 @@
+.nav-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.nav-buttons div:first-child,
+.nav-buttons div:last-child {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: max-content;
+}
+
+.nav-buttons a,
+.nav-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(218, 135, 11);
+  font-weight: bold;
+  color: white;
+}
+.nav-buttons a:hover {
+  background-color: red;
+}

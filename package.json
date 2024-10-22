@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@prisma/client": "^5.20.0",
     "next": "14.2.14",
     "next-auth": "^4.24.8",
@@ -28,5 +29,26 @@
     "eslint-plugin-react": "^7.37.1",
     "globals": "^15.11.0",
     "typescript-eslint": "^8.8.1"
+=======
+    "@prisma/client": "^5.21.1",
+    "@types/next-auth": "^3.15.0",
+    "@vercel/blob": "^0.25.0",
+    "bcrypt": "^5.1.1",
+    "next": "15.0.0-canary.56",
+    "next-auth": "^5.0.0-beta.25",
+    "react": "19.0.0-rc.0",
+    "react-dom": "19.0.0-rc.0",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.14",
+    "prisma": "^5.21.1",
+    "prisma-erd-generator": "^1.11.2"
+>>>>>>> 1419726d2366ccf3bc72d502d47378c57f5c08d7
   }
 }
