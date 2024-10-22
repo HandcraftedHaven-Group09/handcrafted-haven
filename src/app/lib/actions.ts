@@ -1,6 +1,5 @@
 'use server';
 
-// import { signIn } from '@/auth';
 import { put } from '@vercel/blob';
 import { number, z } from 'zod';
 import {
@@ -11,6 +10,9 @@ import {
 } from './data';
 import { PrismaClient, Product, Seller, Image } from '@prisma/client';
 const prisma = new PrismaClient();
+import { signIn } from '@/app/auth';
+import { AuthError } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -93,8 +95,32 @@ export async function fetchProductAll() {
   return products;
 }
 
-// export async function fetchImageById(id: number) {
-//   // Vercel seeing ghosts
-//   //TODO: Fallback to a default image
-//   return await getImageById(id);
-// }
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  'use client';
+  console.log('FORM DATA: ', formData.get('email'));
+  const email = formData.get('email');
+  const password = formData.get('password');
+  try {
+    console.log('Trying to login');
+    const result = await signIn('credentials', {
+      redirect: true,
+      email: email,
+      password: password,
+      callbackUrl: 'http://www.google.com',
+    });
+    console.log('Imediate post login');
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
