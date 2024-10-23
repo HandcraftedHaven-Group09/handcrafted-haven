@@ -29,6 +29,7 @@ export async function getProductById(productId: number) {
   });
   return product;
 }
+
 export async function getProductsAll(max?: number): Promise<Product[]> {
   const products = await prisma.product.findMany({
     take: max,
