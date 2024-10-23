@@ -1,6 +1,24 @@
 import { PrismaClient, Product, Seller, Image } from '@prisma/client';
 const prisma = new PrismaClient();
 
+export async function getUserById(userId: number) {
+  const user = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+  });
+  return user;
+}
+
+export async function getUserByEmail(userEmail: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: userEmail,
+    },
+  });
+  return user;
+}
+
 export async function getProductsBySimpleQuery(query: string, max: number) {
   const products = await prisma.product.findMany({
     where: {
@@ -78,6 +96,15 @@ export async function getSellersAll(max?: number) {
   return sellers;
 }
 
+export async function getImageById(imageId: number) {
+  const image = await prisma.image.findFirst({
+    where: {
+      id: imageId,
+    },
+  });
+  return image;
+}
+
 export async function createImage(imageData: {
   url: string;
   description: string;
@@ -93,3 +120,12 @@ export async function createImage(imageData: {
   console.log('Wrote', imageData.url);
   return result;
 }
+
+// export async function getImageById(imageId: number) {
+//   const image = prisma.image.findFirst({
+//     where: {
+//       id: imageId,
+//     },
+//   });
+//   return image;
+// }

@@ -1,6 +1,15 @@
 import seedData from '../../../../prisma/seed.json';
-import { list } from '@vercel/blob';
-import { PrismaClient, PaymentType, ShippingType } from '@prisma/client';
+import { list, put } from '@vercel/blob';
+import {
+  PrismaClient,
+  PaymentType,
+  ShippingType,
+  Product,
+} from '@prisma/client';
+import { blob } from 'stream/consumers';
+import { fetchExternalImage } from 'next/dist/server/image-optimizer';
+import { createImage } from '@/app/lib/data';
+import bcrypt from 'bcrypt';
 
 async function main() {
   console.log('Writing needed seed data');
@@ -63,6 +72,8 @@ async function main() {
   }
 
   for (const user of seedData.Users) {
+    user.credential = await bcrypt.hash(user.credential, 10);
+
     await client.user
       .create({
         data: user,
@@ -76,16 +87,47 @@ async function main() {
   }
 
   for (const product of seedData.Products) {
-    await client.product
-      .create({
-        data: product,
-      })
-      .then(() => {
-        console.log('Products created');
-      })
-      .catch((error) => {
-        console.log(error);
+    // Create the image first
+    const fileName = product.image?.replace('/products/images/', '');
+
+    console.log('START PRODUCT\nfileName ', fileName);
+
+    if (fileName) {
+      const fetchResponse = await fetch(
+        `http://localhost:3000${product.image || 'default.jpg'}`
+      ); // Get the file
+      console.log('FETCHED');
+      const imageBlob = await fetchResponse.blob(); // Make it a blob
+      console.log('BLOBBED');
+      const putResult = await put(fileName, imageBlob, { access: 'public' }); // Upload to blob
+      const imageRecord = createImage({
+        // Create the db image entry
+        url: putResult.url,
+        description: fileName,
+        ownerId: product.sellerId,
       });
+      const newProduct = {
+        // Map the JSON product to model product
+        name: product.name,
+        price: product.price,
+        discountPercent: product.discountPercent,
+        discountAbsolute: product.discountAbsolute,
+        description: product.description,
+        category: product.category,
+        sellerId: product.sellerId,
+        imageId: (await imageRecord).id,
+      } as Product;
+      await client.product // Write the new product with correct image id
+        .create({
+          data: newProduct,
+        })
+        .then(() => {
+          console.log('Products created');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   for (const review of seedData.Reviews) {
