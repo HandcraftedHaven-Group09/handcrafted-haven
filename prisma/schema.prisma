@@ -42,7 +42,7 @@ model User {
   email            String
   bio              String?
   userId           String
-  credential       String
+  credential       String //Password. Might change this later
   // Relation
   profilePicture   Image?          @relation(fields: [profilePictureId], references: [id])
   profilePictureId Int?
@@ -50,36 +50,45 @@ model User {
   Reviews          Review[]
   PaymentMethods   PaymentMethod[]
   Invoices         Invoice[]
+  UserList         UserList[]
+  Product          Product?        @relation(fields: [productId], references: [id])
+  productId        Int?
 }
 
 model Seller {
-  id             Int       @id @default(autoincrement())
+  id             Int                @id @default(autoincrement())
   displayName    String
   firstName      String
   lastName       String
   // Reverse relations
   PostedProducts Product[]
   PostedImages   Image[]
+  Collections    SellerCollection[]
 }
 
 model Product {
   id               Int    @id @default(autoincrement())
   name             String
-  price            Int
+  price            Float
   discountPercent  Float
-  discountAbsolute Int
+  discountAbsolute Float
   description      String
   category         String
   //Relations
 
-  seller           Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  sellerId         Int
-  image            Image  @relation(fields: [imageId], references: [id])
-  imageId          Int
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId Int
+  image    Image  @relation(fields: [imageId], references: [id])
+  imageId  Int
 
   // Reverse relations
   Reviews  Review[]
   Invoices Invoice[]
+  User     User[]
+
+  // Join tables
+  UserLists    UserList[]         @relation("UserListToProduct") // Lists this product is listed in. Join table
+  InCollection SellerCollection[] @relation("SellerCollectionToProduct") // The seller collections that feature this item. Join table
 }
 
 model Review {
@@ -133,9 +142,33 @@ model Image {
   url         String
   description String
   //Relations
-  Owner       Seller?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner       Seller?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int?
   // Reverse relations
   Users       User[]
   Product     Product[]
+}
+
+model UserList {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  // Relations
+  owner  User @relation(fields: [userId], references: [id])
+  userId Int
+
+  Products Product[] @relation("UserListToProduct") // Listing of products on the list. Join table
+}
+
+model SellerCollection {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  //Relations
+  owner   Seller @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  Products Product[] @relation("SellerCollectionToProduct") // The products in this collection. Join table
 }
