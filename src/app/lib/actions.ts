@@ -5,7 +5,8 @@ import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import { createImage } from './data';
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
+import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
 
 // For creating a new image record with new image
