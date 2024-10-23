@@ -229,54 +229,64 @@ export async function fetchProductById(id: string) {
 
 
 // Function to update the product
-export async function updateProduct(id: string, productData: any) {
-  const productId = parseInt(id) 
+export async function updateProduct(id: string, productData: {
+  name: string
+  description: string
+  price: number
+  discountPercent?: number
+  category: string
+  image?: string
+}) {
+  const productId = parseInt(id)
 
-  // Search for existing product
+  if (isNaN(productId)) {
+    throw new Error(`Invalid product ID: ${id}`)
+  }
+
+  // Fetch the existing product
   const existingProduct = await prisma.product.findUnique({
     where: { id: productId },
     include: { image: true },
   })
 
   if (!existingProduct) {
-    throw new Error(`Produto com ID ${productId} não encontrado.`)
+    throw new Error(`Product with ID ${productId} not found.`)
   }
 
-  // If no new image is sent, keep the existing image
-  const imageUrl = productData.image || existingProduct.image?.url
+  const imageUrl = productData.image || existingProduct.image?.url || ''
 
-  // Se a URL da imagem for undefined, remova o campo image do objeto de dados
-  const imageUpdate = imageUrl
-    ? {
-        upsert: {
-          create: {
-            url: imageUrl,
-            description: productData.name,
-          },
-          update: {
-            url: imageUrl,
-          },
-          where: {
-            id: existingProduct.image?.id, 
-          },
-        },
-      }
-    : undefined // Remove image if there is no valid URL
-
+  // Update the product in the database
   const updatedProduct = await prisma.product.update({
     where: { id: productId },
     data: {
       name: productData.name,
       description: productData.description,
       price: productData.price,
-      discountPercent: productData.discountPercent,
       category: productData.category,
-      ...(imageUpdate && { image: imageUpdate }), // Updates the image only if there is URL
+      ...(productData.discountPercent !== undefined && { discountPercent: productData.discountPercent }),
+      image: imageUrl
+        ? {
+            upsert: {
+              create: {
+                url: imageUrl,
+                description: productData.name,
+              },
+              update: {
+                url: imageUrl,
+              },
+              where: {
+                id: existingProduct.image?.id,
+              },
+            },
+          }
+        : undefined,
     },
   })
-
   return updatedProduct
 }
+
+
+
 
 
 
