@@ -285,6 +285,18 @@ export async function updateProduct(id: string, productData: {
   return updatedProduct
 }
 
+export async function deleteProductById(id: number) {
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    throw error;
+  }
+}
+
+
 
 
 
