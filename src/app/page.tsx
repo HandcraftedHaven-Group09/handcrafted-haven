@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { getProductById } from '@/app/lib/data';
+import { getProductWithImageById } from '@/app/lib/data';
 
 export default async function Home() {
-  const product1 = await getProductById(1);
+  const product1 = await getProductWithImageById(1);
 
   return (
     <main>
@@ -31,31 +31,35 @@ export default async function Home() {
       <div id="featured-prodcuts">
         <h2>Featured Product</h2>
         <Image
-          src=""
+          src={product1?.image.url || ''}
           width={70}
           height={80}
           alt="Picture of featured product number 1"
+          unoptimized
         />
 
         <Image
-          src=""
+          src={product1?.image.url || ''}
           width={70}
           height={80}
           alt="Picture of featured product number 2"
+          unoptimized
         />
 
         <Image
-          src=""
           width={70}
           height={80}
           alt="Picture of featured product number 3"
+          src={product1?.image.url || ''}
+          unoptimized
         />
 
         <Image
-          src=""
           width={70}
           height={80}
           alt="Picture of featured product number 4"
+          src={product1?.image.url || ''}
+          unoptimized
         />
       </div>
 

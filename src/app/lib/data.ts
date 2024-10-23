@@ -39,10 +39,23 @@ export async function getProductsBySimpleQuery(query: string, max: number) {
   });
   return products;
 }
+
 export async function getProductById(productId: number) {
   const product = await prisma.product.findFirst({
     where: {
       id: productId,
+    },
+  });
+  return product;
+}
+
+export async function getProductWithImageById(productId: number) {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: productId,
+    },
+    include: {
+      image: true,
     },
   });
   return product;
