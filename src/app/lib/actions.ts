@@ -205,3 +205,80 @@ export async function fetchCategories() {
 
   return categories;
 }
+
+// Function to search product by ID
+export async function fetchProductById(id: string) {
+
+  const numericId = parseInt(id, 10)
+
+  if (isNaN(numericId)) {
+    throw new Error(`Invalid product ID: ${id}`)
+  }
+
+  const product = await prisma.product.findUnique({
+    where: { id: numericId }, 
+    include: { image: true }, 
+  })
+
+  if (!product) {
+    throw new Error(`Product with ID ${numericId} not found.`)
+  }
+
+  return product
+}
+
+
+// Function to update the product
+export async function updateProduct(id: string, productData: any) {
+  const productId = parseInt(id) 
+
+  // Search for existing product
+  const existingProduct = await prisma.product.findUnique({
+    where: { id: productId },
+    include: { image: true },
+  })
+
+  if (!existingProduct) {
+    throw new Error(`Produto com ID ${productId} não encontrado.`)
+  }
+
+  // If no new image is sent, keep the existing image
+  const imageUrl = productData.image || existingProduct.image?.url
+
+  // Se a URL da imagem for undefined, remova o campo image do objeto de dados
+  const imageUpdate = imageUrl
+    ? {
+        upsert: {
+          create: {
+            url: imageUrl,
+            description: productData.name,
+          },
+          update: {
+            url: imageUrl,
+          },
+          where: {
+            id: existingProduct.image?.id, 
+          },
+        },
+      }
+    : undefined // Remove image if there is no valid URL
+
+  const updatedProduct = await prisma.product.update({
+    where: { id: productId },
+    data: {
+      name: productData.name,
+      description: productData.description,
+      price: productData.price,
+      discountPercent: productData.discountPercent,
+      category: productData.category,
+      ...(imageUpdate && { image: imageUpdate }), // Updates the image only if there is URL
+    },
+  })
+
+  return updatedProduct
+}
+
+
+
+
+
