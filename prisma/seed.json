@@ -12,8 +12,18 @@
       "displayName": "Default",
       "firstName": "Default",
       "lastName": "Default",
-      "email": "a@b.com",
+      "email": "default@hch.com",
       "bio": "This is the default user at index 1.",
+      "profilePictureId": 1,
+      "credential": "123456"
+    },
+    {
+      "userId": "CraftCrazy",
+      "displayName": "CraftCrazy",
+      "firstName": "Craft",
+      "lastName": "Crazy",
+      "email": "CC@gmail.com",
+      "bio": "I like crafts.",
       "profilePictureId": 1,
       "credential": "123456"
     }
