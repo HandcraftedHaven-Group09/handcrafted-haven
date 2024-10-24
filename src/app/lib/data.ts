@@ -120,11 +120,10 @@ export async function createImage(imageData: {
   return result;
 }
 
-// export async function getImageById(imageId: number) {
-//   const image = prisma.image.findFirst({
-//     where: {
-//       id: imageId,
-//     },
-//   });
-//   return image;
-// }
+export async function getUserListById(listId: number) {
+  const result = await prisma.userList.findFirst({
+    where: { id: listId },
+    include: { Products: true },
+  });
+  return result;
+}

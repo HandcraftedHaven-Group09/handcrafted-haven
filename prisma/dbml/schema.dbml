@@ -16,6 +16,9 @@ Table User {
   Reviews Review [not null]
   PaymentMethods PaymentMethod [not null]
   Invoices Invoice [not null]
+  UserList UserList [not null]
+  Product Product
+  productId Int
 }
 
 Table Seller {
@@ -25,14 +28,15 @@ Table Seller {
   lastName String [not null]
   PostedProducts Product [not null]
   PostedImages Image [not null]
+  Collections SellerCollection [not null]
 }
 
 Table Product {
   id Int [pk, increment]
   name String [not null]
-  price Int [not null]
+  price Float [not null]
   discountPercent Float [not null]
-  discountAbsolute Int [not null]
+  discountAbsolute Float [not null]
   description String [not null]
   category String [not null]
   seller Seller [not null]
@@ -41,6 +45,9 @@ Table Product {
   imageId Int [not null]
   Reviews Review [not null]
   Invoices Invoice [not null]
+  User User [not null]
+  UserLists UserList [not null]
+  InCollection SellerCollection [not null]
 }
 
 Table Review {
@@ -88,14 +95,42 @@ Table Image {
   id Int [pk, increment]
   url String [not null]
   description String [not null]
-  Owner Seller
+  owner Seller
   ownerId Int
   Users User [not null]
   Product Product [not null]
 }
 
+Table UserList {
+  id Int [pk, increment]
+  name String [not null]
+  description String [not null]
+  owner User [not null]
+  userId Int [not null]
+  Products Product [not null]
+}
+
+Table SellerCollection {
+  id Int [pk, increment]
+  name String [not null]
+  description String [not null]
+  owner Seller [not null]
+  ownerId Int [not null]
+  Products Product [not null]
+}
+
 Table InvoiceToProduct {
   invoicesId Int [ref: > Invoice.id]
+  productsId Int [ref: > Product.id]
+}
+
+Table UserListToProduct {
+  userlistsId Int [ref: > UserList.id]
+  productsId Int [ref: > Product.id]
+}
+
+Table SellerCollectionToProduct {
+  incollectionId Int [ref: > SellerCollection.id]
   productsId Int [ref: > Product.id]
 }
 
@@ -112,6 +147,8 @@ Enum ShippingType {
 
 Ref: User.profilePictureId > Image.id
 
+Ref: User.productId > Product.id
+
 Ref: Product.sellerId > Seller.id [delete: Cascade]
 
 Ref: Product.imageId > Image.id
@@ -127,3 +164,7 @@ Ref: Invoice.userId > User.id [delete: Cascade]
 Ref: Invoice.paymentMethodId > PaymentMethod.id [delete: Cascade]
 
 Ref: Image.ownerId > Seller.id [delete: Cascade]
+
+Ref: UserList.userId > User.id
+
+Ref: SellerCollection.ownerId > Seller.id
