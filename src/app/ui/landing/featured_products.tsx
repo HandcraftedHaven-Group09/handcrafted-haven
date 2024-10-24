@@ -1,36 +1,21 @@
-import { getProductsAll, getProductWithImageById } from '@/app/lib/data';
-import { useState, useEffect } from 'react';
+import FeaturedProduct from '@/app/ui/landing/featured_product';
+import { productRowCount } from '@/app/lib/data';
 
- interface FeaturedIdProps {
-    onGetProducts: (products: any[]) => void;
- }
-// Get products from table and return just the id's.
-const getProductIds = async (): Promise<number[]> => {
-    const products = await getProductsAll();
-    const featured = products.map(featuredId => featuredId.id);
-    return featured;
-    }
+export default async function FeaturedProducts() {
+  const productCount = await productRowCount();
+  const randomProducts: number[] = Array.from(
+    // Get an array of four randomized valid product ids
+    {
+      length: 4,
+    },
+    () => Math.floor(Math.random() * productCount)
+  );
 
-const getRandomIds = (ids: number[], count: number): number[] => {
-    const shuffle = [...ids].sort(() => 0.5 - Math.random());
-    return shuffle.slice(0, count);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+      {randomProducts.map((productId) => {
+        return <FeaturedProduct id={productId} />;
+      })}
+    </div>
+  );
 }
-
-//  Using the id's, create an array of 4 random id's to pass back to landing page.
-const FeaturedIds: React.FC<FeaturedIdProps> = ({ onGetProducts }) => {
-
-    useEffect(() => {
-        const selectFeaturedIds = async () => {
-            const ids = await getProductIds();
-            const randomIds = getRandomIds(ids, 4);
-            const products = await Promise.all(randomIds.map(id => getProductWithImageById(id)));
-            onGetProducts(products);
-        };
-
-        selectFeaturedIds();
-    }, [onGetProducts]);
-
-    return null;
-}
-
-export default FeaturedIds;

@@ -1,17 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { getProductWithImageById } from '@/app/lib/data';
-import FeaturedIds from '@/app/ui/landing/featured_products'
-import { useState } from 'react';
+import { getProductWithImageById, productRowCount } from '@/app/lib/data';
+import FeaturedProducts from './ui/landing/featured_products';
+// import FeaturedIds from '@/app/ui/landing/featured_products';
 
-export default async function Home() {
+// import { useState } from 'react';
+
+export default async function Page() {
   // const product1 = await getProductWithImageById(1);
-  const [featuredIds, setFeaturedIds] = useState<number[]>([]);
-  const handleGetIds = (ids: number[]) => {
-    setFeaturedIds(ids);
-    console.log(featuredIds);
-  };
+  // const [featuredIds, setFeaturedIds] = useState<number[]>([]);
+  // const handleGetIds = (ids: number[]) => {
+  //   setFeaturedIds(ids);
+  //   console.log(featuredIds);
+  // };
 
   return (
     <main>
@@ -35,40 +37,9 @@ export default async function Home() {
 
       {/* Featured Products Area */}
 
-      <div id="featured-prodcuts">
+      <div id="featured-products">
         <h2>Featured Product</h2>
-        <FeaturedIds onGetIds={handleGetIds} />
-        <Image
-          src={featuredIds[0]?.image.url || ''}
-          width={70}
-          height={80}
-          alt="Picture of featured product number 1"
-          unoptimized
-        />
-
-        <Image
-          src={featuredIds[1]?.image.url || ''}
-          width={70}
-          height={80}
-          alt="Picture of featured product number 2"
-          unoptimized
-        />
-
-        <Image
-          width={70}
-          height={80}
-          alt="Picture of featured product number 3"
-          src={featuredIds[2]?.image.url || ''}
-          unoptimized
-        />
-
-        <Image
-          width={70}
-          height={80}
-          alt="Picture of featured product number 4"
-          src={featuredIds[3]?.image.url || ''}
-          unoptimized
-        />
+        <FeaturedProducts />
       </div>
 
       {/* Featured Artisans */}
