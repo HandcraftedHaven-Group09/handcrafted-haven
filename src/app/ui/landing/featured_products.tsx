@@ -14,7 +14,7 @@ export default async function FeaturedProducts() {
   return (
     <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
       {randomProducts.map((productId) => {
-        return <FeaturedProduct id={productId} />;
+        return <FeaturedProduct id={productId} key={productId} />;
       })}
     </div>
   );
