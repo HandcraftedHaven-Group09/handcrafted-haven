@@ -5,7 +5,8 @@ import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import { createImage } from './data';
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
+import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
 
 // For creating a new image record with new image
@@ -193,3 +194,114 @@ export async function authenticate(
     throw error;
   }
 }
+
+// Listing products category
+export async function fetchCategories() {
+  const categories = await prisma.product.findMany({
+    select: {
+      category: true,
+    },
+    distinct: ['category'], 
+  });
+
+  return categories;
+}
+
+// Function to search product by ID
+export async function fetchProductById(id: string) {
+
+  const numericId = parseInt(id, 10)
+
+  if (isNaN(numericId)) {
+    throw new Error(`Invalid product ID: ${id}`)
+  }
+
+  const product = await prisma.product.findUnique({
+    where: { id: numericId }, 
+    include: { image: true }, 
+  })
+
+  if (!product) {
+    throw new Error(`Product with ID ${numericId} not found.`)
+  }
+
+  return product
+}
+
+
+// Function to update the product
+export async function updateProduct(id: string, productData: {
+  name: string
+  description: string
+  price: number
+  discountPercent?: number
+  category: string
+  image?: string
+}) {
+  const productId = parseInt(id)
+
+  if (isNaN(productId)) {
+    throw new Error(`Invalid product ID: ${id}`)
+  }
+
+  // Fetch the existing product
+  const existingProduct = await prisma.product.findUnique({
+    where: { id: productId },
+    include: { image: true },
+  })
+
+  if (!existingProduct) {
+    throw new Error(`Product with ID ${productId} not found.`)
+  }
+
+  const imageUrl = productData.image || existingProduct.image?.url || ''
+
+  // Update the product in the database
+  const updatedProduct = await prisma.product.update({
+    where: { id: productId },
+    data: {
+      name: productData.name,
+      description: productData.description,
+      price: productData.price,
+      category: productData.category,
+      ...(productData.discountPercent !== undefined && { discountPercent: productData.discountPercent }),
+      image: imageUrl
+        ? {
+            upsert: {
+              create: {
+                url: imageUrl,
+                description: productData.name,
+              },
+              update: {
+                url: imageUrl,
+              },
+              where: {
+                id: existingProduct.image?.id,
+              },
+            },
+          }
+        : undefined,
+    },
+  })
+  return updatedProduct
+}
+
+export async function deleteProductById(id: number) {
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    throw error;
+  }
+}
+
+
+
+
+
+
+
+
+
