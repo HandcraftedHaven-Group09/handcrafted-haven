@@ -23,6 +23,8 @@ Table User {
 
 Table Seller {
   id Int [pk, increment]
+  email String [not null]
+  password String [not null]
   displayName String [not null]
   firstName String [not null]
   lastName String [not null]

@@ -5,6 +5,7 @@ import {
   PaymentType,
   ShippingType,
   Product,
+  Seller,
 } from '@prisma/client';
 import { blob } from 'stream/consumers';
 import { fetchExternalImage } from 'next/dist/server/image-optimizer';
@@ -48,7 +49,7 @@ async function main() {
   for (const seller of seedData.Sellers) {
     await client.seller
       .create({
-        data: seller,
+        data: seller as Seller,
       })
       .then(() => {
         console.log('Sellers created');

@@ -14,7 +14,7 @@ export default async function UserList({ listId }: { listId: string }) {
       <ul>
         {userList?.Products.map((product) => {
           return (
-            <li>
+            <li key={product.id}>
               <Link href="/">
                 <h4>{product.name}</h4>
                 <p>

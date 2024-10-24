@@ -3,7 +3,9 @@
     {
       "displayName": "Default",
       "firstName": "Default",
-      "lastName": "Default"
+      "lastName": "Default",
+      "email": "seller@hch.com",
+      "password": "123456"
     }
   ],
   "Users": [

@@ -60,6 +60,8 @@ model User {
 
 model Seller {
   id             Int                @id @default(autoincrement())
+  email          String
+  password       String
   displayName    String
   firstName      String
   lastName       String

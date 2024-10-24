@@ -3,8 +3,8 @@ import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials'; // Email/Password
 import GitHub from 'next-auth/providers/github'; // GitHub Oauth
 import { z } from 'zod';
-import type { User } from '@prisma/client';
-import { getUserByEmail } from '@/app/lib/data';
+import type { User, Seller } from '@prisma/client';
+import { getUserByEmail, getSellerByEmail } from '@/app/lib/data';
 import bcrypt from 'bcrypt';
 
 async function getUser(email: string): Promise<User | undefined> {
@@ -17,10 +17,24 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
+async function getSeller(email: string): Promise<Seller | undefined> {
+  try {
+    const seller = (await getSellerByEmail(email)) as Seller;
+    return seller;
+  } catch (error) {
+    console.error('Failed to fetch seller:', error);
+    throw new Error('Failed to fetch seller.');
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
+    // This section is for users login
     Credentials({
+      id: 'user-credentials',
+      name: 'Users Login',
+
       async authorize(credentials) {
         console.log('Authorizing');
         const parsedCredentials = z
@@ -45,6 +59,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return null;
       },
     }),
-    GitHub,
+    // This section is for the sellers login
+    Credentials({
+      id: 'seller-credentials',
+      name: 'Sellers Login',
+
+      async authorize(credentials) {
+        console.log('Authorizing Seller');
+        const parsedCredentials = z
+          .object({
+            email: z.string().email(),
+            password: z.string().min(6),
+          })
+          .safeParse(credentials);
+        if (parsedCredentials.success) {
+          const { email, password } = parsedCredentials.data;
+          const seller = await getSeller(email);
+          if (!seller) return null;
+          const passwordsMatch = await bcrypt.compare(
+            password,
+            seller.password
+          );
+          if (passwordsMatch)
+            return { id: seller.id.toString(), email: seller.email };
+        }
+
+        console.log('Invalid seller credentials');
+        return null;
+      },
+    }),
+    GitHub, // This makes github work...
   ],
 });

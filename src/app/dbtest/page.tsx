@@ -57,6 +57,7 @@ export default function Page() {
     postImage,
     initialCreateImageState
   );
+  console.dir('SESION DATA', session);
 
   return (
     <main style={{ padding: '1rem' }}>

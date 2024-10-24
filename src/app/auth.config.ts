@@ -3,13 +3,13 @@ import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
   pages: {
-    signIn: '/login',
+    signIn: '/users/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       if (isLoggedIn) {
-        if (nextUrl.pathname.startsWith('/login')) {
+        if (nextUrl.pathname.startsWith('/users/login')) {
           // Logged in but at login screen then redirect to root path
           return Response.redirect(
             new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl)

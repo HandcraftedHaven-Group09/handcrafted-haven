@@ -19,6 +19,15 @@ export async function getUserByEmail(userEmail: string) {
   return user;
 }
 
+export async function getSellerByEmail(sellerEmail: string) {
+  const seller = await prisma.seller.findFirst({
+    where: {
+      email: sellerEmail,
+    },
+  });
+  return seller;
+}
+
 export async function getProductsBySimpleQuery(query: string, max: number) {
   const products = await prisma.product.findMany({
     where: {
