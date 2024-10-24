@@ -1,6 +1,5 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
 import React from 'react';
 
 // This Define the Product type
@@ -14,11 +13,11 @@ const SellerProfile = () => {
     const { data: session } = useSession();
     const [productDescription, setProductDescription] = useState('');
     const [productCategory, setProductCategory] = useState('');
-    const [products, setProducts] = useState<Product[]>([]); // This explicitly define the state type
+    const [products, setProducts] = useState<Product[]>([]); // This explicitly defines the state type
     const [productImages, setProductImages] = useState<string[]>([]);  // Assuming images are URLs
 
     useEffect(() => {
-        // This will cleanup image URLs on unmount to prevent memory leaks
+        // This will clean up image URLs on unmount to prevent memory leaks
         return () => {
             productImages.forEach((imageUrl) => URL.revokeObjectURL(imageUrl));
         };
@@ -31,19 +30,20 @@ const SellerProfile = () => {
                 category: productCategory,
                 images: productImages,
             };
-            setProducts((prevProducts) => [...prevProducts, newProduct]); 
+            setProducts((prevProducts) => [...prevProducts, newProduct]);
             setProductDescription('');
             setProductCategory('');
             setProductImages([]);
         }
     };
 
-    const onDrop = (acceptedFiles: File[]) => {
-        const imageUrls = acceptedFiles.map(file => URL.createObjectURL(file));
-        setProductImages((prevImages) => [...prevImages, ...imageUrls]);
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files) {
+            const imageUrls = Array.from(files).map((file) => URL.createObjectURL(file));
+            setProductImages((prevImages) => [...prevImages, ...imageUrls]);
+        }
     };
-
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
     // Safely check for session and session.user
     if (!session || !session.user) {
@@ -82,9 +82,14 @@ const SellerProfile = () => {
                 <option value="craft-supplies">Craft Supplies</option>
             </select>
 
-            <div {...getRootProps()} style={{ border: '2px dashed #cccccc', padding: '20px', margin: '10px 0' }}>
-                <input {...getInputProps()} />
-                <p>Drag and drop some images here, or click to select images</p>
+            <div style={{ padding: '20px', margin: '10px 0' }}>
+                <label>Upload Images:</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                />
             </div>
             
             <h4>Selected Images:</h4>
