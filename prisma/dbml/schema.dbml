@@ -1,0 +1,129 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  displayName String [not null]
+  firstName String [not null]
+  lastName String [not null]
+  email String [not null]
+  bio String
+  userId String [not null]
+  credential String [not null]
+  profilePicture Image
+  profilePictureId Int
+  Reviews Review [not null]
+  PaymentMethods PaymentMethod [not null]
+  Invoices Invoice [not null]
+}
+
+Table Seller {
+  id Int [pk, increment]
+  displayName String [not null]
+  firstName String [not null]
+  lastName String [not null]
+  PostedProducts Product [not null]
+  PostedImages Image [not null]
+}
+
+Table Product {
+  id Int [pk, increment]
+  name String [not null]
+  price Int [not null]
+  discountPercent Float [not null]
+  discountAbsolute Int [not null]
+  description String [not null]
+  category String [not null]
+  seller Seller [not null]
+  sellerId Int [not null]
+  image Image [not null]
+  imageId Int [not null]
+  Reviews Review [not null]
+  Invoices Invoice [not null]
+}
+
+Table Review {
+  id Int [pk, increment]
+  rating Int [not null]
+  review String
+  user User [not null]
+  product Product [not null]
+  userId Int [not null]
+  productId Int [not null]
+}
+
+Table PaymentMethod {
+  id Int [pk, increment]
+  identifier String [not null]
+  expirationMonth Int [not null]
+  expirationYear Int [not null]
+  paymentType PaymentType [not null]
+  street1 String [not null]
+  street2 String
+  city String [not null]
+  state String [not null]
+  zip String [not null]
+  validation String [not null]
+  User User
+  userId Int
+  Invoices Invoice [not null]
+}
+
+Table Invoice {
+  id Int [pk, increment]
+  subtotal Int [not null]
+  tax Int [not null]
+  shipping Int [not null]
+  shippingType ShippingType [not null]
+  totalCost Int [not null]
+  user User [not null]
+  userId Int [not null]
+  paymentMethod PaymentMethod [not null]
+  paymentMethodId Int [not null]
+  Products Product [not null]
+}
+
+Table Image {
+  id Int [pk, increment]
+  url String [not null]
+  description String [not null]
+  Owner Seller
+  ownerId Int
+  Users User [not null]
+  Product Product [not null]
+}
+
+Table InvoiceToProduct {
+  invoicesId Int [ref: > Invoice.id]
+  productsId Int [ref: > Product.id]
+}
+
+Enum PaymentType {
+  CREDIT
+  PAYPAL
+}
+
+Enum ShippingType {
+  USPS
+  UPS
+  FEDEX
+}
+
+Ref: User.profilePictureId > Image.id
+
+Ref: Product.sellerId > Seller.id [delete: Cascade]
+
+Ref: Product.imageId > Image.id
+
+Ref: Review.userId > User.id [delete: Cascade]
+
+Ref: Review.productId > Product.id [delete: Cascade]
+
+Ref: PaymentMethod.userId > User.id [delete: Cascade]
+
+Ref: Invoice.userId > User.id [delete: Cascade]
+
+Ref: Invoice.paymentMethodId > PaymentMethod.id [delete: Cascade]
+
+Ref: Image.ownerId > Seller.id [delete: Cascade]
