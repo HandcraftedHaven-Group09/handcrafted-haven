@@ -134,6 +134,11 @@ export async function createImage(imageData: {
   return result;
 }
 
+export async function productRowCount () {
+  const rowCount = await prisma.product.count();
+  return rowCount;
+}
+
 // export async function getImageById(imageId: number) {
 //   const image = prisma.image.findFirst({
 //     where: {

@@ -2,9 +2,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { getProductWithImageById } from '@/app/lib/data';
+import FeaturedIds from '@/app/ui/landing/featured_products'
+import { useState } from 'react';
 
 export default async function Home() {
-  const product1 = await getProductWithImageById(1);
+  // const product1 = await getProductWithImageById(1);
+  const [featuredIds, setFeaturedIds] = useState<number[]>([]);
+  const handleGetIds = (ids: number[]) => {
+    setFeaturedIds(ids);
+    console.log(featuredIds);
+  };
 
   return (
     <main>
@@ -30,8 +37,9 @@ export default async function Home() {
 
       <div id="featured-prodcuts">
         <h2>Featured Product</h2>
+        <FeaturedIds onGetIds={handleGetIds} />
         <Image
-          src={product1?.image.url || ''}
+          src={featuredIds[0]?.image.url || ''}
           width={70}
           height={80}
           alt="Picture of featured product number 1"
@@ -39,7 +47,7 @@ export default async function Home() {
         />
 
         <Image
-          src={product1?.image.url || ''}
+          src={featuredIds[1]?.image.url || ''}
           width={70}
           height={80}
           alt="Picture of featured product number 2"
@@ -50,7 +58,7 @@ export default async function Home() {
           width={70}
           height={80}
           alt="Picture of featured product number 3"
-          src={product1?.image.url || ''}
+          src={featuredIds[2]?.image.url || ''}
           unoptimized
         />
 
@@ -58,7 +66,7 @@ export default async function Home() {
           width={70}
           height={80}
           alt="Picture of featured product number 4"
-          src={product1?.image.url || ''}
+          src={featuredIds[3]?.image.url || ''}
           unoptimized
         />
       </div>
