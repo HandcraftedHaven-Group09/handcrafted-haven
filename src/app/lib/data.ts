@@ -39,6 +39,7 @@ export async function getProductsBySimpleQuery(query: string, max: number) {
   });
   return products;
 }
+
 export async function getProductById(productId: number) {
   const product = await prisma.product.findFirst({
     where: {
@@ -47,6 +48,19 @@ export async function getProductById(productId: number) {
   });
   return product;
 }
+
+export async function getProductWithImageById(productId: number) {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: productId,
+    },
+    include: {
+      image: true,
+    },
+  });
+  return product;
+}
+
 export async function getProductsAll(max?: number): Promise<Product[]> {
   const products = await prisma.product.findMany({
     take: max,
@@ -118,6 +132,11 @@ export async function createImage(imageData: {
   });
   console.log('Wrote', imageData.url);
   return result;
+}
+
+export async function productRowCount () {
+  const rowCount = await prisma.product.count();
+  return rowCount;
 }
 
 // export async function getImageById(imageId: number) {
