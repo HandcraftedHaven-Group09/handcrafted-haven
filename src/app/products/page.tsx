@@ -3,6 +3,12 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { fetchProductAll } from '../lib/actions';
 import styles from './product_page.module.css';
+import { Metadata } from 'next';
+
+//TODO: Make this page "user server" so metadata works. Move client code to sub components
+// export const metadata: Metadata = {
+//   title: 'Products',
+// };
 
 type Product = {
   id: number;
