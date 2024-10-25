@@ -1,51 +1,53 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import Image from 'next/image';
-import { fetchProductById } from '@/app/lib/actions';
-import styles from './product_details.module.css';
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import Image from 'next/image'
+import { fetchProductById } from '@/app/lib/actions'
+import styles from './product_details.module.css'
+import AddToCartButton from '@/app/ui/product/components/add__cart_button'
+import QuantityInput from '@/app/ui/product/components/quantity'
 
 type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  discountPercent?: number;
-  sellerId?: number;
+  id: number
+  name: string
+  description: string
+  price: number
+  category: string
+  discountPercent?: number
+  sellerId?: number
   image: {
-    url: string;
-  };
-};
+    url: string
+  }
+}
 
 export default function ProductDetailsPage() {
-  const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<number>(1); // Estado para a quantidade
+  const { id } = useParams()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [quantity, setQuantity] = useState<number>(1)
 
   useEffect(() => {
     if (id) {
       const fetchProduct = async () => {
         try {
-          const fetchedProduct = await fetchProductById(id as string);
-          setProduct(fetchedProduct);
+          const fetchedProduct = await fetchProductById(id as string)
+          setProduct(fetchedProduct)
         } catch (error) {
-          console.error('Error fetching product:', error);
+          console.error('Error fetching product:', error)
         }
-      };
+      }
 
-      fetchProduct();
+      fetchProduct()
     }
-  }, [id]);
+  }, [id])
 
   const handleAddToCart = () => {
     if (product) {
-      console.log(`${quantity} of ${product.name} added to the cart`);
+      console.log(`${quantity} of ${product.name} added to the cart`)
     }
-  };
+  }
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) return <p>Loading...</p>
 
   return (
     <div className={styles.container}>
@@ -70,20 +72,13 @@ export default function ProductDetailsPage() {
         <p>Seller ID: {product.sellerId}</p>
 
         <div className={styles.cartSection}>
-          <label htmlFor="quantity">Quantity:</label>
-          <input
-            type="number"
-            id="quantity"
-            name="quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            min="1"
-          />
-          <button onClick={handleAddToCart} className={styles.addToCartButton}>
-            Add to Cart
-          </button>
+          {/* Use the QuantityInput component */}
+          <QuantityInput value={quantity} onChange={setQuantity} />
+
+          {/* Use the AddToCartButton component */}
+          <AddToCartButton onClick={handleAddToCart} />
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react'
 import styles from './product_list.module.css'
 import { fetchProductAll, deleteProductById } from '@/app/lib/actions'
 import Search from '@/app/ui/search'
+import EditButton from '@/app/ui/product/components/edit_button'
+import DeleteButton from '@/app/ui/product/components/delete_button'
 
 type Product = {
   id: number
@@ -91,18 +93,8 @@ export default function ProductListingPage() {
               <p><strong>Seller ID:</strong> {product.sellerId}</p>
 
               <div className={styles.buttonContainer}>
-                <button 
-                  onClick={() => router.push(`/products/${product.id}/edit`)} 
-                  className={styles.editButton}
-                >
-                  Edit
-                </button>
-                <button 
-                  onClick={() => handleDelete(product.id)} 
-                  className={styles.deleteButton}
-                >
-                  Delete
-                </button>
+                <EditButton onEdit={() => router.push(`/products/${product.id}/edit`)} />
+                <DeleteButton onDelete={() => handleDelete(product.id)} />
               </div>
             </div>
           </div>
