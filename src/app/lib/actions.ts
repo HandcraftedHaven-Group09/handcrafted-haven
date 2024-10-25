@@ -217,22 +217,22 @@ export async function fetchProductById(id: string) {
 
   const product = await prisma.product.findUnique({
     where: { id: numericId },
-    include: { image: true },
+    include: { 
+      image: true, // Incluindo a imagem conforme o relacionamento definido no schema
+      seller: true, // Incluindo o vendedor caso queira exibir mais informações do vendedor
+    },
   });
 
   if (!product) {
     throw new Error(`Product with ID ${numericId} not found.`);
   }
 
-  // Retorne a URL da imagem corretamente
+  // Ajustando a forma como retornamos a URL da imagem
   return {
     ...product,
     image: product.image ? { url: product.image.url } : { url: '' },
   };
 }
-
-
-
 
 
 // Function to update the product

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { fetchProductById } from '@/app/lib/actions'
 import styles from './product_details.module.css'
@@ -21,16 +20,21 @@ type Product = {
   }
 }
 
-export default function ProductDetailsPage() {
-  const { id } = useParams()
+type Props = {
+  params: {
+    id: string
+  }
+}
+
+export default function ProductDetailsPage({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
 
   useEffect(() => {
-    if (id) {
+    if (params.id) {
       const fetchProduct = async () => {
         try {
-          const fetchedProduct = await fetchProductById(id as string)
+          const fetchedProduct = await fetchProductById(params.id)
           setProduct(fetchedProduct)
         } catch (error) {
           console.error('Error fetching product:', error)
@@ -39,7 +43,7 @@ export default function ProductDetailsPage() {
 
       fetchProduct()
     }
-  }, [id])
+  }, [params.id])
 
   const handleAddToCart = () => {
     if (product) {
@@ -72,10 +76,7 @@ export default function ProductDetailsPage() {
         <p>Seller ID: {product.sellerId}</p>
 
         <div className={styles.cartSection}>
-          {/* Use the QuantityInput component */}
           <QuantityInput value={quantity} onChange={setQuantity} />
-
-          {/* Use the AddToCartButton component */}
           <AddToCartButton onClick={handleAddToCart} />
         </div>
       </div>
