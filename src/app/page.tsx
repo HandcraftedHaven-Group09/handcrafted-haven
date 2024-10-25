@@ -1,6 +1,11 @@
+
+import React from "react"
 import Link from 'next/link';
+import Image from "next/image";
+
 import styles from './page.module.css';
 import FeaturedProducts from './ui/landing/featured_products';
+
 
 export default async function Home() {
   // const product1 = await getProductWithImageById(1);
