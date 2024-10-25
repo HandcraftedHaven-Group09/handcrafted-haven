@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
 import FeaturedProducts from './ui/landing/featured_products';
@@ -13,58 +12,24 @@ export default async function Home() {
         <div id="customers">
           <div>
             <h2>Customers</h2>
-            <Link href="/customerLogin">Login</Link> <br />
+            <Link href={`/login`}>Login</Link> <br />
             {/* <Link href="/customerReg">Registration</Link> <br /> */}
           </div>
         </div>
-        <div id="artisans">
+        {/* <div id="artisans">
           <div>
             <h2>Artisans</h2>
             <Link href="/artisanLogin">Login</Link> <br />
-            {/* <Link href="/artisanReg">Registration</Link> <br /> */}
+            <Link href="/artisanReg">Registration</Link> <br />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Featured Products Area */}
       <FeaturedProducts />
-      {/* <div id="featured-prodcuts">
-        <h2>Featured Product</h2>
-        <Image
-          src={products[0]?.image.url || ''}
-          width={70}
-          height={80}
-          alt="Picture of featured product number 1"
-          unoptimized
-        />
-
-        <Image
-          src={products[1]?.image.url || ''}
-          width={70}
-          height={80}
-          alt="Picture of featured product number 2"
-          unoptimized
-        />
-
-        <Image
-          width={70}
-          height={80}
-          alt="Picture of featured product number 3"
-          src={products[2]?.image.url || ''}
-          unoptimized
-        />
-
-        <Image
-          width={70}
-          height={80}
-          alt="Picture of featured product number 4"
-          src={products[3]?.image.url || ''}
-          unoptimized
-        />
-      </div> */}
 
       {/* Featured Artisans */}
-      <div id="featured-artisans">
+      {/* <div id="featured-artisans">
         <h2>Featured Artist</h2>
         <div id="fa1">
           <Image
@@ -92,7 +57,7 @@ export default async function Home() {
             pariatur sint.
           </p>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
