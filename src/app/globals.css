@@ -6,7 +6,7 @@
   --primary-bg: rgb(240, 235, 226);
   --secondary-fg: rgb(240, 235, 226);
   --secondary-bg: rgb(80, 72, 57);
-  --link-color: rgb(255, 101, 30);
+  --link-color: rgb(138, 44, 0);
   /* THese are provided by layout.tsx */
   /* --font-title: 'Girassol';
   --font-header: 'Arizonia';
@@ -23,6 +23,7 @@ html {
   align-items: center;
   background-color: var(--secondary-bg);
   font-family: var(--font-body);
+  font-size: medium;
 }
 
 body {
@@ -35,10 +36,9 @@ body {
   background-color: var(--primary-bg);
   color: var(--primary-fg);
   font-family: var(--font-body);
-  background-image: url(/product/images/candle_soy.webp);
-
-  background-repeat: no-repeat;
-  background-size: 350px;
+  background-image: url(/ui/background-shavings.webp);
+  background-attachment: fixed;
+  background-repeat: repeat;
 }
 header,
 footer {
@@ -60,10 +60,18 @@ header .title-group {
   padding: 1rem;
   width: 100%;
 }
+header .title-group h1 {
+  margin: 0;
+}
 nav {
+  display: flex;
+  flex-direction: column;
   background-color: rgba(61, 93, 12, 0.71);
+  width: 100%;
 }
 nav ul {
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   list-style: none;
   padding: 0.5rem;
@@ -75,10 +83,14 @@ nav ul li:hover {
 }
 main {
   padding: 1rem;
+  margin: 1rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.689);
+  backdrop-filter: blur(2px);
 }
 
 h1 {
-  background-color: var(--secondary-bg);
+  /* background-color: var(--secondary-bg); */
   color: var(--secondary-fg);
   /* font: var(--font-title); */
   font-family: var(--font-title);
@@ -89,16 +101,29 @@ h1 {
 h2,
 h3,
 h4 {
-  background-color: var(--primary-bg);
+  /* background-color: var(--primary-bg); */
   color: var(--primary-fg);
   /* font: var(--font-header); */
   font-family: var(--font-heading);
   font-size: large;
 }
+h2 {
+  font-size: larger;
+}
+a {
+  color: var(--link-color);
+}
 
 @media (min-width: 450px) {
   header {
     /* flex-direction: row; */
+    align-items: center;
+  }
+  header .title-group {
+    flex-direction: row;
+  }
+  header nav {
+    width: 100%;
     align-items: center;
   }
   header nav ul {

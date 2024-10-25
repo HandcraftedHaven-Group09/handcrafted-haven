@@ -7,7 +7,7 @@ import FeaturedProducts from './ui/landing/featured_products';
 
 export default async function Home() {
   return (
-    <main>
+    <>
       {/* Customer/Artisan Login in Area */}
       <div id="login">
         <div id="customers">
@@ -59,6 +59,6 @@ export default async function Home() {
           </p>
         </div>
       </div>
-    </main>
+    </>
   );
 }

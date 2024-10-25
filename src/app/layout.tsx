@@ -43,7 +43,7 @@ export default async function RootLayout({
             <div className="title-group">
               <Image
                 width={100}
-                height={100}
+                height={50}
                 alt="Logo"
                 src="/ui/logo.svg"
               ></Image>

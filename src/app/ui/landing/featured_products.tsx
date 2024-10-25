@@ -1,5 +1,6 @@
 import { getProductsAll } from '@/app/lib/data';
 import FeaturedProduct from './featured_product';
+import '@/app/ui/landing/landing.css';
 
 // Get products from table and return just the id's.
 // const getProductIds = async () => {
@@ -9,9 +10,9 @@ import FeaturedProduct from './featured_product';
 //     }
 
 const getRandomIds = (ids: number[], count: number): number[] => {
-    const shuffle = [...ids].sort(() => 0.5 - Math.random());
-    return shuffle.slice(0, count);
-}
+  const shuffle = [...ids].sort(() => 0.5 - Math.random());
+  return shuffle.slice(0, count);
+};
 
 // //  Using the id's, create an array of 4 random products.
 // const FeaturedIds = () => {
@@ -32,16 +33,18 @@ const getRandomIds = (ids: number[], count: number): number[] => {
 // export default FeaturedIds;
 
 export default async function FeaturedProducts() {
-    const products = await getProductsAll();
-    const ids: number[] = products.map(product => product.id);
-    const randomIds: number[] = getRandomIds(ids, 4);
+  const products = await getProductsAll();
+  const ids: number[] = products.map((product) => product.id);
+  const randomIds: number[] = getRandomIds(ids, 4);
 
-    return (
-        <div id="featured-products">
-            <h2>Featured Products</h2>
-            {randomIds.map((productId) => {
-                return <FeaturedProduct id={productId} key={productId} />;
-            })}
-        </div>
-    );
+  return (
+    <>
+      <h2>Featured Products</h2>
+      <div id="featured-products">
+        {randomIds.map((productId) => {
+          return <FeaturedProduct id={productId} key={productId} />;
+        })}
+      </div>
+    </>
+  );
 }
