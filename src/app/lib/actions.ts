@@ -209,24 +209,30 @@ export async function fetchCategories() {
 
 // Function to search product by ID
 export async function fetchProductById(id: string) {
-
-  const numericId = parseInt(id, 10)
+  const numericId = parseInt(id, 10);
 
   if (isNaN(numericId)) {
-    throw new Error(`Invalid product ID: ${id}`)
+    throw new Error(`Invalid product ID: ${id}`);
   }
 
   const product = await prisma.product.findUnique({
-    where: { id: numericId }, 
-    include: { image: true }, 
-  })
+    where: { id: numericId },
+    include: { image: true },
+  });
 
   if (!product) {
-    throw new Error(`Product with ID ${numericId} not found.`)
+    throw new Error(`Product with ID ${numericId} not found.`);
   }
 
-  return product
+  // Retorne a URL da imagem corretamente
+  return {
+    ...product,
+    image: product.image ? { url: product.image.url } : { url: '' },
+  };
 }
+
+
+
 
 
 // Function to update the product
