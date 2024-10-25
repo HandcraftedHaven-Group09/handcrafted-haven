@@ -1,0 +1,37 @@
+.container {
+    color: #000; /* Defina a cor do texto como preto para garantir visibilidade */
+    background-color: #fff; /* Use um fundo branco para contraste */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .productDetails h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #333; /* Ajuste a cor do título */
+  }
+  
+  .productDetails p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #555; /* Ajuste a cor do texto */
+  }
+  
+  .addToCartButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .addToCartButton:hover {
+    background-color: #45a049;
+  }
+  
