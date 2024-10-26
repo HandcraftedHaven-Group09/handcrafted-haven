@@ -11,9 +11,14 @@ export const authConfig = {
       if (isLoggedIn) {
         if (nextUrl.pathname.startsWith('/users/login')) {
           // Logged in but at login screen then redirect to root path
-          return Response.redirect(
-            new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl)
-          );
+          const callback = nextUrl.searchParams.get('callbackUrl');
+          if (callback) {
+            return Response.redirect(
+              new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl) // Go to the callback if present
+            );
+          } else {
+            return Response.redirect(new URL(nextUrl.origin, nextUrl)); // Go to root if present
+          }
         }
       }
 
