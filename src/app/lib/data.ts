@@ -19,6 +19,15 @@ export async function getUserByEmail(userEmail: string) {
   return user;
 }
 
+export async function getSellerByEmail(sellerEmail: string) {
+  const seller = await prisma.seller.findFirst({
+    where: {
+      email: sellerEmail,
+    },
+  });
+  return seller;
+}
+
 export async function getProductsBySimpleQuery(query: string, max: number) {
   const products = await prisma.product.findMany({
     where: {
@@ -134,16 +143,16 @@ export async function createImage(imageData: {
   return result;
 }
 
+export async function getUserListById(listId: number) {
+  const result = await prisma.userList.findFirst({
+    where: { id: listId },
+    include: { Products: true },
+  });
+  return result;
+}
+
 export async function productRowCount () {
   const rowCount = await prisma.product.count();
   return rowCount;
 }
 
-// export async function getImageById(imageId: number) {
-//   const image = prisma.image.findFirst({
-//     where: {
-//       id: imageId,
-//     },
-//   });
-//   return image;
-// }

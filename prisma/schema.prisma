@@ -14,6 +14,9 @@ generator client {
 //   output   = "./ERD.svg" // Specify output file, it can be PNG, SVG, etc.
 //   format   = "svg" // Choose the desired format (png, svg)
 // }
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
 
 datasource db {
   provider  = "postgresql"
@@ -55,6 +58,8 @@ model User {
 
 model Seller {
   id             Int                @id @default(autoincrement())
+  email          String
+  password       String
   displayName    String
   firstName      String
   lastName       String

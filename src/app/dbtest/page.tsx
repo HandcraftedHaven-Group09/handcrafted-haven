@@ -11,7 +11,6 @@ import { SessionProvider, useSession } from 'next-auth/react';
 
 export default function Page() {
   const { data: session, status } = useSession();
-
   const [products, updateProducts] = useState<
     {
       name: string;
@@ -57,13 +56,17 @@ export default function Page() {
     postImage,
     initialCreateImageState
   );
+  console.log('SESSION DATA', session);
 
   return (
     <main style={{ padding: '1rem' }}>
       <h2>Database Testing Sandbox</h2>
       <div>
         {session ? (
-          <span>{session.user?.email} logged in</span>
+          <span>
+            User {session.user?.name} #{session.user?.id} email:
+            {session.user?.email} role:{session.user?.role} logged in
+          </span>
         ) : (
           <span>No session</span>
         )}

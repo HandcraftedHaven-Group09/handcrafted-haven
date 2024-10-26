@@ -8,6 +8,7 @@ import { createImage } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -164,7 +165,7 @@ export async function createNewProduct(productData: {
   }
 }
 
-// Handle authentication
+// Handle authentication for users
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData
@@ -175,18 +176,49 @@ export async function authenticate(
   const password = formData.get('password');
   try {
     console.log('Trying to login');
-    const result = await signIn('credentials', {
+    const result = await signIn('user-credentials', {
       redirect: true,
       email: email,
       password: password,
-      callbackUrl: 'http://www.google.com',
+      role: 'user', // These fields go to authorize() in auth.ts
     });
-    console.log('Imediate post login');
+    console.log('Immediate post login');
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
           return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
+
+// Handle authentication for sellers
+export async function authenticateSeller(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  'use client';
+  console.log('FORM DATA: ', formData.get('email'));
+  const email = formData.get('email');
+  const password = formData.get('password');
+  try {
+    console.log('Trying to login');
+    const result = await signIn('seller-credentials', {
+      // TODO Make this credentialsSeller...thing
+      redirect: true,
+      email: email,
+      password: password,
+      role: 'seller',
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid seller credentials.';
         default:
           return 'Something went wrong.';
       }
@@ -201,7 +233,7 @@ export async function fetchCategories() {
     select: {
       category: true,
     },
-    distinct: ['category'], 
+    distinct: ['category'],
   });
 
   return categories;
@@ -224,6 +256,7 @@ export async function fetchProductById(id: string) {
     throw new Error(`Product with ID ${numericId} not found.`);
   }
 
+
   // Retorne a URL da imagem corretamente
   return {
     ...product,
@@ -232,35 +265,35 @@ export async function fetchProductById(id: string) {
 }
 
 
-
-
-
 // Function to update the product
-export async function updateProduct(id: string, productData: {
-  name: string
-  description: string
-  price: number
-  discountPercent?: number
-  category: string
-  image?: string
-}) {
-  const productId = parseInt(id)
+export async function updateProduct(
+  id: string,
+  productData: {
+    name: string;
+    description: string;
+    price: number;
+    discountPercent?: number;
+    category: string;
+    image?: string;
+  }
+) {
+  const productId = parseInt(id);
 
   if (isNaN(productId)) {
-    throw new Error(`Invalid product ID: ${id}`)
+    throw new Error(`Invalid product ID: ${id}`);
   }
 
   // Fetch the existing product
   const existingProduct = await prisma.product.findUnique({
     where: { id: productId },
     include: { image: true },
-  })
+  });
 
   if (!existingProduct) {
-    throw new Error(`Product with ID ${productId} not found.`)
+    throw new Error(`Product with ID ${productId} not found.`);
   }
 
-  const imageUrl = productData.image || existingProduct.image?.url || ''
+  const imageUrl = productData.image || existingProduct.image?.url || '';
 
   // Update the product in the database
   const updatedProduct = await prisma.product.update({
@@ -270,7 +303,9 @@ export async function updateProduct(id: string, productData: {
       description: productData.description,
       price: productData.price,
       category: productData.category,
-      ...(productData.discountPercent !== undefined && { discountPercent: productData.discountPercent }),
+      ...(productData.discountPercent !== undefined && {
+        discountPercent: productData.discountPercent,
+      }),
       image: imageUrl
         ? {
             upsert: {
@@ -288,8 +323,8 @@ export async function updateProduct(id: string, productData: {
           }
         : undefined,
     },
-  })
-  return updatedProduct
+  });
+  return updatedProduct;
 }
 
 export async function deleteProductById(id: number) {
@@ -302,12 +337,3 @@ export async function deleteProductById(id: number) {
     throw error;
   }
 }
-
-
-
-
-
-
-
-
-
