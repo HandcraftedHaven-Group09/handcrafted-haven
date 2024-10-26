@@ -1,10 +1,11 @@
-'use client'  
+'use client'
 
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import styles from './product_list.module.css'
 import { fetchProductAll, deleteProductById } from '@/app/lib/actions'
+import Search from '@/app/ui/search'
 
 type Product = {
   id: number
@@ -18,8 +19,9 @@ type Product = {
 }
 
 export default function ProductListingPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const router = useRouter(); // Initialize router for navigation
+  const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const router = useRouter() // Initialize router for navigation
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,9 +34,10 @@ export default function ProductListingPage() {
         category: product.category,
         discountPercent: product.discountPercent,
         sellerId: product.sellerId,
-        image: product.image.url, 
+        image: product.image.url,
       }))
       setProducts(productData)
+      setFilteredProducts(productData) // Initially, all products are shown
     }
 
     fetchProducts()
@@ -43,16 +46,29 @@ export default function ProductListingPage() {
   const handleDelete = async (productId: number) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this product?')
     if (confirmDelete) {
-      await deleteProductById(productId); // Call delete function
-      setProducts(products.filter((product) => product.id !== productId)); // Update the product list
+      await deleteProductById(productId) 
+      setProducts(products.filter((product) => product.id !== productId)) 
+      setFilteredProducts(filteredProducts.filter((product) => product.id !== productId)) 
     }
+  }
+
+  const handleSearch = (searchTerm: string) => {
+    // Filter the products based on the search term
+    const lowerCaseSearchTerm = searchTerm.toLowerCase()
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.description.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.category.toLowerCase().includes(lowerCaseSearchTerm)
+    )
+    setFilteredProducts(filtered)
   }
 
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Product Listing</h1>
+      <Search onSearch={handleSearch} /> 
       <div className={styles.productGrid}>
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.id} className={styles.card}>
             <div className={styles.imageWrapper}>
               <Image

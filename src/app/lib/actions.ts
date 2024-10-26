@@ -256,8 +256,14 @@ export async function fetchProductById(id: string) {
     throw new Error(`Product with ID ${numericId} not found.`);
   }
 
-  return product;
+
+  // Retorne a URL da imagem corretamente
+  return {
+    ...product,
+    image: product.image ? { url: product.image.url } : { url: '' },
+  };
 }
+
 
 // Function to update the product
 export async function updateProduct(
