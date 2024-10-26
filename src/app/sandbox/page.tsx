@@ -101,13 +101,21 @@ export default function Page() {
           <label>PRODUCT</label>
           <select name="product">
             {products.map((prod) => {
-              return <option value={prod.id}>{prod.name}</option>;
+              return (
+                <option key={prod.id} value={prod.id}>
+                  {prod.name}
+                </option>
+              );
             })}
           </select>
           <label>LIST</label>
           <select name="list">
             {lists.map((list) => {
-              return <option value={list.id}>{list.name}</option>;
+              return (
+                <option key={list.id} value={list.id}>
+                  {list.name}
+                </option>
+              );
             })}
           </select>
           <button>ADD</button>

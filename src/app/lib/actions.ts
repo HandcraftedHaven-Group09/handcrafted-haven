@@ -10,10 +10,8 @@ import {
   getListsByUser,
   getUserListById,
 } from './data';
-// import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({

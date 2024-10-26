@@ -2,10 +2,9 @@
 
 import '@/app/ui/users/users.css';
 import Image from 'next/image';
-import Link from 'next/link';
+
 import { authenticate } from '@/app/lib/actions';
 import { useActionState, useState } from 'react';
-import { signIn } from '@/app/auth';
 import { signIn as signInClient } from 'next-auth/react';
 
 export default function UserLogin() {

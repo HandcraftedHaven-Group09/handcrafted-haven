@@ -1,5 +1,4 @@
 import { getUserWithListsById } from '@/app/lib/data';
-import Link from 'next/link';
 import UserList from '@/app/ui/users/user-list';
 import './users.css';
 
@@ -11,8 +10,8 @@ export default async function UserLists({ id }: { id: number }) {
       <ul>
         {lists?.UserList.map((list) => {
           return (
-            <li>
-              <UserList list={list} />
+            <li key={list.id}>
+              <UserList key={list.id} list={list} />
             </li>
           );
         })}
