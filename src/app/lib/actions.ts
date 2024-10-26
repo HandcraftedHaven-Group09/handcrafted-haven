@@ -4,11 +4,14 @@ import { put } from '@vercel/blob';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { createImage } from './data';
-// import { signIn } from 'next-auth/react';
+import {
+  addToUserList,
+  createImage,
+  getListsByUser,
+  getUserListById,
+} from './data';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -256,14 +259,12 @@ export async function fetchProductById(id: string) {
     throw new Error(`Product with ID ${numericId} not found.`);
   }
 
-
   // Retorne a URL da imagem corretamente
   return {
     ...product,
     image: product.image ? { url: product.image.url } : { url: '' },
   };
 }
-
 
 // Function to update the product
 export async function updateProduct(
@@ -335,5 +336,24 @@ export async function deleteProductById(id: number) {
   } catch (error) {
     console.error('Error deleting product:', error);
     throw error;
+  }
+}
+
+export async function fetchUserListAll(userId: number) {
+  try {
+    const lists = await getListsByUser(userId);
+    console.log('Got lists');
+    return lists;
+  } catch (error) {
+    console.log('Error', error);
+    return [];
+  }
+}
+
+export async function addProductToUserList(listId: number, productId: number) {
+  try {
+    const result = await addToUserList(productId, listId);
+  } catch (error) {
+    return 'error';
   }
 }

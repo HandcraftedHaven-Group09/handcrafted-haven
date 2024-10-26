@@ -1,10 +1,27 @@
-import { PrismaClient, Product, Seller, Image } from '@prisma/client';
+import { PrismaClient, Product, Seller, Image, UserList } from '@prisma/client';
+import { list } from '@vercel/blob';
 const prisma = new PrismaClient();
 
 export async function getUserById(userId: number) {
   const user = await prisma.user.findFirst({
     where: {
       id: userId,
+    },
+  });
+  return user;
+}
+
+export async function getUserWithListsById(userId: number) {
+  const user = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+    include: {
+      UserList: {
+        include: {
+          Products: true,
+        },
+      },
     },
   });
   return user;
@@ -151,8 +168,31 @@ export async function getUserListById(listId: number) {
   return result;
 }
 
-export async function productRowCount () {
+export async function productRowCount() {
   const rowCount = await prisma.product.count();
   return rowCount;
 }
 
+export async function getListsByUser(userId: number) {
+  const lists = await prisma.userList.findMany({
+    where: { userId: userId },
+  });
+  return lists;
+}
+
+export async function addToUserList(productId: number, listId: number) {
+  const result = await prisma.userList.update({
+    where: {
+      id: listId,
+    },
+    data: {
+      Products: {
+        connect: {
+          id: productId,
+        },
+      },
+    },
+  });
+
+  return result;
+}

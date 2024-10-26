@@ -1,4 +1,3 @@
-
 import { User } from 'prisma/prisma-client';
 import { getUserById } from '@/app/lib/data';
 import UserEdit from '@/app/ui/users/user-edit';
@@ -28,7 +27,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   ] as ButtonConfig[];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div>
+      <h2>Edit Bio</h2>
       <UserEdit userData={user}></UserEdit>
       <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
     </div>

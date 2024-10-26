@@ -7,6 +7,8 @@
   --secondary-fg: rgb(240, 235, 226);
   --secondary-bg: rgb(80, 72, 57);
   --link-color: rgb(255, 101, 30);
+
+  --secondary-bg-component: 80, 72, 57;
   /* THese are provided by layout.tsx */
   /* --font-title: 'Girassol';
   --font-header: 'Arizonia';
@@ -74,7 +76,7 @@ nav ul li:hover {
   margin-left: 0.5rem;
 }
 main {
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 h1 {
