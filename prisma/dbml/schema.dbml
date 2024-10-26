@@ -17,8 +17,6 @@ Table User {
   PaymentMethods PaymentMethod [not null]
   Invoices Invoice [not null]
   UserList UserList [not null]
-  Product Product
-  productId Int
 }
 
 Table Seller {
@@ -47,7 +45,6 @@ Table Product {
   imageId Int [not null]
   Reviews Review [not null]
   Invoices Invoice [not null]
-  User User [not null]
   UserLists UserList [not null]
   InCollection SellerCollection [not null]
 }
@@ -148,8 +145,6 @@ Enum ShippingType {
 }
 
 Ref: User.profilePictureId > Image.id
-
-Ref: User.productId > Product.id
 
 Ref: Product.sellerId > Seller.id [delete: Cascade]
 

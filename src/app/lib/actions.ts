@@ -180,7 +180,7 @@ export async function authenticate(
       redirect: true,
       email: email,
       password: password,
-      role: 'user',
+      role: 'user', // These fields go to authorize() in auth.ts
     });
     console.log('Immediate post login');
   } catch (error) {

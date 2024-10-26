@@ -20,6 +20,18 @@ export const authConfig = {
       if (isLoggedIn) return true; // If logged in, not at login page, pass through
       return false; // Redirect unauthenticated users to login page
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.role = token.role;
+      session.user.id = token.id;
+      return session;
+    },
   },
 
   providers: [], // Add providers with an empty array for now

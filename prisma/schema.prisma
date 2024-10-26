@@ -54,8 +54,6 @@ model User {
   PaymentMethods   PaymentMethod[]
   Invoices         Invoice[]
   UserList         UserList[]
-  Product          Product?        @relation(fields: [productId], references: [id])
-  productId        Int?
 }
 
 model Seller {
@@ -89,7 +87,6 @@ model Product {
   // Reverse relations
   Reviews  Review[]
   Invoices Invoice[]
-  User     User[]
 
   // Join tables
   UserLists    UserList[]         @relation("UserListToProduct") // Lists this product is listed in. Join table
