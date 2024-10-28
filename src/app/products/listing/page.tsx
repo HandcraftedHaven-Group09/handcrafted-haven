@@ -1,10 +1,10 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
 import styles from './product_list.module.css'
-import { fetchProductAll, deleteProductById } from '@/app/lib/actions'
+import { deleteProductById, fetchProductAll } from '@/app/lib/actions'
 import Search from '@/app/ui/search'
 import EditButton from '@/app/ui/product/components/edit_button'
 import DeleteButton from '@/app/ui/product/components/delete_button'
@@ -17,13 +17,13 @@ type Product = {
   discountPercent?: number
   category: string
   sellerId: number
-  image: string
+  image: { url: string }
 }
 
-export default function ProductListingPage() {
+export default function ProductListing() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const router = useRouter() // Initialize router for navigation
+  const router = useRouter() // Initializes the router for navigation
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,10 +36,11 @@ export default function ProductListingPage() {
         category: product.category,
         discountPercent: product.discountPercent,
         sellerId: product.sellerId,
-        image: product.image.url,
+        image: { url: product.image.url },
       }))
+
       setProducts(productData)
-      setFilteredProducts(productData) // Initially, all products are shown
+      setFilteredProducts(productData)
     }
 
     fetchProducts()
@@ -48,14 +49,12 @@ export default function ProductListingPage() {
   const handleDelete = async (productId: number) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this product?')
     if (confirmDelete) {
-      await deleteProductById(productId) 
-      setProducts(products.filter((product) => product.id !== productId)) 
-      setFilteredProducts(filteredProducts.filter((product) => product.id !== productId)) 
+      await deleteProductById(productId)
+      setFilteredProducts(filteredProducts.filter((product) => product.id !== productId))
     }
   }
 
   const handleSearch = (searchTerm: string) => {
-    // Filter the products based on the search term
     const lowerCaseSearchTerm = searchTerm.toLowerCase()
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
@@ -68,13 +67,13 @@ export default function ProductListingPage() {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Product Listing</h1>
-      <Search onSearch={handleSearch} /> 
+      <Search onSearch={handleSearch} />
       <div className={styles.productGrid}>
         {filteredProducts.map((product) => (
           <div key={product.id} className={styles.card}>
             <div className={styles.imageWrapper}>
               <Image
-                src={product.image}
+                src={product.image.url}
                 alt={product.name}
                 width={200}
                 height={200}
