@@ -1,7 +1,7 @@
-'use client'
-import { useState, useEffect } from 'react'
-import styles from '@/app/ui/product/new_product.module.css'
-import { updateProduct, uploadImage, fetchProductById, fetchCategories } from '@/app/lib/actions'
+'use client';
+import { useState, useEffect } from 'react';
+import styles from '@/app/ui/product/new_product.module.css';
+import { updateProduct, uploadImage, fetchProductById, fetchCategories } from '@/app/lib/actions';
 
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const [productData, setProductData] = useState({
@@ -12,14 +12,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     discountPercent: '',
     sellerId: 1,
     image: '', 
-  })
+  });
 
-  const [images, setImages] = useState<FileList | null>(null)
-  const [categories, setCategories] = useState<string[]>([])
+  const [images, setImages] = useState<FileList | null>(null);
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     const loadProductData = async () => {
-      const fetchedProduct = await fetchProductById(params.id)
+      const fetchedProduct = await fetchProductById(params.id);
       setProductData({
         name: fetchedProduct.name,
         description: fetchedProduct.description,
@@ -28,39 +28,37 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         discountPercent: fetchedProduct.discountPercent?.toString() || '',
         sellerId: fetchedProduct.sellerId,
         image: fetchedProduct.image?.url || '', // Load the existing image URL
-      })
-    }
+      });
+    };
 
     const loadCategories = async () => {
-      const fetchedCategories = await fetchCategories()
-      setCategories(fetchedCategories.map((c) => c.category))
-    }
+      const fetchedCategories = await fetchCategories();
+      setCategories(fetchedCategories.map((c) => c.category));
+    };
 
-    loadProductData()
-    loadCategories()
-  }, [params.id])
+    loadProductData();
+    loadCategories();
+  }, [params.id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setProductData({
       ...productData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      // Maintains the current image URL if no new image is loaded
-      let imageUrl = productData.image || '' 
+      let imageUrl = productData.image || ''; 
 
-      // If the user uploads an image, we update the URL
       if (images && images.length > 0) {
-        const formData = new FormData()
-        formData.append('file', images[0])
-        const response = await uploadImage(formData)
-        imageUrl = response.url
+        const formData = new FormData();
+        formData.append('file', images[0]);
+        const response = await uploadImage(formData);
+        imageUrl = response.url;
       }
 
       const productPayload = {
@@ -68,15 +66,15 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         price: parseFloat(productData.price),
         discountPercent: parseInt(productData.discountPercent, 10),
         image: imageUrl, 
-      }
+      };
 
-      await updateProduct(params.id, productPayload)
-      alert('Product updated successfully!')
+      await updateProduct(params.id, productPayload);
+      alert('Product updated successfully!');
     } catch (error) {
-      console.error('Error updating product:', error)
-      alert('Error updating the product')
+      console.error('Error updating product:', error);
+      alert('Error updating the product');
     }
-  }
+  };
 
   return (
     <div className={styles.formContainer}>
@@ -155,5 +153,5 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         </button>
       </form>
     </div>
-  )
+  );
 }
