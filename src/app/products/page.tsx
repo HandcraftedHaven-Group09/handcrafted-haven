@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { fetchProductAll } from '../lib/actions'
 import styles from './product_page.module.css'
+import ProductSearch from '@/app/ui/search'
 
 type Product = {
   id: number
@@ -22,6 +23,7 @@ type Product = {
 export default function ProductPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,6 +41,7 @@ export default function ProductPage() {
       }))
 
       setProducts(productData)
+      setFilteredProducts(productData)
     }
 
     fetchProducts()
@@ -55,9 +58,20 @@ export default function ProductPage() {
     }))
   }
 
+  const handleSearch = (searchTerm: string) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.description.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.category.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+    setFilteredProducts(filtered)
+  }
+
   return (
     <div className={styles.container}>
-      {products.map((product) => (
+      <ProductSearch onSearch={handleSearch} />
+      {filteredProducts.map((product) => (
         <div key={product.id} className={styles.product}>
           <Link href={`/products/${product.id}`}>
             <Image
