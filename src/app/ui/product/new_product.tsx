@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
 import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
+import BackButton from './components/back_button'
 
 export default function NewProductForm() {
   const router = useRouter()
@@ -18,7 +19,7 @@ export default function NewProductForm() {
 
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
-
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setProductData({
@@ -68,6 +69,7 @@ export default function NewProductForm() {
 
   return (
     <div className={styles.formContainer}>
+      <BackButton backTo='/products/listing' />
       <h1 className={styles.title}>Create New Product</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label htmlFor="name" className={styles.label}>Name:</label>

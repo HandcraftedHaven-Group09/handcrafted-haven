@@ -1,60 +1,62 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { fetchProductById } from '@/app/lib/actions'
-import styles from './product_details.module.css'
-import AddToCartButton from '@/app/ui/product/components/add__cart_button'
-import QuantityInput from '@/app/ui/product/components/quantity'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { fetchProductById } from '@/app/lib/actions';
+import styles from './product_details.module.css';
+import AddToCartButton from '@/app/ui/product/components/add_cart_button';
+import QuantityInput from '@/app/ui/product/components/quantity';
+import BackButton from '@/app/ui/product/components/back_button'; 
 
 type Product = {
-  id: number
-  name: string
-  description: string
-  price: number
-  category: string
-  discountPercent?: number
-  sellerId?: number
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  discountPercent?: number;
+  sellerId?: number;
   image: {
-    url: string
-  }
-}
+    url: string;
+  };
+};
 
 type Props = {
   params: {
-    id: string
-  }
-}
+    id: string;
+  };
+};
 
 export default function ProductDetailsPage({ params }: Props) {
-  const [product, setProduct] = useState<Product | null>(null)
-  const [quantity, setQuantity] = useState<number>(1)
+  const [product, setProduct] = useState<Product | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
     if (params.id) {
       const fetchProduct = async () => {
         try {
-          const fetchedProduct = await fetchProductById(params.id)
-          setProduct(fetchedProduct)
+          const fetchedProduct = await fetchProductById(params.id);
+          setProduct(fetchedProduct);
         } catch (error) {
-          console.error('Error fetching product:', error)
+          console.error('Error fetching product:', error);
         }
-      }
+      };
 
-      fetchProduct()
+      fetchProduct();
     }
-  }, [params.id])
+  }, [params.id]);
 
   const handleAddToCart = () => {
     if (product) {
-      console.log(`${quantity} of ${product.name} added to the cart`)
+      console.log(`${quantity} of ${product.name} added to the cart`);
     }
-  }
+  };
 
-  if (!product) return <p>Loading...</p>
+  if (!product) return <p>Loading...</p>;
 
   return (
     <div className={styles.container}>
+      <BackButton backTo='/products' /> {/* Button to return to the list of products */}
       {product.image?.url && (
         <Image
           src={product.image.url}
@@ -74,12 +76,11 @@ export default function ProductDetailsPage({ params }: Props) {
         )}
         <p>Category: {product.category}</p>
         <p>Seller ID: {product.sellerId}</p>
-
         <div className={styles.cartSection}>
           <QuantityInput value={quantity} onChange={setQuantity} />
           <AddToCartButton onClick={handleAddToCart} />
         </div>
       </div>
     </div>
-  )
+  );
 }
