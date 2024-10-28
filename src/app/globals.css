@@ -95,6 +95,9 @@ h4 {
   font-family: var(--font-heading);
   font-size: large;
 }
+#content {
+  padding: 1rem;
+}
 
 @media (min-width: 450px) {
   header {

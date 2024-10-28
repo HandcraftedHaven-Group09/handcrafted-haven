@@ -1,25 +1,29 @@
 'use client';
 
-import '@/app/ui/sellers/sellers.css';
+import '@/app/ui/users/users.css';
 import Image from 'next/image';
 import Link from 'next/link';
-import { authenticateSeller } from '@/app/lib/actions'; // TODO Get a seller version
+import { authenticate } from '@/app/lib/actions';
 import { useActionState, useState } from 'react';
+import { signIn } from '@/app/auth';
+import { signIn as signInClient } from 'next-auth/react';
 
-import { signIn } from 'next-auth/react';
-
-export default function SellerLogin() {
+export default function UserSignup() {
   const [email, changeEmail] = useState('');
   const [password, changePassword] = useState('');
+  const [firstName, changeFirstName] = useState('');
+  const [lastName, changeLastName] = useState('');
+  const [userId, changeUserId] = useState('');
+
   const [errorMessage, formAction, isPending] = useActionState(
-    authenticateSeller,
+    authenticate,
     undefined
   );
 
   return (
     <>
       <form action={formAction} className="login-form">
-        <h2>SELLER LOGIN</h2>
+        <h2>LOGIN</h2>
         <label>email</label>
         <input
           type="email"
@@ -42,7 +46,7 @@ export default function SellerLogin() {
       </form>
       <button
         onClick={() => {
-          signIn('github', { callbackUrl: '/' });
+          signInClient('github', { callbackUrl: '/' });
         }}
         style={{ backgroundColor: 'transparent', border: 'unset' }}
       >
@@ -53,7 +57,6 @@ export default function SellerLogin() {
           alt="Sign in with GitHub"
         ></Image>
       </button>
-      <Link href="/sellers/signup">Sign up</Link>
     </>
   );
 }
