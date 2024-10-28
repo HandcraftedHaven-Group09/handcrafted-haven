@@ -1,9 +1,12 @@
-'use client'
+'use client' 
+
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
 import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
 
 export default function NewProductForm() {
+  const router = useRouter()
   const [productData, setProductData] = useState({
     name: '',
     description: '',
@@ -33,7 +36,6 @@ export default function NewProductForm() {
       if (images && images.length > 0) {
         const formData = new FormData()
         formData.append('file', images[0])
-
         const response = await uploadImage(formData)
         imageUrl = response.url
       }
@@ -45,17 +47,16 @@ export default function NewProductForm() {
         image: imageUrl,
       }
 
-      console.log('Final product data being submitted:', productPayload)
-
       await createNewProduct(productPayload)
       alert('Product created successfully!')
+      // Redirect to product listing page
+      router.push('/products/listing')
     } catch (error) {
       console.error('Error creating product:', error)
       alert('Error creating the product')
     }
   }
 
-  // Fetch product categories
   useEffect(() => {
     const getCategories = async () => {
       const fetchedCategories = await fetchCategories()
