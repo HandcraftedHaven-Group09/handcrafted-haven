@@ -1,35 +1,31 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { fetchProductAll } from '../lib/actions';
-import styles from './product_page.module.css';
-import { Metadata } from 'next';
-
-//TODO: Make this page "user server" so metadata works. Move client code to sub components
-// export const metadata: Metadata = {
-//   title: 'Products',
-// };
+'use client'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { fetchProductAll } from '../lib/actions'
+import styles from './product_page.module.css'
 
 type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  discountPercent?: number;
-  discountAbsolute?: number;
-  sellerId?: number;
-  image: string;
-};
+  id: number
+  name: string
+  description: string
+  price: number
+  category: string
+  discountPercent?: number
+  discountAbsolute?: number
+  sellerId?: number
+  image: {
+    url: string
+  }
+}
 
 export default function ProductPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+  const [products, setProducts] = useState<Product[]>([])
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetchProductAll(); // Get all products from the db
+      const response = await fetchProductAll() // Get all products from the db
       const productData = response.map((product) => ({
         id: product.id,
         name: product.name,
@@ -39,25 +35,25 @@ export default function ProductPage() {
         discountPercent: product.discountPercent,
         discountAbsolute: product.discountAbsolute,
         sellerId: product.sellerId,
-        image: product.image.url,
-      }));
+        image: { url: product.image.url },
+      }))
 
-      setProducts(productData);
-    };
+      setProducts(productData)
+    }
 
-    fetchProducts();
-  }, []);
+    fetchProducts()
+  }, [])
 
   const handleAddToCart = (product: Product) => {
-    console.log(`${quantities[product.id] || 1} of ${product.name} added to the cart`);
-  };
+    console.log(`${quantities[product.id] || 1} of ${product.name} added to the cart`)
+  }
 
   const handleQuantityChange = (productId: number, value: number) => {
     setQuantities((prev) => ({
       ...prev,
       [productId]: value,
-    }));
-  };
+    }))
+  }
 
   return (
     <div className={styles.container}>
@@ -65,7 +61,7 @@ export default function ProductPage() {
         <div key={product.id} className={styles.product}>
           <Link href={`/products/${product.id}`}>
             <Image
-              src={product.image}
+              src={product.image.url}
               alt={product.name}
               width={400}
               height={400}
@@ -116,5 +112,5 @@ export default function ProductPage() {
         </div>
       ))}
     </div>
-  );
+  )
 }

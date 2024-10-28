@@ -114,7 +114,6 @@ export async function fetchProductAll() {
       },
     },
   });
-
   return products;
 }
 
@@ -233,7 +232,6 @@ export async function fetchProductById(id: string) {
     image: product.image ? { url: product.image.url } : { url: '' },
   };
 }
-
 
 // Function to update the product
 export async function updateProduct(id: string, productData: {
