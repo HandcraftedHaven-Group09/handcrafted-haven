@@ -1,86 +1,31 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { fetchProductById } from '@/app/lib/actions';
-import styles from './product_details.module.css';
-import AddToCartButton from '@/app/ui/product/components/add_cart_button';
-import QuantityInput from '@/app/ui/product/components/quantity';
-import BackButton from '@/app/ui/product/components/back_button'; 
-
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  discountPercent?: number;
-  sellerId?: number;
-  image: {
-    url: string;
-  };
-};
+import ProductDetailsWrapper from '@/app/ui/product/edit_product'
+import { fetchProductById } from '@/app/lib/actions'
+import { Metadata } from 'next'
 
 type Props = {
   params: {
-    id: string;
-  };
-};
+    id: string
+  }
+}
 
-export default function ProductDetailsPage({ params }: Props) {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
-
-  useEffect(() => {
-    if (params.id) {
-      const fetchProduct = async () => {
-        try {
-          const fetchedProduct = await fetchProductById(params.id);
-          setProduct(fetchedProduct);
-        } catch (error) {
-          console.error('Error fetching product:', error);
-        }
-      };
-
-      fetchProduct();
+// Gerando metadata dinamicamente baseado no nome do produto
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = params
+  try {
+    const product = await fetchProductById(id)
+    return {
+      title: product?.name || 'Product Details',
+      description: `Edit the details of ${product?.name || 'this product'}.`,
     }
-  }, [params.id]);
-
-  const handleAddToCart = () => {
-    if (product) {
-      console.log(`${quantity} of ${product.name} added to the cart`);
+  } catch (error) {
+    console.error('Failed to fetch product metadata:', error)
+    return {
+      title: 'Product Details',
+      description: 'Edit the details of this product.',
     }
-  };
+  }
+}
 
-  if (!product) return <p>Loading...</p>;
-
-  return (
-    <div className={styles.container}>
-      <BackButton backTo='/products' /> {/* Button to return to the list of products */}
-      {product.image?.url && (
-        <Image
-          src={product.image.url}
-          alt={product.name}
-          width={500}
-          height={500}
-          className={styles.productImage}
-          unoptimized
-        />
-      )}
-      <div className={styles.productDetails}>
-        <h1>{product.name}</h1>
-        <p>{product.description}</p>
-        <p>Price: ${product.price.toFixed(2)}</p>
-        {product.discountPercent && (
-          <p>Discount: {product.discountPercent}% off</p>
-        )}
-        <p>Category: {product.category}</p>
-        <p>Seller ID: {product.sellerId}</p>
-        <div className={styles.cartSection}>
-          <QuantityInput value={quantity} onChange={setQuantity} />
-          <AddToCartButton onClick={handleAddToCart} />
-        </div>
-      </div>
-    </div>
-  );
+export default function ProductDetailsWrapperPage({ params }: Props) {
+  return <ProductDetailsWrapper params={{ id: params.id }} />
 }

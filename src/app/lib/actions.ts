@@ -97,24 +97,26 @@ export async function fetchSellerAll() {
 
 // Fetch all products
 export async function fetchProductAll() {
-  const products = await prisma.product.findMany({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      discountPercent: true,
-      discountAbsolute: true,
-      sellerId: true,
-      category: true,
-      image: {
-        select: {
-          url: true,
-        },
+  try {
+    return await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        category: true,
+        discountPercent: true,
+        discountAbsolute: true,
+        sellerId: true,
+        image: true,
       },
-    },
-  });
-  return products;
+    })
+  } catch (error) {
+    console.error("Error fetching products:", error)
+    throw error
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
 // Create a new product in the database
@@ -217,8 +219,8 @@ export async function fetchProductById(id: string) {
   const product = await prisma.product.findUnique({
     where: { id: numericId },
     include: { 
-      image: true, // Incluindo a imagem conforme o relacionamento definido no schema
-      seller: true, // Incluindo o vendedor caso queira exibir mais informações do vendedor
+      image: true, 
+      seller: true, 
     },
   });
 
