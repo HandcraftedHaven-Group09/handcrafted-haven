@@ -240,7 +240,7 @@ export async function getUserListById(listId: number) {
 export async function productRowCount() {
   const rowCount = await prisma.product.count();
   return rowCount;
-
+}
 
 export async function getListsByUser(userId: number) {
   const lists = await prisma.userList.findMany({
@@ -265,4 +265,3 @@ export async function addToUserList(productId: number, listId: number) {
 
   return result;
 }
-

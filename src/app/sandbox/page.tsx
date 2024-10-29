@@ -14,7 +14,6 @@ import { SessionProvider, useSession } from 'next-auth/react';
 import { getUserListById } from '../lib/data';
 import { UserList } from '@prisma/client';
 
-
 export default function Page() {
   const { data: session, status } = useSession();
   const [products, updateProducts] = useState<
@@ -38,7 +37,6 @@ export default function Page() {
     }[]
   >([]);
 
-
   const [lists, updateLists] = useState<UserList[]>([]);
 
   useEffect(() => {
@@ -57,7 +55,6 @@ export default function Page() {
   }, []);
   console.log(products);
   console.log(sellers);
-
 
   const initialCreateImageState: CreateImageState = {
     message: null,
@@ -125,7 +122,6 @@ export default function Page() {
           <button>ADD</button>
         </fieldset>
       </form>
-
 
       <form action={formAction}>
         <fieldset

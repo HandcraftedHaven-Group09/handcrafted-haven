@@ -5,12 +5,13 @@ import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import {
-
   createImage,
   getUserByEmail,
   getSellerByEmail,
   createUser,
   createSeller,
+  getListsByUser,
+  addToUserList,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
@@ -19,7 +20,6 @@ import Credentials from 'next-auth/providers/credentials';
 import { describe } from 'node:test';
 import { execSync } from 'node:child_process';
 import { redirect } from 'next/navigation';
-
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -54,6 +54,12 @@ export type UserSignupFormState = {
   };
   message?: string | null;
 };
+export type CreateImageState = {
+  errors?: {
+    description?: string[];
+  };
+  message?: string | null;
+};
 
 export type SellerSignupFormState = {
   errors?: {
@@ -80,9 +86,9 @@ export type SellerSignupFormState = {
  * @returns
  */
 export async function postImage(
-  prevState: UserSignupFormState,
+  prevState: CreateImageState,
   formData: FormData
-): Promise<UserSignupFormState> {
+): Promise<CreateImageState> {
   try {
     const imageFile = formData.get('imageFile') as File;
     const blob = await put(imageFile.name, imageFile, {
@@ -160,12 +166,12 @@ export async function fetchProductAll() {
         sellerId: true,
         image: true,
       },
-    })
+    });
   } catch (error) {
-    console.error("Error fetching products:", error)
-    throw error
+    console.error('Error fetching products:', error);
+    throw error;
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }
 
@@ -291,10 +297,10 @@ export async function fetchCategories() {
 
 // Function to search product by ID
 export async function fetchProductById(id: string) {
-  const numericId = parseInt(id, 10)
+  const numericId = parseInt(id, 10);
 
   if (isNaN(numericId)) {
-    throw new Error(`Invalid product ID: ${id}`)
+    throw new Error(`Invalid product ID: ${id}`);
   }
 
   const product = await prisma.product.findUnique({
@@ -318,28 +324,28 @@ export async function fetchProductById(id: string) {
         },
       },
     },
-  })
+  });
 
   if (!product) {
-    throw new Error(`Product with ID ${numericId} not found.`)
+    throw new Error(`Product with ID ${numericId} not found.`);
   }
 
   // Sets the maximum note allowed
-  const maxRating = 5
+  const maxRating = 5;
 
   // Calculates the average of the ratings, limiting each rating between 1 and 5
   const averageRating =
-    product.Reviews.reduce((sum, review) => 
-      sum + Math.min(Math.max(review.rating, 1), maxRating), 0
-    ) / (product.Reviews.length || 1)
-
+    product.Reviews.reduce(
+      (sum, review) => sum + Math.min(Math.max(review.rating, 1), maxRating),
+      0
+    ) / (product.Reviews.length || 1);
 
   return {
     ...product,
     averageRating: averageRating.toFixed(1),
     Reviews: product.Reviews,
     image: product.image ? { url: product.image.url } : { url: '' },
-  }
+  };
 }
 
 // Function to update the product
@@ -414,7 +420,6 @@ export async function deleteProductById(id: number) {
     throw error;
   }
 }
-
 
 const NewUserSchema = z.object({
   email: z.string().email(),
@@ -550,6 +555,7 @@ export async function signupSeller(
     errors: { email: ['That email is already in use'] },
     message: "Something's wrong, something's amiss! email",
   };
+}
 
 export async function fetchUserListAll(userId: number) {
   try {
@@ -568,5 +574,4 @@ export async function addProductToUserList(listId: number, productId: number) {
   } catch (error) {
     return 'error';
   }
-
 }
