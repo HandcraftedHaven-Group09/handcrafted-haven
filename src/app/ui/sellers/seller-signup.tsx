@@ -1,15 +1,15 @@
 'use client';
 
-import '@/app/ui/users/users.css';
+import '@/app/ui/sellers/sellers.css';
 import Image from 'next/image';
 import Link from 'next/link';
-import { UserSignupFormState, signupUser } from '@/app/lib/actions'; // TODO: Make this
+import { SellerSignupFormState, signupSeller } from '@/app/lib/actions'; // TODO: Make this
 import { useActionState, useState } from 'react';
 import { signIn } from '@/app/auth';
 import { signIn as signInClient } from 'next-auth/react';
 
-export default function UserSignup() {
-  const initialPostFormState: UserSignupFormState = {
+export default function SellerSignup() {
+  const initialPostFormState: SellerSignupFormState = {
     message: null,
     errors: {},
     formData: {
@@ -21,7 +21,7 @@ export default function UserSignup() {
   };
 
   const [formState, formAction] = useActionState(
-    signupUser,
+    signupSeller,
     initialPostFormState
   );
 

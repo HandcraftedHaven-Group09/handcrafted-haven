@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           textAlign: 'center',
         }}
       >
-        Congratulations {user.displayName}, You've successfully logged in.
+        Congratulations {user.displayName}, You&apos;ve successfully logged in.
       </span>
     </div>
   );

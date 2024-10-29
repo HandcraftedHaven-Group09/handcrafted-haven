@@ -4,7 +4,12 @@ import { put } from '@vercel/blob';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { createImage, getUserByEmail, createUser } from './data';
+import {
+  createImage,
+  getUserByEmail,
+  getSellerByEmail,
+  createUser,
+} from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
@@ -29,7 +34,25 @@ const SignupUserFormSchema = z.object({
   password: z.string(),
 });
 // Form types
-export type PostFormState = {
+export type UserSignupFormState = {
+  errors?: {
+    email?: string[];
+    displayName?: string[];
+    firstName?: string[];
+    lastName?: string[];
+    password?: string[];
+  };
+  formData?: {
+    email?: string;
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    password?: string;
+  };
+  message?: string | null;
+};
+
+export type SellerSignupFormState = {
   errors?: {
     email?: string[];
     displayName?: string[];
@@ -54,9 +77,9 @@ export type PostFormState = {
  * @returns
  */
 export async function postImage(
-  prevState: PostFormState,
+  prevState: UserSignupFormState,
   formData: FormData
-): Promise<PostFormState> {
+): Promise<UserSignupFormState> {
   try {
     const imageFile = formData.get('imageFile') as File;
     const blob = await put(imageFile.name, imageFile, {
@@ -368,9 +391,9 @@ const NewUserSchema = z.object({
 });
 
 export async function signupUser(
-  prevState: PostFormState | undefined,
+  prevState: UserSignupFormState | undefined,
   formData: FormData
-): Promise<PostFormState> {
+): Promise<UserSignupFormState> {
   // Extract form data
   console.log('EXTRACT FORM');
 
@@ -383,6 +406,66 @@ export async function signupUser(
   };
   //Check existing email
   const existingUser = await getUserByEmail(extractedData.email);
+
+  if (!existingUser) {
+    // Email is free, use it
+    const parsedUserData = NewUserSchema.safeParse(extractedData);
+    console.log('PARSED: ', parsedUserData);
+    if (parsedUserData.success) {
+      console.log('SUCCESS PATH');
+      // Redirect to confirm? Just do it?
+      const newUser = await createUser(parsedUserData.data);
+      const result = await signIn('user-credentials', {
+        redirect: true,
+        email: newUser?.email,
+        password: newUser?.credential,
+        role: 'user', // These fields go to authorize() in auth.ts
+        redirectTo: `/users/${newUser?.id}/success`,
+      });
+      // redirect('/users/signup/success');
+      return {};
+    }
+    console.log('FAIL PATH');
+
+    return {
+      errors: parsedUserData.error.flatten().fieldErrors,
+      formData: {
+        displayName: extractedData.displayName,
+        email: extractedData.email,
+        firstName: extractedData.firstName,
+        lastName: extractedData.lastName,
+      },
+      message: "Something's wrong, something's amiss!",
+    };
+  }
+  return {
+    formData: {
+      displayName: extractedData.displayName,
+      email: extractedData.email,
+      firstName: extractedData.firstName,
+      lastName: extractedData.lastName,
+    },
+    errors: { email: ['That email is already in use'] },
+    message: "Something's wrong, something's amiss! email",
+  };
+}
+
+export async function signupSeller(
+  prevState: SellerSignupFormState | undefined,
+  formData: FormData
+): Promise<SellerSignupFormState> {
+  // Extract form data
+  console.log('EXTRACT FORM');
+
+  const extractedData = {
+    email: formData.get('email')?.toString() || '',
+    password: formData.get('password')?.toString() || '',
+    displayName: formData.get('displayName')?.toString() || '',
+    firstName: formData.get('firstName')?.toString() || '',
+    lastName: formData.get('lastName')?.toString() || '',
+  };
+  //Check existing email
+  const existingUser = await getSellerByEmail(extractedData.email);
 
   if (!existingUser) {
     // Email is free, use it

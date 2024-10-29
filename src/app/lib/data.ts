@@ -54,6 +54,40 @@ export async function getUserByEmail(userEmail: string) {
   return user;
 }
 
+export async function createSeller({
+  email,
+  password,
+  displayName,
+  firstName,
+  lastName,
+}: {
+  email: string;
+  password: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+}) {
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  try {
+    const seller = await prisma.seller.create({
+      data: {
+        email: email,
+        displayName: displayName,
+        password: hashedPassword,
+        firstName: firstName,
+        lastName: lastName,
+        // userId: 'Credentials',
+        profilePictureId: 1,
+      },
+    });
+    seller.password = password; // need the unhashed one to sign in
+    return seller;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 export async function getSellerByEmail(sellerEmail: string) {
   const seller = await prisma.seller.findFirst({
     where: {
@@ -134,7 +168,7 @@ export async function getSellersBySimpleQuery(query: string, max: number) {
   return sellers;
 }
 
-export async function getSellersById(productId: number) {
+export async function getSellerById(productId: number) {
   const sellers = await prisma.seller.findFirst({
     where: {
       id: productId,

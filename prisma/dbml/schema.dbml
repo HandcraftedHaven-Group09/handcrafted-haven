@@ -9,7 +9,7 @@ Table User {
   lastName String [not null]
   email String [not null]
   bio String
-  userId String [not null]
+  userId String
   credential String [not null]
   profilePicture Image
   profilePictureId Int
