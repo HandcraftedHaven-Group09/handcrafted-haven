@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { fetchProductAll } from '@/app/lib/actions'
 import styles from '@/app/products/product_page.module.css'
 import ProductSearch from '@/app/ui/search'
@@ -21,13 +22,16 @@ type Product = {
 }
 
 export default function ProductPage() {
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetchProductAll() // Get all products from the db
+      const response = await fetchProductAll()
       const productData = response.map((product) => ({
         id: product.id,
         name: product.name,
@@ -39,7 +43,6 @@ export default function ProductPage() {
         sellerId: product.sellerId,
         image: { url: product.image.url },
       }))
-
       setProducts(productData)
       setFilteredProducts(productData)
     }
@@ -48,7 +51,25 @@ export default function ProductPage() {
   }, [])
 
   const handleAddToCart = (product: Product) => {
-    console.log(`${quantities[product.id] || 1} of ${product.name} added to the cart`)
+    setSelectedProduct(product)
+    setShowConfirmation(true)
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+    const existingItemIndex = cart.findIndex((item: { id: number }) => item.id === product.id)
+
+    if (existingItemIndex > -1) {
+      cart[existingItemIndex].quantity += quantities[product.id] || 1
+    } else {
+      cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: quantities[product.id] || 1,
+        image: product.image.url,
+      })
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart))
   }
 
   const handleQuantityChange = (productId: number, value: number) => {
@@ -59,13 +80,21 @@ export default function ProductPage() {
   }
 
   const handleSearch = (searchTerm: string) => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const lowerCaseSearchTerm = searchTerm.toLowerCase()
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
       product.description.toLowerCase().includes(lowerCaseSearchTerm) ||
       product.category.toLowerCase().includes(lowerCaseSearchTerm)
-    );
+    )
     setFilteredProducts(filtered)
+  }
+
+  const handleContinueShopping = () => {
+    setShowConfirmation(false)
+  }
+
+  const handleGoToCart = () => {
+    router.push('/products/cart')
   }
 
   return (
@@ -124,6 +153,18 @@ export default function ProductPage() {
           </div>
         </div>
       ))}
+
+      {showConfirmation && selectedProduct && (
+        <div className={styles.confirmationModal}>
+          <p>{quantities[selectedProduct.id] || 1} of {selectedProduct.name} added to the cart!</p>
+          <button onClick={handleContinueShopping} className={styles.continueButton}>
+            Continue Shopping
+          </button>
+          <button onClick={handleGoToCart} className={styles.cartButton}>
+            Go to Cart
+          </button>
+        </div>
+      )}
     </div>
   )
 }
