@@ -1,104 +1,92 @@
 'use client'
-
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import { fetchProductAll, authenticateSeller } from '@/app/lib/actions'
 import styles from '@/app/products/listing/product_list.module.css'
-import { deleteProductById, fetchProductAll } from '@/app/lib/actions'
-import Search from '@/app/ui/search'
-import EditButton from '@/app/ui/product/components/edit_button'
-import DeleteButton from '@/app/ui/product/components/delete_button'
 
 type Product = {
   id: number
   name: string
   description: string
   price: number
-  discountPercent?: number
   category: string
-  sellerId: number
-  image: { url: string }
+  discountPercent?: number
+  discountAbsolute?: number
+  sellerId?: number
+  image: {
+    url: string
+  }
 }
 
-export default function ProductListing() {
+export default function ListingPage() {
   const [products, setProducts] = useState<Product[]>([])
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const router = useRouter()
+  const [authorized, setAuthorized] = useState(false)
+  const [unauthorized, setUnauthorized] = useState(false)
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await fetchProductAll()
-      const productData = response.map((product) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        category: product.category,
-        discountPercent: product.discountPercent,
-        sellerId: product.sellerId,
-        image: { url: product.image.url },
-      }))
+    const checkAuthorization = async () => {
+      try {
+        const formData = new FormData()
+        formData.append('email', 'seller@example.com')
+        formData.append('password', 'password123')
 
-      setProducts(productData)
-      setFilteredProducts(productData)
+        const authResult = await authenticateSeller(undefined, formData)
+
+        if (typeof authResult === 'string') {
+          console.error(authResult)
+          setUnauthorized(true) // As not authorized
+        } else {
+          setAuthorized(true) // As authorized
+          fetchProducts()
+        }
+      } catch (error) {
+        console.error('Access denied:', error)
+        setUnauthorized(true) // As not authorized in case of error
+      }
     }
 
-    fetchProducts()
+    checkAuthorization()
   }, [])
 
-  const handleDelete = async (productId: number) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?')
-    if (confirmDelete) {
-      await deleteProductById(productId)
-      setFilteredProducts(filteredProducts.filter((product) => product.id !== productId))
-    }
+  const fetchProducts = async () => {
+    const response = await fetchProductAll()
+    const productData = response.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category: product.category,
+      discountPercent: product.discountPercent,
+      discountAbsolute: product.discountAbsolute,
+      sellerId: product.sellerId,
+      image: { url: product.image.url },
+    }))
+
+    setProducts(productData)
   }
 
-  const handleSearch = (searchTerm: string) => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase()
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-      product.description.toLowerCase().includes(lowerCaseSearchTerm) ||
-      product.category.toLowerCase().includes(lowerCaseSearchTerm)
+  if (!authorized) {
+    return (
+      <p>
+        {unauthorized
+          ? 'Unauthorized Access.'
+          : 'Loading...'}
+      </p>
     )
-    setFilteredProducts(filtered)
   }
+  
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Product Listing</h1>
-      <Search onSearch={handleSearch} />
-      <div className={styles.productGrid}>
-        {filteredProducts.map((product) => (
-          <div key={product.id} className={styles.card}>
-            <div className={styles.imageWrapper}>
-              <Image
-                src={product.image.url}
-                alt={product.name}
-                width={200}
-                height={200}
-                className={styles.productImage}
-                unoptimized
-              />
-            </div>
-            <div className={styles.productDetails}>
-              <h2>{product.name}</h2>
-              <p>{product.description}</p>
-              <p><strong>Price:</strong> ${product.price.toFixed(2)}</p>
-              {product.discountPercent && (
-                <p><strong>Discount:</strong> {product.discountPercent}% off</p>
-              )}
-              <p><strong>Category:</strong> {product.category}</p>
-              <p><strong>Seller ID:</strong> {product.sellerId}</p>
-
-              <div className={styles.buttonContainer} style={{ display: 'flex', gap: '10px', border: '1px solid red' }}>
-                <EditButton onEdit={() => router.push(`/products/${product.id}/edit`)} />
-                <DeleteButton onDelete={() => handleDelete(product.id)} />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h1>Listing Page - Seller Only Access</h1>
+      {products.map((product) => (
+        <div key={product.id} className={styles.product}>
+          <h1 className={styles.title}>{product.name}</h1>
+          <p className={styles.category}>Category: {product.category}</p>
+          <p className={styles.description}>{product.description}</p>
+          <p className={styles.price}>Price: ${product.price.toFixed(2)}</p>
+          <p className={styles.seller}>Seller ID: {product.sellerId}</p>
+        </div>
+      ))}
     </div>
   )
 }
