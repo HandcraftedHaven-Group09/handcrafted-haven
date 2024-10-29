@@ -120,6 +120,14 @@ h4 {
   align-items: baseline;
 }
 
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 @media (min-width: 450px) {
   header {
     /* flex-direction: row; */
