@@ -9,10 +9,13 @@ import {
   fetchUserListAll,
   addProductToUserList,
 } from '../lib/actions';
+import Burger from '../ui/burger-button/burger-button';
 import { useActionState, useEffect, useState } from 'react';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { getUserListById } from '../lib/data';
 import { UserList } from '@prisma/client';
+import { text } from 'stream/consumers';
+import { url } from 'inspector';
 
 export default function Page() {
   const { data: session, status } = useSession();
@@ -69,8 +72,24 @@ export default function Page() {
   console.log('SESSION DATA', session);
 
   return (
-    <main style={{ padding: '1rem', backgroundColor: 'var(--primary-bg)' }}>
-      <h2>Database Testing Sandbox</h2>
+    <main
+      style={{
+        padding: '1rem',
+        backgroundColor: 'var(--primary-bg)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <h2>Testing Sandbox</h2>
+      <Burger
+        rightHanded={true}
+        menuItems={[
+          { text: 'Home', url: '/stuff' },
+          { text: 'Products', url: '/stuff' },
+          { text: 'Collections', url: '/stuff' },
+          { text: 'About', url: '/stuff' },
+        ]}
+      />
       <div>
         {session ? (
           <span>

@@ -1,0 +1,71 @@
+.burger {
+  background-color: unset;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.right-handed {
+  align-items: end;
+}
+.burger-button {
+  font-weight: bolder;
+  border: none;
+  /* padding: 0.15rem 0.35rem 0.15rem 0.35rem; */
+  padding-bottom: 0.2rem;
+  height: 2.3rem;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  background-color: var(--secondary-bg);
+  color: var(--secondary-fg);
+  font-weight: bolder;
+  font-size: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+.burger-menu {
+  /* width: 70%; */
+  background-color: var(--secondary-bg);
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin: 0;
+  /* margin-right: 10rem; */
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.365);
+  animation: slideIn 0.15s ease-in-out;
+  transform-origin: top;
+}
+ul.burger-menu {
+  list-style: none;
+  padding: 0.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+ul.burger-menu li a {
+  text-decoration: none;
+  color: var(--secondary-fg);
+}
+ul.burger-menu li a:hover {
+  color: var(--link-color);
+}
+
+.menu-hidden {
+  display: none;
+  position: fixed;
+}
+.menu-vertical {
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.menu-float {
+  position: absolute;
+  top: 100%;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
