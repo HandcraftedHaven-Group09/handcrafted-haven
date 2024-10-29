@@ -6,6 +6,12 @@ import { fetchProductById } from '@/app/lib/actions'
 import styles from '@/app/products/[id]/product_details.module.css'
 import BackButton from '@/app/ui/product/components/back_button'
 
+type Review = {
+  id: number
+  rating: number
+  review: string | null
+  user: { displayName: string } }
+
 type Product = {
   id: number
   name: string
@@ -14,9 +20,10 @@ type Product = {
   category: string
   discountPercent?: number
   sellerId?: number
-  image: {
-    url: string
-  }
+  averageRating: string // Average of aggregate rating
+  image: { url: string }
+  Reviews: Review[]
+  seller: { displayName: string } 
 }
 
 type Props = {
@@ -43,7 +50,7 @@ export default function IndividualProduct({ id }: Props) {
 
   return (
     <div className={styles.container}>
-      <BackButton backTo="/products" /> {/* Botão para retornar à lista de produtos */}
+      <BackButton backTo="/products" />
       {product.image?.url && (
         <Image
           src={product.image.url}
@@ -58,11 +65,27 @@ export default function IndividualProduct({ id }: Props) {
         <h1>{product.name}</h1>
         <p>{product.description}</p>
         <p>Price: ${product.price.toFixed(2)}</p>
-        {product.discountPercent && (
-          <p>Discount: {product.discountPercent}% off</p>
-        )}
+        {product.discountPercent && <p>Discount: {product.discountPercent}% off</p>}
         <p>Category: {product.category}</p>
-        <p>Seller ID: {product.sellerId}</p>
+        <p>Seller: {product.seller.displayName}</p>
+        
+        {/* Displays the average rating */}
+        <p>Average Rating: {product.averageRating} / 5</p>
+
+        {/* Comment section */}
+        <div className={styles.commentsSection}>
+          <h2>Comments</h2>
+          {product.Reviews.length > 0 ? (
+            product.Reviews.map((review) => (
+              <div key={review.id} className={styles.comment}>
+                <p><strong>{review.user.displayName}</strong> ({review.rating} / 5)</p>
+                <p>{review.review || "No comment provided."}</p>
+              </div>
+            ))
+          ) : (
+            <p>No comments yet.</p>
+          )}
+        </div>
       </div>
     </div>
   )

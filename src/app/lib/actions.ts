@@ -210,29 +210,54 @@ export async function fetchCategories() {
 
 // Function to search product by ID
 export async function fetchProductById(id: string) {
-  const numericId = parseInt(id, 10);
+  const numericId = parseInt(id, 10)
 
   if (isNaN(numericId)) {
-    throw new Error(`Invalid product ID: ${id}`);
+    throw new Error(`Invalid product ID: ${id}`)
   }
 
   const product = await prisma.product.findUnique({
     where: { id: numericId },
-    include: { 
-      image: true, 
-      seller: true, 
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      category: true,
+      discountPercent: true,
+      sellerId: true,
+      image: { select: { url: true } },
+      seller: { select: { id: true, displayName: true } },
+      Reviews: {
+        select: {
+          id: true,
+          rating: true,
+          review: true,
+          user: { select: { displayName: true } },
+        },
+      },
     },
-  });
+  })
 
   if (!product) {
-    throw new Error(`Product with ID ${numericId} not found.`);
+    throw new Error(`Product with ID ${numericId} not found.`)
   }
 
-  // Ajustando a forma como retornamos a URL da imagem
+  // Sets the maximum note allowed
+  const maxRating = 5
+
+  // Calculates the average of the ratings, limiting each rating between 1 and 5
+  const averageRating =
+    product.Reviews.reduce((sum, review) => 
+      sum + Math.min(Math.max(review.rating, 1), maxRating), 0
+    ) / (product.Reviews.length || 1)
+
   return {
     ...product,
+    averageRating: averageRating.toFixed(1),
+    Reviews: product.Reviews,
     image: product.image ? { url: product.image.url } : { url: '' },
-  };
+  }
 }
 
 // Function to update the product
