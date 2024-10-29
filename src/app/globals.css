@@ -102,12 +102,13 @@ h4 {
   flex-direction: column;
 }
 
-#featured-products{
+.featured-products-grid{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   gap: 1rem;
   justify-content: center;
+  align-items: baseline;
 }
 
 @media (min-width: 450px) {
