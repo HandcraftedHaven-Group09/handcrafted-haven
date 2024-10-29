@@ -56,6 +56,7 @@ header {
   flex-direction: column;
   opacity: 0.9;
 }
+
 header .title-group {
   display: flex;
   flex-direction: column;
@@ -63,19 +64,23 @@ header .title-group {
   padding: 1rem;
   width: 100%;
 }
+
 nav {
   background-color: rgba(61, 93, 12, 0.71);
 }
+
 nav ul {
   text-decoration: none;
   list-style: none;
   padding: 0.5rem;
   margin: 0;
 }
+
 nav ul li:hover {
   color: orange;
   margin-left: 0.5rem;
 }
+
 main {
   /* padding: 1rem; */
 }
