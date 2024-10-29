@@ -64,9 +64,16 @@ export default function ListingPage() {
     setProducts(productData)
   }
 
-  if (unauthorized) {
-    return <p className={styles.unauthorized}> Unauthorized Access..</p>
+  if (!authorized) {
+    return (
+      <p>
+        {unauthorized
+          ? 'Unauthorized Access.'
+          : 'Loading...'}
+      </p>
+    )
   }
+  
 
   return (
     <div className={styles.container}>

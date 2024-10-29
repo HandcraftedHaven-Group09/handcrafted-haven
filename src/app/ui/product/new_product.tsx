@@ -1,9 +1,9 @@
-'use client' 
+'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
-import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
+import { createNewProduct, uploadImage, fetchCategories, authenticateSeller } from '../../lib/actions'
 import BackButton from './components/back_button'
 
 export default function NewProductForm() {
@@ -16,10 +16,41 @@ export default function NewProductForm() {
     discountPercent: '',
     sellerId: 1,
   })
-
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
-  
+  const [authorized, setAuthorized] = useState(false)
+  const [unauthorized, setUnauthorized] = useState(false)
+
+  useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const formData = new FormData()
+        formData.append('email', 'seller@example.com')
+        formData.append('password', 'password123')
+
+        const authResult = await authenticateSeller(undefined, formData)
+
+        if (typeof authResult === 'string') {
+          console.error(authResult)
+          setUnauthorized(true)
+        } else {
+          setAuthorized(true)
+          getCategories()
+        }
+      } catch (error) {
+        console.error('Access denied:', error)
+        setUnauthorized(true)
+      }
+    }
+
+    checkAuthorization()
+  }, [])
+
+  const getCategories = async () => {
+    const fetchedCategories = await fetchCategories()
+    setCategories(fetchedCategories.map((c) => c.category))
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setProductData({
@@ -50,7 +81,6 @@ export default function NewProductForm() {
 
       await createNewProduct(productPayload)
       alert('Product created successfully!')
-      // Redirect to product listing page
       router.push('/products/listing')
     } catch (error) {
       console.error('Error creating product:', error)
@@ -58,14 +88,13 @@ export default function NewProductForm() {
     }
   }
 
-  useEffect(() => {
-    const getCategories = async () => {
-      const fetchedCategories = await fetchCategories()
-      setCategories(fetchedCategories.map((c) => c.category))
-    }
+  if (unauthorized) {
+    return <p className={styles.unauthorized}>Unauthorized Access.</p>
+  }
 
-    getCategories()
-  }, [])
+  if (!authorized) {
+    return <p>Loading...</p>
+  }
 
   return (
     <div className={styles.formContainer}>
