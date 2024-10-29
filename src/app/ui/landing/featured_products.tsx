@@ -39,9 +39,11 @@ export default async function FeaturedProducts() {
     return (
         <div id="featured-products">
             <h2>Featured Products</h2>
+            <div className="featured-products-grid">
             {randomIds.map((productId) => {
                 return <FeaturedProduct id={productId} key={productId} />;
             })}
+        </div>
         </div>
     );
 }
