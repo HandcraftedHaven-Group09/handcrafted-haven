@@ -102,7 +102,7 @@ h4 {
   flex-direction: column;
 }
 
-.featured-product{
+#featured-products{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
