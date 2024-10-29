@@ -40,7 +40,9 @@ body {
   background-image: url(/product/images/candle_soy.webp);
 
   background-repeat: no-repeat;
-  background-size: 350px;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: auto;
 }
 header,
 footer {
@@ -129,6 +131,6 @@ h4 {
 
 @media (min-width: 900px) {
   header {
-    flex-direction: row;
+    /* flex-direction: row; */
   }
 }
