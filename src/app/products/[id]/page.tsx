@@ -1,4 +1,4 @@
-import ProductDetailsWrapper from '@/app/ui/product/edit_product'
+import IndividualProduct from '@/app/ui/product/individual_product'
 import { fetchProductById } from '@/app/lib/actions'
 import { Metadata } from 'next'
 
@@ -8,24 +8,24 @@ type Props = {
   }
 }
 
-// Gerando metadata dinamicamente baseado no nome do produto
+// Generating metadata dynamically based on the product name
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = params
   try {
     const product = await fetchProductById(id)
     return {
       title: product?.name || 'Product Details',
-      description: `Edit the details of ${product?.name || 'this product'}.`,
+      description: `View the details of ${product?.name || 'this product'}.`,
     }
   } catch (error) {
     console.error('Failed to fetch product metadata:', error)
     return {
       title: 'Product Details',
-      description: 'Edit the details of this product.',
+      description: 'View the details of this product.',
     }
   }
 }
 
 export default function ProductDetailsWrapperPage({ params }: Props) {
-  return <ProductDetailsWrapper params={{ id: params.id }} />
+  return <IndividualProduct id={params.id} />
 }
