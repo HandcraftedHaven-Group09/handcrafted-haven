@@ -66,7 +66,7 @@ model Seller {
   bio              String?
   // Relations
   profilePicture   Image?             @relation(fields: [profilePictureId], references: [id])
-  profilePictureId Int
+  profilePictureId Int?
   // Reverse relations
   PostedProducts   Product[]
   PostedImages     Image[]            @relation("PostedImages")

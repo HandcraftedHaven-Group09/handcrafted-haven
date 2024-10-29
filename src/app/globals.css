@@ -31,7 +31,7 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   max-width: var(--max-size);
   background-color: var(--primary-bg);
@@ -47,7 +47,7 @@ body {
 header,
 footer {
   display: flex;
-
+  box-sizing: border-box;
   background-color: var(--secondary-bg);
   color: var(--secondary-fg);
   font: var(--font-header);
@@ -62,7 +62,7 @@ header .title-group {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  width: 100vw;
+  width: 100%;
   box-sizing: border-box;
 }
 nav {
@@ -80,7 +80,9 @@ nav ul li:hover {
 }
 main {
   display: flex;
+  box-sizing: border-box;
   /* height: 100%; */
+  width: 100%;
   padding: 1rem;
   flex: 1;
   background-color: var(--primary-bg);
@@ -106,6 +108,8 @@ h4 {
 }
 #content {
   padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 .center-children {
   display: flex;

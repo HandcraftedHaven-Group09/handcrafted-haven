@@ -2,7 +2,7 @@ import { Seller } from 'prisma/prisma-client';
 import { getSellerById } from '@/app/lib/data';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import '@/app/ui/users/sellers.css';
+import '@/app/ui/sellers/sellers.css';
 export const metadata: Metadata = {
   title: 'Successful Seller Signup',
   description: 'Another successful seller signup!',

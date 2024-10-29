@@ -28,7 +28,7 @@ Table Seller {
   lastName String [not null]
   bio String
   profilePicture Image
-  profilePictureId Int [not null]
+  profilePictureId Int
   PostedProducts Product [not null]
   PostedImages Image [not null]
   Collections SellerCollection [not null]

@@ -9,6 +9,7 @@ import {
   getUserByEmail,
   getSellerByEmail,
   createUser,
+  createSeller,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
@@ -390,6 +391,14 @@ const NewUserSchema = z.object({
   lastName: z.string(),
 });
 
+const NewSellerSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  displayName: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+});
+
 export async function signupUser(
   prevState: UserSignupFormState | undefined,
   formData: FormData
@@ -465,22 +474,22 @@ export async function signupSeller(
     lastName: formData.get('lastName')?.toString() || '',
   };
   //Check existing email
-  const existingUser = await getSellerByEmail(extractedData.email);
+  const existingSeller = await getSellerByEmail(extractedData.email);
 
-  if (!existingUser) {
+  if (!existingSeller) {
     // Email is free, use it
-    const parsedUserData = NewUserSchema.safeParse(extractedData);
-    console.log('PARSED: ', parsedUserData);
-    if (parsedUserData.success) {
+    const parsedSellerData = NewSellerSchema.safeParse(extractedData);
+    console.log('PARSED: ', parsedSellerData);
+    if (parsedSellerData.success) {
       console.log('SUCCESS PATH');
       // Redirect to confirm? Just do it?
-      const newUser = await createUser(parsedUserData.data);
-      const result = await signIn('user-credentials', {
+      const newSeller = await createSeller(parsedSellerData.data);
+      const result = await signIn('seller-credentials', {
         redirect: true,
-        email: newUser?.email,
-        password: newUser?.credential,
+        email: newSeller?.email,
+        password: newSeller?.password,
         role: 'user', // These fields go to authorize() in auth.ts
-        redirectTo: `/users/${newUser?.id}/success`,
+        redirectTo: `/sellers/${newSeller?.id}/success`,
       });
       // redirect('/users/signup/success');
       return {};
@@ -488,7 +497,7 @@ export async function signupSeller(
     console.log('FAIL PATH');
 
     return {
-      errors: parsedUserData.error.flatten().fieldErrors,
+      errors: parsedSellerData.error.flatten().fieldErrors,
       formData: {
         displayName: extractedData.displayName,
         email: extractedData.email,
