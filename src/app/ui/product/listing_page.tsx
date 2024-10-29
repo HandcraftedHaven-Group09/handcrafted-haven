@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { fetchProductAll, authenticateSeller, deleteProductById } from '@/app/lib/actions'
-import ProductSearch from '@/app/ui/search'  // Certifique-se de que o caminho esteja correto para o componente de busca
+import { fetchProductAll, deleteProductById } from '@/app/lib/actions'
+import ProductSearch from '@/app/ui/search'
 import styles from '@/app/products/listing/product_list.module.css'
 
 type Product = {
@@ -24,51 +24,28 @@ export default function ListingPage() {
   const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const [authorized, setAuthorized] = useState(false)
-  const [unauthorized, setUnauthorized] = useState(false)
 
   useEffect(() => {
-    const checkAuthorization = async () => {
-      try {
-        const formData = new FormData()
-        formData.append('email', 'sadf@sadg.com')
-        formData.append('password', '123456')
+    const fetchProducts = async () => {
+      const response = await fetchProductAll()
+      const productData = response.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        category: product.category,
+        discountPercent: product.discountPercent,
+        discountAbsolute: product.discountAbsolute,
+        sellerId: product.sellerId,
+        image: { url: product.image.url },
+      }))
 
-        const authResult = await authenticateSeller(undefined, formData)
-
-        if (typeof authResult === 'string') {
-          console.error(authResult)
-          setUnauthorized(true)
-        } else {
-          setAuthorized(true)
-          fetchProducts()
-        }
-      } catch (error) {
-        console.error('Access denied:', error)
-        setUnauthorized(true)
-      }
+      setProducts(productData)
+      setFilteredProducts(productData)
     }
 
-    checkAuthorization()
+    fetchProducts()
   }, [])
-
-  const fetchProducts = async () => {
-    const response = await fetchProductAll()
-    const productData = response.map((product) => ({
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      category: product.category,
-      discountPercent: product.discountPercent,
-      discountAbsolute: product.discountAbsolute,
-      sellerId: product.sellerId,
-      image: { url: product.image.url },
-    }))
-
-    setProducts(productData)
-    setFilteredProducts(productData)
-  }
 
   const handleSearch = (searchTerm: string) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase()
@@ -97,19 +74,9 @@ export default function ListingPage() {
     router.push('/products/create')
   }
 
-  if (!authorized) {
-    return (
-      <div className={styles.unauthorizedMessage}>
-        {unauthorized
-          ? 'Unauthorized Access. Please log in as a seller to view this page.'
-          : 'Loading...'}
-      </div>
-    )
-  }
-
   return (
     <div className={styles.container}>
-      <h1>Seller Listing Page</h1>
+      <h1>Product Listing Page</h1>
       <button
         onClick={handleCreateProduct}
         className={styles.addProductButton}

@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
-import { createNewProduct, uploadImage, fetchCategories, authenticateSeller } from '../../lib/actions'
+import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
 import BackButton from './components/back_button'
 
-// Função para sanitizar strings de entradas
+// Function to sanitize input strings
 function sanitizeInput(input: string): string {
   const div = document.createElement('div')
   div.innerText = input
@@ -25,49 +25,25 @@ export default function NewProductForm() {
   })
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
-  const [authorized, setAuthorized] = useState(false)
-  const [unauthorized, setUnauthorized] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    const checkAuthorization = async () => {
-      try {
-        const formData = new FormData()
-        formData.append('email', 'sadf@sadg.com')
-        formData.append('password', '123456')
-
-        const authResult = await authenticateSeller(undefined, formData)
-
-        if (typeof authResult === 'string') {
-          console.error(authResult)
-          setUnauthorized(true)
-        } else {
-          setAuthorized(true)
-          getCategories()
-        }
-      } catch (error) {
-        console.error('Access denied:', error)
-        setUnauthorized(true)
-      }
+    const getCategories = async () => {
+      const fetchedCategories = await fetchCategories()
+      setCategories(fetchedCategories.map((c) => c.category))
     }
-
-    checkAuthorization()
+    getCategories()
   }, [])
-
-  const getCategories = async () => {
-    const fetchedCategories = await fetchCategories()
-    setCategories(fetchedCategories.map((c) => c.category))
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setProductData({
       ...productData,
-      [name]: sanitizeInput(value), // Sanitiza a entrada do usuário
+      [name]: sanitizeInput(value),
     })
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '', // Limpa a mensagem de erro ao digitar
+      [name]: '',
     }))
   }
 
@@ -84,12 +60,10 @@ export default function NewProductForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!validateFields()) return
 
     try {
       let imageUrl = ''
-
       if (images && images.length > 0) {
         const formData = new FormData()
         formData.append('file', images[0])
@@ -111,14 +85,6 @@ export default function NewProductForm() {
       console.error('Error creating product:', error)
       alert('Error creating the product')
     }
-  }
-
-  if (unauthorized) {
-    return <p className={styles.unauthorizedMessage}>Unauthorized Access. Please log in as a seller to access this page.</p>
-  }
-
-  if (!authorized) {
-    return <p>Loading...</p>
   }
 
   return (
