@@ -3,6 +3,7 @@
 import {
   postImage,
   CreateImageState,
+  UserSignupFormState,
   fetchSellerAll,
   fetchProductAll,
   fetchUserListAll,
@@ -46,7 +47,6 @@ export default function Page() {
       const sellers = await fetchSellerAll();
       const newLists = await fetchUserListAll(Number(session?.user.id));
       console.log('NEW LISTS', newLists);
-
       updateProducts(() => product);
       updateSellers(() => sellers);
       updateLists(newLists);
@@ -81,6 +81,7 @@ export default function Page() {
           <span>No session</span>
         )}
       </div>
+
       <form
         action={(data: FormData) => {
           addProductToUserList(

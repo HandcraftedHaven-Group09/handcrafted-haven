@@ -22,8 +22,11 @@ const bodyFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Handcrafted Haven',
-  description: '',
+  title: {
+    template: '%s | Handcrafted Haven',
+    default: 'Home | Handcrafted Haven',
+  },
+  description: 'A site for artisans to showcase their wares. ',
 };
 
 export default async function RootLayout({

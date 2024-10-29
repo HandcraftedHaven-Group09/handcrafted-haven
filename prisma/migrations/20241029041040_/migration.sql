@@ -12,7 +12,7 @@ CREATE TABLE "User" (
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "bio" TEXT,
-    "userId" TEXT NOT NULL,
+    "userId" TEXT,
     "credential" TEXT NOT NULL,
     "profilePictureId" INTEGER,
 
@@ -22,9 +22,13 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Seller" (
     "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "bio" TEXT,
+    "profilePictureId" INTEGER,
 
     CONSTRAINT "Seller_pkey" PRIMARY KEY ("id")
 );
@@ -155,6 +159,9 @@ CREATE INDEX "_InvoiceToProduct_B_index" ON "_InvoiceToProduct"("B");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_profilePictureId_fkey" FOREIGN KEY ("profilePictureId") REFERENCES "Image"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Seller" ADD CONSTRAINT "Seller_profilePictureId_fkey" FOREIGN KEY ("profilePictureId") REFERENCES "Image"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "Seller"("id") ON DELETE CASCADE ON UPDATE CASCADE;

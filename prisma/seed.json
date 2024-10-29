@@ -5,7 +5,16 @@
       "firstName": "Default",
       "lastName": "Default",
       "email": "seller@hch.com",
-      "password": "123456"
+      "password": "123456",
+      "bio": "The default seller. Used when something needs a relation"
+    },
+    {
+      "displayName": "Testing seller",
+      "firstName": "Test",
+      "lastName": "Seller",
+      "email": "test@hch.com",
+      "password": "123456",
+      "bio": "A test seller. Used when something needs testing"
     }
   ],
   "Users": [
@@ -438,7 +447,8 @@
       "review": "It's alright.",
       "userId": 1,
       "productId": 1
-    }
+    },
+    { "rating": 1, "review": "We hates's it!", "userId": 2, "productId": 3 }
   ],
   "Invoices": [
     {
@@ -468,8 +478,8 @@
   ],
   "Images": [
     {
-      "url": "https://k87g89olmcekxaqo.public.blob.vercel-storage.com/img1-mJVfdbY5xGPK71N4auFzZo5ziCSQfm.jpg",
-      "description": "Some wood shoes.",
+      "url": "/ui/default-user.webp",
+      "description": "Generic user placeholder",
       "ownerId": 1
     }
   ]

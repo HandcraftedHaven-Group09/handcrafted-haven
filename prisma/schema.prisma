@@ -44,7 +44,7 @@ model User {
   lastName         String
   email            String
   bio              String?
-  userId           String
+  userId           String? //For oauth
   credential       String //Password. Might change this later
   // Relation
   profilePicture   Image?          @relation(fields: [profilePictureId], references: [id])
@@ -57,16 +57,20 @@ model User {
 }
 
 model Seller {
-  id             Int                @id @default(autoincrement())
-  email          String
-  password       String
-  displayName    String
-  firstName      String
-  lastName       String
+  id               Int                @id @default(autoincrement())
+  email            String
+  password         String
+  displayName      String
+  firstName        String
+  lastName         String
+  bio              String?
+  // Relations
+  profilePicture   Image?             @relation(fields: [profilePictureId], references: [id])
+  profilePictureId Int?
   // Reverse relations
-  PostedProducts Product[]
-  PostedImages   Image[]
-  Collections    SellerCollection[]
+  PostedProducts   Product[]
+  PostedImages     Image[]            @relation("PostedImages")
+  Collections      SellerCollection[]
 }
 
 model Product {
@@ -140,15 +144,16 @@ model Invoice {
 }
 
 model Image {
-  id          Int       @id @default(autoincrement())
-  url         String
-  description String
+  id                 Int       @id @default(autoincrement())
+  url                String
+  description        String
   //Relations
-  owner       Seller?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId     Int?
+  owner              Seller?   @relation(name: "PostedImages", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId            Int?
   // Reverse relations
-  Users       User[]
-  Product     Product[]
+  UsersProfilesWith  User[]
+  ProductsWith       Product[]
+  SellerProfilesWith Seller[] //
 }
 
 model UserList {

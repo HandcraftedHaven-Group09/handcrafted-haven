@@ -9,7 +9,7 @@ Table User {
   lastName String [not null]
   email String [not null]
   bio String
-  userId String [not null]
+  userId String
   credential String [not null]
   profilePicture Image
   profilePictureId Int
@@ -26,6 +26,9 @@ Table Seller {
   displayName String [not null]
   firstName String [not null]
   lastName String [not null]
+  bio String
+  profilePicture Image
+  profilePictureId Int
   PostedProducts Product [not null]
   PostedImages Image [not null]
   Collections SellerCollection [not null]
@@ -96,8 +99,9 @@ Table Image {
   description String [not null]
   owner Seller
   ownerId Int
-  Users User [not null]
-  Product Product [not null]
+  UsersProfilesWith User [not null]
+  ProductsWith Product [not null]
+  SellerProfilesWith Seller [not null]
 }
 
 Table UserList {
@@ -146,6 +150,8 @@ Enum ShippingType {
 
 Ref: User.profilePictureId > Image.id
 
+Ref: Seller.profilePictureId - Image.id
+
 Ref: Product.sellerId > Seller.id [delete: Cascade]
 
 Ref: Product.imageId > Image.id
@@ -160,7 +166,7 @@ Ref: Invoice.userId > User.id [delete: Cascade]
 
 Ref: Invoice.paymentMethodId > PaymentMethod.id [delete: Cascade]
 
-Ref: Image.ownerId > Seller.id [delete: Cascade]
+Ref: Image.ownerId - Seller.id [delete: Cascade]
 
 Ref: UserList.userId > User.id
 
