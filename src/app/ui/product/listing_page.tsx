@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { fetchProductAll, authenticateSeller, deleteProductById } from '@/app/lib/actions'
+import ProductSearch from '@/app/ui/search'  // Certifique-se de que o caminho esteja correto para o componente de busca
 import styles from '@/app/products/listing/product_list.module.css'
 
 type Product = {
@@ -22,6 +23,7 @@ type Product = {
 export default function ListingPage() {
   const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [authorized, setAuthorized] = useState(false)
   const [unauthorized, setUnauthorized] = useState(false)
 
@@ -65,6 +67,17 @@ export default function ListingPage() {
     }))
 
     setProducts(productData)
+    setFilteredProducts(productData)
+  }
+
+  const handleSearch = (searchTerm: string) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase()
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.description.toLowerCase().includes(lowerCaseSearchTerm) ||
+      product.category.toLowerCase().includes(lowerCaseSearchTerm)
+    )
+    setFilteredProducts(filtered)
   }
 
   const handleEditProduct = (productId: number) => {
@@ -76,6 +89,7 @@ export default function ListingPage() {
     if (confirmDelete) {
       await deleteProductById(productId)
       setProducts(products.filter((product) => product.id !== productId))
+      setFilteredProducts(filteredProducts.filter((product) => product.id !== productId))
     }
   }
 
@@ -102,8 +116,13 @@ export default function ListingPage() {
       >
         Add New Product
       </button>
-      {products.map((product) => (
+
+      {/* Componente de busca */}
+      <ProductSearch onSearch={handleSearch} />
+
+      {filteredProducts.map((product) => (
         <div key={product.id} className={styles.product}>
+          <h1 className={styles.title}>{product.name}</h1>
           <Image
             src={product.image.url}
             alt={product.name}
@@ -112,7 +131,6 @@ export default function ListingPage() {
             className={styles.productImage}
             unoptimized
           />
-          <h1 className={styles.title}>{product.name}</h1>
           <p className={styles.category}>Category: {product.category}</p>
           <p className={styles.description}>{product.description}</p>
           <p className={styles.price}>Price: ${product.price.toFixed(2)}</p>
