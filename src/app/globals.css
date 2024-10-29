@@ -42,6 +42,7 @@ body {
   background-repeat: no-repeat;
   background-size: 350px;
 }
+
 header,
 footer {
   display: flex;
@@ -82,7 +83,6 @@ main {
 h1 {
   background-color: var(--secondary-bg);
   color: var(--secondary-fg);
-  /* font: var(--font-title); */
   font-family: var(--font-title);
   font-size: xx-large;
   max-width: var(--medium-break);
@@ -93,9 +93,21 @@ h3,
 h4 {
   background-color: var(--primary-bg);
   color: var(--primary-fg);
-  /* font: var(--font-header); */
   font-family: var(--font-heading);
   font-size: large;
+}
+
+#login{
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.featured-product{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
 }
 
 @media (min-width: 450px) {
