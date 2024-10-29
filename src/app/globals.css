@@ -98,8 +98,12 @@ h4 {
 }
 
 #login{
+  display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 10rem;
+  justify-content: center;
+  align-items: baseline;
 }
 
 .featured-products-grid{
