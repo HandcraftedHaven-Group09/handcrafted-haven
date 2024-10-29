@@ -46,7 +46,6 @@ export default function Burger({
         }
       >
         {menuItems.map((item) => {
-          let count = 0;
           return (
             <li key={item.text}>
               <Link href={item.url}>{item.text}</Link>
