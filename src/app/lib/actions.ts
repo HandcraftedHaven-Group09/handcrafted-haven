@@ -4,11 +4,14 @@ import { put } from '@vercel/blob';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { createImage } from './data';
+import { createImage, getUserByEmail, createUser } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { describe } from 'node:test';
+import { execSync } from 'node:child_process';
+import { redirect } from 'next/navigation';
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -16,10 +19,30 @@ const CreateImageFormSchema = z.object({
   description: z.string(),
   ownerId: z.string(),
 });
-
-export type CreateImageState = {
+// For signing up a new user manually.
+const SignupUserFormSchema = z.object({
+  id: z.bigint(),
+  displayName: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  password: z.string(),
+});
+// Form types
+export type PostFormState = {
   errors?: {
-    description?: string[];
+    email?: string[];
+    displayName?: string[];
+    firstName?: string[];
+    lastName?: string[];
+    password?: string[];
+  };
+  formData?: {
+    email?: string;
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    password?: string;
   };
   message?: string | null;
 };
@@ -31,9 +54,9 @@ export type CreateImageState = {
  * @returns
  */
 export async function postImage(
-  prevState: CreateImageState,
+  prevState: PostFormState,
   formData: FormData
-): Promise<CreateImageState> {
+): Promise<PostFormState> {
   try {
     const imageFile = formData.get('imageFile') as File;
     const blob = await put(imageFile.name, imageFile, {
@@ -256,14 +279,12 @@ export async function fetchProductById(id: string) {
     throw new Error(`Product with ID ${numericId} not found.`);
   }
 
-
   // Retorne a URL da imagem corretamente
   return {
     ...product,
     image: product.image ? { url: product.image.url } : { url: '' },
   };
 }
-
 
 // Function to update the product
 export async function updateProduct(
@@ -336,4 +357,72 @@ export async function deleteProductById(id: number) {
     console.error('Error deleting product:', error);
     throw error;
   }
+}
+
+const NewUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  displayName: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+});
+
+export async function signupUser(
+  prevState: PostFormState | undefined,
+  formData: FormData
+): Promise<PostFormState> {
+  // Extract form data
+  console.log('EXTRACT FORM');
+
+  const extractedData = {
+    email: formData.get('email')?.toString() || '',
+    password: formData.get('password')?.toString() || '',
+    displayName: formData.get('displayName')?.toString() || '',
+    firstName: formData.get('firstName')?.toString() || '',
+    lastName: formData.get('lastName')?.toString() || '',
+  };
+  //Check existing email
+  const existingUser = await getUserByEmail(extractedData.email);
+
+  if (!existingUser) {
+    // Email is free, use it
+    const parsedUserData = NewUserSchema.safeParse(extractedData);
+    console.log('PARSED: ', parsedUserData);
+    if (parsedUserData.success) {
+      console.log('SUCCESS PATH');
+      // Redirect to confirm? Just do it?
+      const newUser = await createUser(parsedUserData.data);
+      const result = await signIn('user-credentials', {
+        redirect: true,
+        email: newUser?.email,
+        password: newUser?.credential,
+        role: 'user', // These fields go to authorize() in auth.ts
+        redirectTo: `/users/${newUser?.id}/success`,
+      });
+      // redirect('/users/signup/success');
+      return {};
+    }
+    console.log('FAIL PATH');
+
+    return {
+      errors: parsedUserData.error.flatten().fieldErrors,
+      formData: {
+        displayName: extractedData.displayName,
+        email: extractedData.email,
+        firstName: extractedData.firstName,
+        lastName: extractedData.lastName,
+      },
+      message: "Something's wrong, something's amiss!",
+    };
+  }
+  return {
+    formData: {
+      displayName: extractedData.displayName,
+      email: extractedData.email,
+      firstName: extractedData.firstName,
+      lastName: extractedData.lastName,
+    },
+    errors: { email: ['That email is already in use'] },
+    message: "Something's wrong, something's amiss! email",
+  };
 }

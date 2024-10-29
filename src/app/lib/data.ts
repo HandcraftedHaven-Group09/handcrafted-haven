@@ -1,6 +1,41 @@
 import { PrismaClient, Product, Seller, Image } from '@prisma/client';
 const prisma = new PrismaClient();
+import bcrypt from 'bcrypt';
 
+export async function createUser({
+  email,
+  password,
+  displayName,
+  firstName,
+  lastName,
+}: {
+  email: string;
+  password: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+}) {
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: email,
+        displayName: displayName,
+        credential: hashedPassword,
+        firstName: firstName,
+        lastName: lastName,
+        userId: 'Credentials',
+        profilePictureId: 1,
+      },
+    });
+    user.credential = password; // need the unhashed one to sign in
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 export async function getUserById(userId: number) {
   const user = await prisma.user.findFirst({
     where: {
@@ -151,8 +186,7 @@ export async function getUserListById(listId: number) {
   return result;
 }
 
-export async function productRowCount () {
+export async function productRowCount() {
   const rowCount = await prisma.product.count();
   return rowCount;
 }
-

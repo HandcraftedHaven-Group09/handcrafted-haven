@@ -44,7 +44,7 @@ model User {
   lastName         String
   email            String
   bio              String?
-  userId           String
+  userId           String? //For oauth
   credential       String //Password. Might change this later
   // Relation
   profilePicture   Image?          @relation(fields: [profilePictureId], references: [id])

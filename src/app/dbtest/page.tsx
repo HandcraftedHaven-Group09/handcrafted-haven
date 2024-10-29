@@ -2,7 +2,7 @@
 
 import {
   postImage,
-  CreateImageState,
+  PostFormState,
   fetchSellerAll,
   fetchProductAll,
 } from '../lib/actions';
@@ -47,7 +47,7 @@ export default function Page() {
   console.log(products);
   console.log(sellers);
 
-  const initialCreateImageState: CreateImageState = {
+  const initialCreateImageState: PostFormState = {
     message: null,
     errors: {},
   };

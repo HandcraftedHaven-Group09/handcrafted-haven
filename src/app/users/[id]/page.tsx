@@ -6,7 +6,7 @@ import { ButtonConfig } from '@/app/ui/nav-button';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  params = await params;
+  params = params;
 
   const user = (await getUserById(Number(params.id))) as User;
   if (!user) {
