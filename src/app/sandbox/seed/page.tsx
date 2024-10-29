@@ -26,7 +26,9 @@ async function main() {
   await client.invoice.deleteMany({}).catch((e) => console.log(e));
 
   // Reset all the auto increment ids yep
+
   console.log('Wiping tables and resetting key counters');
+
   await client.$executeRawUnsafe(
     'ALTER SEQUENCE "Image_id_seq" RESTART WITH 1'
   );

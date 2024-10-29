@@ -2,12 +2,18 @@
 
 import {
   postImage,
+  CreateImageState,
   UserSignupFormState,
   fetchSellerAll,
   fetchProductAll,
+  fetchUserListAll,
+  addProductToUserList,
 } from '../lib/actions';
 import { useActionState, useEffect, useState } from 'react';
 import { SessionProvider, useSession } from 'next-auth/react';
+import { getUserListById } from '../lib/data';
+import { UserList } from '@prisma/client';
+
 
 export default function Page() {
   const { data: session, status } = useSession();
@@ -32,22 +38,28 @@ export default function Page() {
     }[]
   >([]);
 
+
+  const [lists, updateLists] = useState<UserList[]>([]);
+
   useEffect(() => {
     async function doit() {
       console.log('DO IT!');
 
       const product = await fetchProductAll();
       const sellers = await fetchSellerAll();
-
+      const newLists = await fetchUserListAll(Number(session?.user.id));
+      console.log('NEW LISTS', newLists);
       updateProducts(() => product);
       updateSellers(() => sellers);
+      updateLists(newLists);
     }
     doit();
   }, []);
   console.log(products);
   console.log(sellers);
 
-  const initialCreateImageState: UserSignupFormState = {
+
+  const initialCreateImageState: CreateImageState = {
     message: null,
     errors: {},
   };
@@ -56,10 +68,11 @@ export default function Page() {
     postImage,
     initialCreateImageState
   );
+
   console.log('SESSION DATA', session);
 
   return (
-    <main style={{ padding: '1rem' }}>
+    <main style={{ padding: '1rem', backgroundColor: 'var(--primary-bg)' }}>
       <h2>Database Testing Sandbox</h2>
       <div>
         {session ? (
@@ -71,6 +84,48 @@ export default function Page() {
           <span>No session</span>
         )}
       </div>
+
+      <form
+        action={(data: FormData) => {
+          addProductToUserList(
+            Number(data.get('list')),
+            Number(data.get('product'))
+          );
+        }}
+      >
+        <fieldset
+          style={{
+            padding: '1rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
+          <legend>ADD TO LIST</legend>
+          <label>PRODUCT</label>
+          <select name="product">
+            {products.map((prod) => {
+              return (
+                <option key={prod.id} value={prod.id}>
+                  {prod.name}
+                </option>
+              );
+            })}
+          </select>
+          <label>LIST</label>
+          <select name="list">
+            {lists.map((list) => {
+              return (
+                <option key={list.id} value={list.id}>
+                  {list.name}
+                </option>
+              );
+            })}
+          </select>
+          <button>ADD</button>
+        </fieldset>
+      </form>
+
 
       <form action={formAction}>
         <fieldset

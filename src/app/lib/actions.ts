@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import {
+
   createImage,
   getUserByEmail,
   getSellerByEmail,
@@ -18,6 +19,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { describe } from 'node:test';
 import { execSync } from 'node:child_process';
 import { redirect } from 'next/navigation';
+
 
 // For creating a new image record with new image
 const CreateImageFormSchema = z.object({
@@ -145,25 +147,26 @@ export async function fetchSellerAll() {
 
 // Fetch all products
 export async function fetchProductAll() {
-  const products = await prisma.product.findMany({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      discountPercent: true,
-      discountAbsolute: true,
-      sellerId: true,
-      category: true,
-      image: {
-        select: {
-          url: true,
-        },
+  try {
+    return await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        category: true,
+        discountPercent: true,
+        discountAbsolute: true,
+        sellerId: true,
+        image: true,
       },
-    },
-  });
-
-  return products;
+    })
+  } catch (error) {
+    console.error("Error fetching products:", error)
+    throw error
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
 // Create a new product in the database
@@ -288,26 +291,55 @@ export async function fetchCategories() {
 
 // Function to search product by ID
 export async function fetchProductById(id: string) {
-  const numericId = parseInt(id, 10);
+  const numericId = parseInt(id, 10)
 
   if (isNaN(numericId)) {
-    throw new Error(`Invalid product ID: ${id}`);
+    throw new Error(`Invalid product ID: ${id}`)
   }
 
   const product = await prisma.product.findUnique({
     where: { id: numericId },
-    include: { image: true },
-  });
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      category: true,
+      discountPercent: true,
+      sellerId: true,
+      image: { select: { url: true } },
+      seller: { select: { id: true, displayName: true } },
+      Reviews: {
+        select: {
+          id: true,
+          rating: true,
+          review: true,
+          user: { select: { displayName: true } },
+        },
+      },
+    },
+  })
 
   if (!product) {
-    throw new Error(`Product with ID ${numericId} not found.`);
+    throw new Error(`Product with ID ${numericId} not found.`)
   }
 
-  // Retorne a URL da imagem corretamente
+  // Sets the maximum note allowed
+  const maxRating = 5
+
+  // Calculates the average of the ratings, limiting each rating between 1 and 5
+  const averageRating =
+    product.Reviews.reduce((sum, review) => 
+      sum + Math.min(Math.max(review.rating, 1), maxRating), 0
+    ) / (product.Reviews.length || 1)
+
+
   return {
     ...product,
+    averageRating: averageRating.toFixed(1),
+    Reviews: product.Reviews,
     image: product.image ? { url: product.image.url } : { url: '' },
-  };
+  }
 }
 
 // Function to update the product
@@ -382,6 +414,7 @@ export async function deleteProductById(id: number) {
     throw error;
   }
 }
+
 
 const NewUserSchema = z.object({
   email: z.string().email(),
@@ -517,4 +550,23 @@ export async function signupSeller(
     errors: { email: ['That email is already in use'] },
     message: "Something's wrong, something's amiss! email",
   };
+
+export async function fetchUserListAll(userId: number) {
+  try {
+    const lists = await getListsByUser(userId);
+    console.log('Got lists');
+    return lists;
+  } catch (error) {
+    console.log('Error', error);
+    return [];
+  }
+}
+
+export async function addProductToUserList(listId: number, productId: number) {
+  try {
+    const result = await addToUserList(productId, listId);
+  } catch (error) {
+    return 'error';
+  }
+
 }

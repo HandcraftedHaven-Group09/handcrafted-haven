@@ -1,7 +1,36 @@
-.bio-card,
-.signup-form {
-  display: grid;
-  grid-template-columns: min-content 1fr;
+#user-layout {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-bg);
+}
+#user-side-nav {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: var(--primary-fg);
+}
+#user-side-nav ul {
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+}
+#user-side-nav a {
+  color: var(--primary-fg);
+  text-decoration: none;
+}
+#user-side-nav a:hover {
+  color: var(--link-color);
+}
+
+#user-content {
+  /* background-color: red; */
+  padding: 1rem;
+}
+
+.bio-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
   background-color: #ffffff6a;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -13,6 +42,9 @@
   text-shadow: 0 0 1rem white;
 }
 .bio-card img {
+  min-width: 5rem;
+  width: 100%;
+  height: auto;
   border-radius: 0.4rem;
   box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.382);
 }
@@ -109,6 +141,52 @@
   animation: pulse 1.5s infinite;
 }
 
+.user-lists {
+  display: flex;
+  flex-direction: column;
+}
+.user-lists > ul {
+  margin: 0.5rem;
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.user-list {
+  background-color: var(--secondary-bg);
+  color: var(--secondary-fg);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.186);
+}
+.user-list h4 {
+  color: var(--secondary-fg);
+  margin: 0;
+  background-color: unset;
+}
+.user-list > ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.1rem; */
+}
+.user-list > ul > li {
+  /* background-color: var(--link-color); */
+  display: flex;
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+}
+.user-list > ul > li a {
+  width: 100%;
+  text-decoration: none;
+  color: var(--secondary-fg);
+}
+
+.user-list > ul > li a:hover {
+  background-color: rgba(255, 255, 255, 0.085);
+}
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -118,5 +196,20 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media (min-width: 450px) {
+  #user-layout {
+    flex-direction: row;
+  }
+  #user-side-nav {
+    min-width: 6rem;
+    width: 15rem;
+    max-width: 15rem;
+  }
+  .bio-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
   }
 }

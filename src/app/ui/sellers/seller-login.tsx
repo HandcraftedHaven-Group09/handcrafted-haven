@@ -2,7 +2,6 @@
 
 import '@/app/ui/sellers/sellers.css';
 import Image from 'next/image';
-import Link from 'next/link';
 import { authenticateSeller } from '@/app/lib/actions'; // TODO Get a seller version
 import { useActionState, useState } from 'react';
 

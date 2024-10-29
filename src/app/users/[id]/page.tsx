@@ -35,7 +35,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   ] as ButtonConfig[];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div>
+      <h2>User Bio</h2>
       <UserBio userData={user}></UserBio>
       <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
     </div>
