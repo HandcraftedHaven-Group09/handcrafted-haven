@@ -6,7 +6,7 @@ import { ButtonConfig } from '@/app/ui/nav-button';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  params = await params;
+  params = params;
 
   const user = (await getUserById(Number(params.id))) as User;
   if (!user) {
@@ -35,7 +35,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   ] as ButtonConfig[];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div>
+      <h2>User Bio</h2>
       <UserBio userData={user}></UserBio>
       <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
     </div>

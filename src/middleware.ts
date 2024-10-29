@@ -6,5 +6,5 @@ console.log('Middleware initializing');
 export default NextAuth(authConfig).auth;
 
 export const config = {
-  matcher: ['/users/:path*', '/users/login'],
+  matcher: ['/users/(\\d+)/:path*'],
 };

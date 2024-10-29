@@ -7,6 +7,8 @@
   --secondary-fg: rgb(240, 235, 226);
   --secondary-bg: rgb(80, 72, 57);
   --link-color: rgb(255, 101, 30);
+
+  --secondary-bg-component: 80, 72, 57;
   /* THese are provided by layout.tsx */
   /* --font-title: 'Girassol';
   --font-header: 'Arizonia';
@@ -28,9 +30,11 @@ html {
 body {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   width: 100%;
+  min-height: 100vh;
   max-width: var(--max-size);
   background-color: var(--primary-bg);
   color: var(--primary-fg);
@@ -38,12 +42,15 @@ body {
   background-image: url(/product/images/candle_soy.webp);
 
   background-repeat: no-repeat;
-  background-size: 350px;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: auto;
 }
+
 header,
 footer {
   display: flex;
-
+  box-sizing: border-box;
   background-color: var(--secondary-bg);
   color: var(--secondary-fg);
   font: var(--font-header);
@@ -53,34 +60,47 @@ header {
   flex-direction: column;
   opacity: 0.9;
 }
+
 header .title-group {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
+
 nav {
   background-color: rgba(61, 93, 12, 0.71);
 }
+
 nav ul {
   text-decoration: none;
   list-style: none;
   padding: 0.5rem;
   margin: 0;
 }
+
 nav ul li:hover {
   color: orange;
   margin-left: 0.5rem;
 }
+
 main {
+
+  display: flex;
+  box-sizing: border-box;
+  /* height: 100%; */
+  width: 100%;
   padding: 1rem;
+  flex: 1;
+  background-color: var(--primary-bg);
+
 }
 
 h1 {
   background-color: var(--secondary-bg);
   color: var(--secondary-fg);
-  /* font: var(--font-title); */
   font-family: var(--font-title);
   font-size: xx-large;
   max-width: var(--medium-break);
@@ -91,9 +111,48 @@ h3,
 h4 {
   background-color: var(--primary-bg);
   color: var(--primary-fg);
-  /* font: var(--font-header); */
   font-family: var(--font-heading);
   font-size: large;
+}
+#content {
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.center-children {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+#login{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10rem;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.featured-products-grid{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 @media (min-width: 450px) {
@@ -110,6 +169,6 @@ h4 {
 
 @media (min-width: 900px) {
   header {
-    flex-direction: row;
+    /* flex-direction: row; */
   }
 }

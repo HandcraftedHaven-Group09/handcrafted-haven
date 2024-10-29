@@ -1,9 +1,13 @@
 'use client'
+
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
-import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
+import { createNewProduct, uploadImage, fetchCategories, authenticateSeller } from '../../lib/actions'
+import BackButton from './components/back_button'
 
 export default function NewProductForm() {
+  const router = useRouter()
   const [productData, setProductData] = useState({
     name: '',
     description: '',
@@ -12,9 +16,40 @@ export default function NewProductForm() {
     discountPercent: '',
     sellerId: 1,
   })
-
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
+  const [authorized, setAuthorized] = useState(false)
+  const [unauthorized, setUnauthorized] = useState(false)
+
+  useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const formData = new FormData()
+        formData.append('email', 'seller@example.com')
+        formData.append('password', 'password123')
+
+        const authResult = await authenticateSeller(undefined, formData)
+
+        if (typeof authResult === 'string') {
+          console.error(authResult)
+          setUnauthorized(true)
+        } else {
+          setAuthorized(true)
+          getCategories()
+        }
+      } catch (error) {
+        console.error('Access denied:', error)
+        setUnauthorized(true)
+      }
+    }
+
+    checkAuthorization()
+  }, [])
+
+  const getCategories = async () => {
+    const fetchedCategories = await fetchCategories()
+    setCategories(fetchedCategories.map((c) => c.category))
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -33,7 +68,6 @@ export default function NewProductForm() {
       if (images && images.length > 0) {
         const formData = new FormData()
         formData.append('file', images[0])
-
         const response = await uploadImage(formData)
         imageUrl = response.url
       }
@@ -45,28 +79,26 @@ export default function NewProductForm() {
         image: imageUrl,
       }
 
-      console.log('Final product data being submitted:', productPayload)
-
       await createNewProduct(productPayload)
       alert('Product created successfully!')
+      router.push('/products/listing')
     } catch (error) {
       console.error('Error creating product:', error)
       alert('Error creating the product')
     }
   }
 
-  // Fetch product categories
-  useEffect(() => {
-    const getCategories = async () => {
-      const fetchedCategories = await fetchCategories()
-      setCategories(fetchedCategories.map((c) => c.category))
-    }
+  if (unauthorized) {
+    return <p className={styles.unauthorized}>Unauthorized Access.</p>
+  }
 
-    getCategories()
-  }, [])
+  if (!authorized) {
+    return <p>Loading...</p>
+  }
 
   return (
     <div className={styles.formContainer}>
+      <BackButton backTo='/products/listing' />
       <h1 className={styles.title}>Create New Product</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label htmlFor="name" className={styles.label}>Name:</label>

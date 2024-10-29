@@ -2,9 +2,9 @@
 
 import '@/app/ui/sellers/sellers.css';
 import Image from 'next/image';
-import Link from 'next/link';
 import { authenticateSeller } from '@/app/lib/actions'; // TODO Get a seller version
 import { useActionState, useState } from 'react';
+import Link from 'next/link';
 
 import { signIn } from 'next-auth/react';
 
@@ -53,6 +53,7 @@ export default function SellerLogin() {
           alt="Sign in with GitHub"
         ></Image>
       </button>
+      <Link href="/sellers/signup">Sign up</Link>
     </>
   );
 }
