@@ -1,9 +1,9 @@
-'use client';
-
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import SellerCollections from '../ui/sellers/seller-collections';
+
+//TODO This function needs to be a 'use server', not client.
 
 // This Define the Product type
 interface Product {

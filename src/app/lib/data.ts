@@ -115,6 +115,7 @@ export async function getSellerByEmail(sellerEmail: string) {
 }
 // Get a seller and attach all their collections
 export async function getSellerWithCollectionsById(sellerId: number) {
+  console.log('!!~@! GETTIN STUFF!');
   const user = await prisma.seller.findFirst({
     where: {
       id: sellerId,
