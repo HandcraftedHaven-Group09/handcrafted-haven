@@ -1,12 +1,12 @@
-import { getSellersById } from '@/app/lib/data';
+import { getSellerById } from '@/app/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function FeaturedArtist({ id }: { id: number }) {
-  const seller = await getSellersById(id);
+  const seller = await getSellerById(id);
   return (
     <Link href={`/sellers/${id}`}>
-      <h3>{seller?.firstName}</h3>  
+      <h3>{seller?.firstName}</h3>
       {/* <Image
         src={product?.image.url || ''}
         width={200}
