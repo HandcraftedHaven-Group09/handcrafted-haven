@@ -164,7 +164,7 @@ export async function fetchProductAll() {
         discountPercent: true,
         discountAbsolute: true,
         image: { select: { url: true } },
-        seller: { select: { displayName: true } },
+        seller: { select: { displayName: true, id: true } },
     }});
   } catch (error) {
     console.error('Error fetching products:', error);
