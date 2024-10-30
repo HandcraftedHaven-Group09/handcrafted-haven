@@ -3,6 +3,7 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import React from 'react';
+import SellerCollections from '../ui/sellers/seller-collections';
 
 // This Define the Product type
 interface Product {
@@ -109,6 +110,8 @@ const SellerProfile = () => {
       </div>
 
       <button onClick={handleAddProduct}>Add Product</button>
+      <h3>Your Collections</h3>
+      <SellerCollections id={session.user?.id} />
 
       <h3>Your Products:</h3>
       <ul>

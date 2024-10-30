@@ -113,6 +113,22 @@ export async function getSellerByEmail(sellerEmail: string) {
   });
   return seller;
 }
+// Get a seller and attach all their collections
+export async function getSellerWithCollectionsById(sellerId: number) {
+  const user = await prisma.seller.findFirst({
+    where: {
+      id: sellerId,
+    },
+    include: {
+      Collections: {
+        include: {
+          Products: true,
+        },
+      },
+    },
+  });
+  return user;
+}
 
 export async function getProductsBySimpleQuery(query: string, max: number) {
   const products = await prisma.product.findMany({
