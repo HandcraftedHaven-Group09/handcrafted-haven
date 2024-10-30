@@ -16,8 +16,8 @@ export async function middleware(request: NextRequest) {
   const isLoggedIn = !!token;
 
   if (!isLoggedIn) {
-    const loginUrl = new URL('/users/login', request.url);
-    loginUrl.searchParams.set('callbackUrl', request.url); // Preservar a URL solicitada para redirecionar após o login
+    const loginUrl = new URL('/sellers/login', request.url);
+    loginUrl.searchParams.set('callbackUrl', request.url); // Preserve the requested URL to redirect after login
     return NextResponse.redirect(loginUrl);
   }
 
