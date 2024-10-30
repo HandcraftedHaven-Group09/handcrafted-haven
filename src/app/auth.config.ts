@@ -1,31 +1,40 @@
-import { NextResponse } from 'next/server';
+import next from 'next';
 import type { NextAuthConfig } from 'next-auth';
 
-export const authConfig: NextAuthConfig = {
+export const authConfig = {
   pages: {
     signIn: '/users/login',
   },
   callbacks: {
-    authorized({ auth, request }) {
-      const isLoggedIn = !!auth?.user; // Check if user is authenticated
-      const { pathname, origin } = request.nextUrl;
-      
-      // Redirect logged-in users trying to access the login page back to the main page or callback URL
-      if (isLoggedIn && pathname === '/users/login') {
-        const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/';
-        return NextResponse.redirect(new URL(callbackUrl, origin));
-      }
-      
-      // Block unauthenticated users from accessing protected pages
-      const protectedPaths = ['/products/listing', '/products/:id/edit', '/products/create'];
-      const isProtectedPage = protectedPaths.some((path) => pathname.startsWith(path));
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user; // Checks if the user is logged in
+      const userRole = auth?.user?.role; // Retrieves the user's role
+      if (isLoggedIn) {
+        // If the user is logged in but trying to access the login page, redirect them
+        if (nextUrl.pathname.startsWith('/users/login')) {
+          const callback = nextUrl.searchParams.get('callbackUrl');
+          if (callback) {
+            return Response.redirect(
+              new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl)
+            );
+          } else {
+            // Otherwise, redirect to the home page
+            return Response.redirect(new URL(nextUrl.origin, nextUrl));
+          }
+        }
 
-      if (!isLoggedIn && isProtectedPage) {
-        return NextResponse.redirect(new URL('/users/login', origin));
+        // Role-based access control for specific pages
+        const restrictedPaths = ['/products/listing', '/products/create', '/products/:id/edit'];
+        const isRestrictedPage = restrictedPaths.some(path => nextUrl.pathname.startsWith(path));
+
+        if (isRestrictedPage && userRole !== 'seller') {
+          return Response.redirect(new URL('/unauthorized', nextUrl.origin)); // Redirect unauthorized users
+        }
       }
 
-      // Allow access if logged in or if the page is not protected
-      return true;
+      if (isLoggedIn) return true;
+
+      return false;
     },
     async jwt({ token, user }) {
       if (user) {
@@ -35,11 +44,11 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user = { ...session.user, id: token.id, role: token.role };
-      }
+      session.user.role = token.role;
+      session.user.id = token.id;
       return session;
     },
   },
-  providers: [], // Add your providers here
+
+  providers: [], // Add providers here
 } satisfies NextAuthConfig;
