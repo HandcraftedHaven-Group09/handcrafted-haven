@@ -2,10 +2,12 @@
 
 import '@/app/ui/users/users.css';
 import Image from 'next/image';
+import HorizontalBar from '@/app/ui/horizontal-bar';
 
 import { authenticate } from '@/app/lib/actions';
 import { useActionState, useState } from 'react';
 import { signIn as signInClient } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function UserLogin() {
   const [email, changeEmail] = useState('');
@@ -16,8 +18,8 @@ export default function UserLogin() {
   );
 
   return (
-    <>
-      <form action={formAction} className="login-form">
+    <div className="login-form">
+      <form action={formAction}>
         <h2>LOGIN</h2>
         <label>email</label>
         <input
@@ -36,9 +38,13 @@ export default function UserLogin() {
         ></input>
         <input type="submit" className="span2"></input>
         {errorMessage && <p className="error span2">{errorMessage}</p>}
-        <div className="span2">Sign in with</div>
-        <section className="span2"></section>
       </form>
+
+      <HorizontalBar
+        text="Sign in with"
+        thickness="4px"
+        color="var(--secondary-bg)"
+      ></HorizontalBar>
       <button
         onClick={() => {
           signInClient('github', { callbackUrl: '/' });
@@ -52,6 +58,9 @@ export default function UserLogin() {
           alt="Sign in with GitHub"
         ></Image>
       </button>
-    </>
+      <span>
+        Not registered? Sign up <Link href={'/users/signup'}>here</Link>!
+      </span>
+    </div>
   );
 }
