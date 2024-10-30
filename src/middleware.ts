@@ -2,17 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 export const config = {
-  matcher: [
-    '/products/listing',        
-    '/products/:id/edit',    
-    '/products/create'
-  ],
+  matcher: ['/products/listing', '/products/:id/edit', '/products/create'],
 };
 
 export async function middleware(request: NextRequest) {
   console.log('Middleware initializing');
 
-  const token = await getToken({ req: request });
+  const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+  });
   const isLoggedIn = !!token;
 
   if (!isLoggedIn) {
