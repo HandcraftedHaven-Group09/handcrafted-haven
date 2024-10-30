@@ -50,9 +50,10 @@ export default function NewProductForm() {
   const validateFields = () => {
     const newErrors: { [key: string]: string } = {}
     if (!productData.name) newErrors.name = 'Name is required.'
+    if (!productData.category) newErrors.category = 'Category is required.'
     if (!productData.description) newErrors.description = 'Description is required.'
     if (!productData.price) newErrors.price = 'Price is required.'
-    if (!productData.category) newErrors.category = 'Category is required.'
+    if (!productData.discountPercent) newErrors.discountPercent = 'Discount is required.'
     if (!images || images.length === 0) newErrors.images = 'At least one image is required.'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -103,6 +104,23 @@ export default function NewProductForm() {
         />
         {errors.name && <p className={styles.error}>{errors.name}</p>}
 
+        <label htmlFor="category" className={styles.label}>Category:</label>
+        <select
+          id="category"
+          name="category"
+          value={productData.category}
+          onChange={handleInputChange}
+          className={styles.select}
+        >
+          <option value="" disabled>Select a category</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        {errors.category && <p className={styles.error}>{errors.category}</p>}
+
         <label htmlFor="description" className={styles.label}>Description:</label>
         <input
           type="text"
@@ -127,22 +145,19 @@ export default function NewProductForm() {
         />
         {errors.price && <p className={styles.error}>{errors.price}</p>}
 
-        <label htmlFor="category" className={styles.label}>Category:</label>
-        <select
-          id="category"
-          name="category"
-          value={productData.category}
+        <label htmlFor="discountPercent" className={styles.label}>Discount Percent:</label>
+        <input
+          type="number"
+          id="discountPercent"
+          name="discountPercent"
+          value={productData.discountPercent}
           onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="" disabled>Select a category</option>
-          {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        {errors.category && <p className={styles.error}>{errors.category}</p>}
+          step="1"
+          min="0"
+          max="100"
+          className={styles.input}
+        />
+        {errors.discountPercent && <p className={styles.error}>{errors.discountPercent}</p>}
 
         <label htmlFor="images" className={styles.label}>Images:</label>
         <input

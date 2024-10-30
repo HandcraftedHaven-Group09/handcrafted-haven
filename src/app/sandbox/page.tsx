@@ -27,7 +27,7 @@ export default function Page() {
       discountPercent: number;
       discountAbsolute: number;
       description: string;
-      sellerId: number;
+      // sellerId: number;
     }[]
   >([]);
 
