@@ -102,6 +102,7 @@ export default function ListingPage() {
           <p className={styles.category}>Category: {product.category}</p>
           <p className={styles.description}>{product.description}</p>
           <p className={styles.price}>Price: ${product.price.toFixed(2)}</p>
+          <p className={styles.discountPercent}>Discount: {product.discountPercent}%</p>
           <p className={styles.seller}>Seller: {product.sellerName || 'Unknown Seller'}</p>
           <div className={styles.buttonContainer}>
             <button
