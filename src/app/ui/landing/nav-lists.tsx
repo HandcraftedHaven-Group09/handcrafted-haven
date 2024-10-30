@@ -1,20 +1,29 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Burger from '../burger-button/burger-button';
 import Link from 'next/link';
 
-const links = [
-  { name: 'Home', href: '../../' },
-  { name: 'Products', href: '/products' },
-  { name: 'Collections', href: '' },
-  { name: 'About', href: '' },
+export type MenuItem = {
+  text: string;
+  url: string;
+};
+
+const links: MenuItem[] = [
+  { text: 'Home', url: '../../' },
+  { text: 'Products', url: '/products' },
+  { text: 'Collections', url: '' },
+  { text: 'About', url: '' },
 ];
 
 export default function NavLists() {
-  const [isLargeScreen, setIsLargeScreen] = useState(true);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 450);
 
   const handleResize = () => {
-    setIsLargeScreen(window.innerWidth > 450);
+    const currentWidth = window.innerWidth;
+    const isLarge = currentWidth > 450;
+    setIsLargeScreen(prev => isLarge);
+    console.log(currentWidth, window.innerWidth, isLarge, isLargeScreen)
   };
 
   useEffect(() => {
@@ -31,9 +40,9 @@ export default function NavLists() {
       {isLargeScreen ? (
         <ul>
           {links.map((link) => (
-            <li key={link.name}>
-              <Link href={link.href}>
-                <p>{link.name}</p>
+            <li key={link.text}>
+              <Link href={link.url}>
+                <p>{link.text}</p>
               </Link>
             </li>
           ))}
@@ -41,12 +50,7 @@ export default function NavLists() {
       ) : (
         <Burger
           rightHanded={true}
-          menuItems={[
-            { text: 'Home', url:'../../'},
-            { text: 'Products', url:'/products'},
-            { text: 'Collections', url:''},
-            { text: 'About', url:''},
-          ]}
+          menuItems={links}
         />
       )}
     </nav>
