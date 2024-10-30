@@ -16,10 +16,12 @@ type Product = {
   discountPercent?: number
   discountAbsolute?: number
   sellerId?: number
+  sellerName?: string  // Adicione esta linha
   image: {
     url: string
   }
 }
+
 
 export default function ProductPage() {
   const router = useRouter()
@@ -40,7 +42,7 @@ export default function ProductPage() {
         category: product.category,
         discountPercent: product.discountPercent,
         discountAbsolute: product.discountAbsolute,
-        sellerId: product.sellerId,
+        sellerName: product.seller?.displayName,
         image: { url: product.image.url },
       }))
       setProducts(productData)
@@ -132,7 +134,7 @@ export default function ProductPage() {
             </>
           )}
 
-          <p className={styles.seller}>Seller ID: {product.sellerId}</p>
+          <p className={styles.seller}>Seller: {product.sellerName || 'Unknown Seller'}</p>
 
           <div className={styles.cartSection}>
             <label htmlFor={`quantity-${product.id}`}>Quantity: </label>
