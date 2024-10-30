@@ -12,22 +12,18 @@ const links = [
 export default function NavLists() {
     return(
         <>
-        <nav>
-            <ul>
-                {links.map((link) => {
-                    return (
-                        <li>
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                            >
-                            <p>{link.name}</p>
-                            </Link>
-                        </li>
-                    )
-                })}
-            </ul>
-        </nav>
+        {links.map((link) => {
+            return (
+                <li>
+                    <Link
+                        key={link.name}
+                         href={link.href}
+                    >
+                    <p>{link.name}</p>
+                    </Link>
+                </li>
+            )
+        })}
         </>
     )
 }
