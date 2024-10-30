@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/src/app/auth';
 import Image from 'next/image';
 import './globals.css';
+import NavLists from './ui/landing/nav-lists';
 
 const titleFont = localFont({
   src: './fonts/arizonia/Arizonia-Regular.ttf',
@@ -54,12 +55,17 @@ export default async function RootLayout({
             </div>
             <nav>
               <ul>
+                <NavLists/>
+              </ul>
+            </nav>
+            {/* <nav>
+              <ul>
                 <li>Home</li>
                 <li>Products</li>
                 <li>Collections</li>
                 <li>About</li>
               </ul>
-            </nav>
+            </nav> */}
           </header>
           <main>{children}</main>
           <footer>FOOTER</footer>
