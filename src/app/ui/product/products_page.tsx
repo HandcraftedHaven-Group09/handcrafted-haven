@@ -16,7 +16,7 @@ type Product = {
   discountPercent?: number
   discountAbsolute?: number
   sellerId?: number
-  sellerName?: string  // Adicione esta linha
+  sellerName?: string  
   image: {
     url: string
   }
