@@ -1,29 +1,31 @@
-import next from 'next';
+import { NextResponse } from 'next/server';
 import type { NextAuthConfig } from 'next-auth';
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/users/login',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      if (isLoggedIn) {
-        if (nextUrl.pathname.startsWith('/users/login')) {
-          // Logged in but at login screen then redirect to root path
-          const callback = nextUrl.searchParams.get('callbackUrl');
-          if (callback) {
-            return Response.redirect(
-              new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl) // Go to the callback if present
-            );
-          } else {
-            return Response.redirect(new URL(nextUrl.origin, nextUrl)); // Go to root if present
-          }
-        }
+    authorized({ auth, request }) {
+      const isLoggedIn = !!auth?.user; // Check if user is authenticated
+      const { pathname, origin } = request.nextUrl;
+      
+      // Redirect logged-in users trying to access the login page back to the main page or callback URL
+      if (isLoggedIn && pathname === '/users/login') {
+        const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/';
+        return NextResponse.redirect(new URL(callbackUrl, origin));
+      }
+      
+      // Block unauthenticated users from accessing protected pages
+      const protectedPaths = ['/products/listing', '/products/:id/edit', '/products/create'];
+      const isProtectedPage = protectedPaths.some((path) => pathname.startsWith(path));
+
+      if (!isLoggedIn && isProtectedPage) {
+        return NextResponse.redirect(new URL('/users/login', origin));
       }
 
-      if (isLoggedIn) return true; // If logged in, not at login page, pass through
-      return false; // Redirect unauthenticated users to login page
+      // Allow access if logged in or if the page is not protected
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
@@ -33,11 +35,11 @@ export const authConfig = {
       return token;
     },
     async session({ session, token }) {
-      session.user.role = token.role;
-      session.user.id = token.id;
+      if (token) {
+        session.user = { ...session.user, id: token.id, role: token.role };
+      }
       return session;
     },
   },
-
-  providers: [], // Add providers with an empty array for now
+  providers: [], // Add your providers here
 } satisfies NextAuthConfig;
