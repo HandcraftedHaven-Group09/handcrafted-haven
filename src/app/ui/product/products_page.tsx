@@ -102,6 +102,7 @@ export default function ProductPage() {
       <ProductSearch onSearch={handleSearch} />
       {filteredProducts.map((product) => (
         <div key={product.id} className={styles.product}>
+          <h1 className={styles.title}>{product.name}</h1>
           <Link href={`/products/${product.id}`}>
             <Image
               src={product.image.url}
@@ -112,8 +113,6 @@ export default function ProductPage() {
               unoptimized
             />
           </Link>
-
-          <h1 className={styles.title}>{product.name}</h1>
           <p className={styles.category}>Category: {product.category}</p>
           <p className={styles.description}>{product.description}</p>
 

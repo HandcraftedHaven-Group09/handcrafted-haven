@@ -1,4 +1,4 @@
-import EditProductPage from './page';
+import EditProductPage from '@/app/ui/product/edit_product';
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

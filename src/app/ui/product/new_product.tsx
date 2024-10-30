@@ -3,8 +3,15 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './new_product.module.css'
-import { createNewProduct, uploadImage, fetchCategories, authenticateSeller } from '../../lib/actions'
+import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
 import BackButton from './components/back_button'
+
+// Function to sanitize input strings
+function sanitizeInput(input: string): string {
+  const div = document.createElement('div')
+  div.innerText = input
+  return div.innerHTML
+}
 
 export default function NewProductForm() {
   const router = useRouter()
@@ -18,53 +25,45 @@ export default function NewProductForm() {
   })
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
-  const [authorized, setAuthorized] = useState(false)
-  const [unauthorized, setUnauthorized] = useState(false)
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    const checkAuthorization = async () => {
-      try {
-        const formData = new FormData()
-        formData.append('email', 'seller@example.com')
-        formData.append('password', 'password123')
-
-        const authResult = await authenticateSeller(undefined, formData)
-
-        if (typeof authResult === 'string') {
-          console.error(authResult)
-          setUnauthorized(true)
-        } else {
-          setAuthorized(true)
-          getCategories()
-        }
-      } catch (error) {
-        console.error('Access denied:', error)
-        setUnauthorized(true)
-      }
+    const getCategories = async () => {
+      const fetchedCategories = await fetchCategories()
+      setCategories(fetchedCategories.map((c) => c.category))
     }
-
-    checkAuthorization()
+    getCategories()
   }, [])
-
-  const getCategories = async () => {
-    const fetchedCategories = await fetchCategories()
-    setCategories(fetchedCategories.map((c) => c.category))
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setProductData({
       ...productData,
-      [name]: value,
+      [name]: sanitizeInput(value),
     })
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
+    }))
+  }
+
+  const validateFields = () => {
+    const newErrors: { [key: string]: string } = {}
+    if (!productData.name) newErrors.name = 'Name is required.'
+    if (!productData.description) newErrors.description = 'Description is required.'
+    if (!productData.price) newErrors.price = 'Price is required.'
+    if (!productData.category) newErrors.category = 'Category is required.'
+    if (!images || images.length === 0) newErrors.images = 'At least one image is required.'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!validateFields()) return
 
     try {
       let imageUrl = ''
-
       if (images && images.length > 0) {
         const formData = new FormData()
         formData.append('file', images[0])
@@ -88,14 +87,6 @@ export default function NewProductForm() {
     }
   }
 
-  if (unauthorized) {
-    return <p className={styles.unauthorized}>Unauthorized Access.</p>
-  }
-
-  if (!authorized) {
-    return <p>Loading...</p>
-  }
-
   return (
     <div className={styles.formContainer}>
       <BackButton backTo='/products/listing' />
@@ -108,9 +99,9 @@ export default function NewProductForm() {
           name="name"
           value={productData.name}
           onChange={handleInputChange}
-          required
           className={styles.input}
         />
+        {errors.name && <p className={styles.error}>{errors.name}</p>}
 
         <label htmlFor="description" className={styles.label}>Description:</label>
         <input
@@ -119,9 +110,9 @@ export default function NewProductForm() {
           name="description"
           value={productData.description}
           onChange={handleInputChange}
-          required
           className={styles.input}
         />
+        {errors.description && <p className={styles.error}>{errors.description}</p>}
 
         <label htmlFor="price" className={styles.label}>Price (USD):</label>
         <input
@@ -130,11 +121,11 @@ export default function NewProductForm() {
           name="price"
           value={productData.price}
           onChange={handleInputChange}
-          required
           step="0.01"
           min="0"
           className={styles.input}
         />
+        {errors.price && <p className={styles.error}>{errors.price}</p>}
 
         <label htmlFor="category" className={styles.label}>Category:</label>
         <select
@@ -142,7 +133,6 @@ export default function NewProductForm() {
           name="category"
           value={productData.category}
           onChange={handleInputChange}
-          required
           className={styles.select}
         >
           <option value="" disabled>Select a category</option>
@@ -152,18 +142,7 @@ export default function NewProductForm() {
             </option>
           ))}
         </select>
-
-        <label htmlFor="discountPercent" className={styles.label}>Discount (%):</label>
-        <input
-          type="number"
-          id="discountPercent"
-          name="discountPercent"
-          value={productData.discountPercent}
-          onChange={handleInputChange}
-          min="0"
-          max="100"
-          className={styles.input}
-        />
+        {errors.category && <p className={styles.error}>{errors.category}</p>}
 
         <label htmlFor="images" className={styles.label}>Images:</label>
         <input
@@ -171,9 +150,16 @@ export default function NewProductForm() {
           id="images"
           name="images"
           multiple
-          onChange={(e) => setImages(e.target.files)}
+          onChange={(e) => {
+            setImages(e.target.files)
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              images: '',
+            }))
+          }}
           className={styles.fileInput}
         />
+        {errors.images && <p className={styles.error}>{errors.images}</p>}
 
         <button type="submit" className={styles.submitButton}>Create Product</button>
       </form>

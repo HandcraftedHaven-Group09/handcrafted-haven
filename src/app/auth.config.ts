@@ -1,43 +1,53 @@
-import next from 'next';
-import type { NextAuthConfig } from 'next-auth';
+import next from 'next'
+import type { NextAuthConfig } from 'next-auth'
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
+  secret: process.env.NEXTAUTH_SECRET, // Set the secret key for token generation
   pages: {
-    signIn: '/users/login',
+    signIn: '/sellers/login', 
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
+      const isLoggedIn = !!auth?.user 
+      const userRole = auth?.user?.role // Retrieves the user's role
       if (isLoggedIn) {
-        if (nextUrl.pathname.startsWith('/users/login')) {
-          // Logged in but at login screen then redirect to root path
-          const callback = nextUrl.searchParams.get('callbackUrl');
+        // If the user is logged in but trying to access the login page, redirect them
+        if (nextUrl.pathname.startsWith('/sellers/login')) {
+          const callback = nextUrl.searchParams.get('callbackUrl')
           if (callback) {
             return Response.redirect(
-              new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl) // Go to the callback if present
-            );
+              new URL(nextUrl.searchParams.get('callbackUrl') || '', nextUrl)
+            )
           } else {
-            return Response.redirect(new URL(nextUrl.origin, nextUrl)); // Go to root if present
+            return Response.redirect(new URL(nextUrl.origin, nextUrl))
           }
+        }
+
+        // Role-based access control for specific pages
+        const restrictedPaths = ['/products/listing', '/products/create', '/products/:id/edit']
+        const isRestrictedPage = restrictedPaths.some(path => nextUrl.pathname.startsWith(path))
+
+        if (isRestrictedPage && userRole !== 'seller') {
+          return Response.redirect(new URL('/unauthorized', nextUrl.origin)) // Redirect unauthorized users
         }
       }
 
-      if (isLoggedIn) return true; // If logged in, not at login page, pass through
-      return false; // Redirect unauthenticated users to login page
+      if (isLoggedIn) return true
+
+      return false
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        token.id = user.id
+        token.role = user.role
       }
-      return token;
+      return token
     },
     async session({ session, token }) {
-      session.user.role = token.role;
-      session.user.id = token.id;
-      return session;
+      session.user.role = token.role
+      session.user.id = token.id
+      return session
     },
   },
-
-  providers: [], // Add providers with an empty array for now
-} satisfies NextAuthConfig;
+  providers: [], // Add providers here
+}
