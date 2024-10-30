@@ -1,11 +1,10 @@
-// pages/seller-profile.tsx
-
+// SellerProfilePage.tsx (Server Component)
 "use server";
 
 import React from 'react';
 import { getSession } from 'next-auth/react';
-import SignInPrompt from './components/SignInPrompt';
-import SellerDashboard from './components/SellerDashboard';
+import SignInPrompt from './SignInPrompt';
+import SellerDashboard from './SellerDashboard';
 
 export default async function SellerProfilePage() {
     const session = await getSession();
