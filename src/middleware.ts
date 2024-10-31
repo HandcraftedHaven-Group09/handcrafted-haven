@@ -9,6 +9,8 @@ export const config = {
     '/products',
     '/products/:id',
     '/products/cart',
+    '/sellers/login',
+    '/users/login',
   ],
 };
 
@@ -43,6 +45,21 @@ export async function middleware(request: NextRequest) {
     path.test(request.nextUrl.pathname)
   );
 
+  // Logging for debugging purposes
+  console.log('Token:', token);
+  console.log('User Role:', userRole);
+  console.log('Is Seller Restricted Page:', isSellerRestrictedPage);
+  console.log('Is User Restricted Page:', isUserRestrictedPage);
+
+  // Handle login pages directly to avoid redirect loops
+  if (request.nextUrl.pathname === '/sellers/login' || request.nextUrl.pathname === '/users/login') {
+    if (isLoggedIn && userRole === 'seller' && request.nextUrl.pathname === '/sellers/login') {
+      console.log('Redirecting seller to /products/listing after successful login');
+      return NextResponse.redirect(new URL('/products/listing', request.url));
+    }
+    return NextResponse.next();
+  }
+
   // If the user is not logged in, redirect them to the appropriate login page
   if (!isLoggedIn) {
     const loginUrl = new URL(
@@ -54,11 +71,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // If the user is logged in but tries to access a restricted page for their role
-  if (userRole === 'seller' && !isSellerRestrictedPage && isUserRestrictedPage) {
+  if (userRole === 'seller' && isUserRestrictedPage) {
     return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect sellers who try to access user pages
   }
 
-  if (userRole === 'user' && !isUserRestrictedPage && isSellerRestrictedPage) {
+  if (userRole === 'user' && isSellerRestrictedPage) {
     return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect users who try to access seller pages
   }
 
