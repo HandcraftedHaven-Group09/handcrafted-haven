@@ -4,12 +4,10 @@ import './burger-button.css';
 import useMedia from 'use-media';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-
 export type MenuItem = {
   text: string;
   url: string;
 };
-
 export default function Burger({
   rightHanded,
   menuItems,
@@ -20,7 +18,6 @@ export default function Burger({
   const { data: session } = useSession();
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const isWide = useMedia({ minWidth: '450px' });
-
   return (
     <div className={rightHanded ? 'burger right-handed' : 'burger'}>
       {!isWide ? ( // Show if not wide mode
