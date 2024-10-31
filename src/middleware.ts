@@ -6,7 +6,7 @@ export const config = {
     '/products/listing',
     '/products/:id/edit',
     '/products/create',
-    '/products/',
+    '/products',
     '/products/:id',
     '/products/cart',
   ],
