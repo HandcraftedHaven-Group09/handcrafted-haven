@@ -53,7 +53,7 @@ export default async function RootLayout({
               ></Image>
               <h1>Handcrafted Haven</h1>
             </div>
-            <NavLists/>
+            <NavLists />
           </header>
           <main>{children}</main>
           <footer>FOOTER</footer>
