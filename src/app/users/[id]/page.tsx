@@ -3,10 +3,21 @@ import { getUserById } from '@/app/lib/data';
 import UserBio from '@/app/ui/users/user-bio';
 import NavButtons from '@/app/ui/nav-buttons';
 import { ButtonConfig } from '@/app/ui/nav-button';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { auth } from '@/app/auth';
 
 export default async function Page({ params }: { params: { id: string } }) {
   params = params;
+  const session = await auth();
+
+  if (session?.user.id) {
+    if (params.id != session?.user.id) {
+      console.log('user: ', session?.user.id);
+      redirect(`/users/${session?.user.id}`);
+    }
+  } else {
+    redirect('/users/login');
+  }
 
   const user = (await getUserById(Number(params.id))) as User;
   if (!user) {

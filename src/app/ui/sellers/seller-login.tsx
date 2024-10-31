@@ -17,8 +17,8 @@ export default function SellerLogin() {
   );
 
   return (
-    <>
-      <form action={formAction} className="login-form">
+    <div className="login-form">
+      <form action={formAction}>
         <h2>SELLER LOGIN</h2>
         <label>email</label>
         <input
@@ -37,23 +37,11 @@ export default function SellerLogin() {
         ></input>
         <input type="submit" className="span2"></input>
         {errorMessage && <p className="error span2">{errorMessage}</p>}
-        <div className="span2">Sign in with</div>
-        <section className="span2"></section>
       </form>
-      <button
-        onClick={() => {
-          signIn('github', { callbackUrl: '/' });
-        }}
-        style={{ backgroundColor: 'transparent', border: 'unset' }}
-      >
-        <Image
-          src="/ui/github_logo.svg"
-          width={30}
-          height={30}
-          alt="Sign in with GitHub"
-        ></Image>
-      </button>
-      <Link href="/sellers/signup">Sign up</Link>
-    </>
+
+      <span>
+        Not registered? Sign up <Link href={'/sellers/signup'}>here</Link>!
+      </span>
+    </div>
   );
 }

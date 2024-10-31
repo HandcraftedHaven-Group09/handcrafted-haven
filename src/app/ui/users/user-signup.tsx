@@ -26,8 +26,9 @@ export default function UserSignup() {
   );
 
   return (
-    <>
-      <form action={formAction} className="login-form">
+    <div className="login-form">
+      {/* <div> */}
+      <form action={formAction}>
         <label>email</label>
         <input
           type="email"
@@ -88,6 +89,6 @@ export default function UserSignup() {
           <p className="error span2">{formState.message}</p>
         )}
       </form>
-    </>
+    </div>
   );
 }

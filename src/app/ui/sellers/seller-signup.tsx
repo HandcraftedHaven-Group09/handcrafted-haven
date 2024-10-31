@@ -26,8 +26,8 @@ export default function SellerSignup() {
   );
 
   return (
-    <>
-      <form action={formAction} className="login-form">
+    <div className="login-form">
+      <form action={formAction}>
         <label>email</label>
         <input
           type="email"
@@ -88,6 +88,6 @@ export default function SellerSignup() {
           <p className="error span2">{formState.message}</p>
         )}
       </form>
-    </>
+    </div>
   );
 }

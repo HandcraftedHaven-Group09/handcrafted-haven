@@ -1,75 +1,21 @@
-.bio-card {
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  background-color: #ffffff6a;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  gap: 1rem;
-  backdrop-filter: blur(10px);
-}
-.bio-card h3 {
-  color: black;
-  text-shadow: 0 0 1rem white;
-}
-.bio-card img {
-  border-radius: 0.4rem;
-  box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.382);
-}
-.bio-card > div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.bio-card dl {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.5rem;
-}
-
-.bio-card dl > dt,
-.bio-card dl > dd,
-.bio-card p {
-  background-color: white;
-  padding: 0.5rem;
-  color: black;
-}
-
-.bio-card dl > dt {
-  border-radius: 0.5rem 0 0 0.5rem;
-  font-weight: bold;
-}
-.bio-card dl > dd {
-  border-radius: 0 0.5rem 0.5rem 0;
-}
-.bio-card p {
-  border-radius: 0.5rem;
-  height: 100%;
-}
-.bio-card input {
-  background-color: unset;
-  border: unset;
-  color: black;
-  width: 100%;
-  height: 100%;
-}
-.bio-card textarea {
-  background-color: white;
-  color: black;
-  padding: 0.5rem;
-  border: unset;
-  border-radius: 0.5rem;
-  height: 10rem;
-}
 /* Login forms */
 .login-form {
-  display: grid;
-  grid-template-columns: min-content 1fr;
+  display: flex;
+  flex-direction: column;
   color: black;
   background-color: #ffffff6a;
+  /* backdrop-filter: blur(10px); */
   padding: 0.5rem;
   border-radius: 0.5rem;
   gap: 1rem;
-  backdrop-filter: blur(10px);
+  align-items: center;
+  width: max-content;
+}
+.login-form > form {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 1rem;
+  background-color: unset;
 }
 .login-form label {
   display: flex;
@@ -108,6 +54,52 @@
   animation: pulse 1.5s infinite;
 }
 
+.user-lists {
+  display: flex;
+  flex-direction: column;
+}
+.user-lists > ul {
+  margin: 0.5rem;
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.user-list {
+  background-color: var(--secondary-bg);
+  color: var(--secondary-fg);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.186);
+}
+.user-list h4 {
+  color: var(--secondary-fg);
+  margin: 0;
+  background-color: unset;
+}
+.user-list > ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.1rem; */
+}
+.user-list > ul > li {
+  /* background-color: var(--link-color); */
+  display: flex;
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+}
+.user-list > ul > li a {
+  width: 100%;
+  text-decoration: none;
+  color: var(--secondary-fg);
+}
+
+.user-list > ul > li a:hover {
+  background-color: rgba(255, 255, 255, 0.085);
+}
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -117,5 +109,20 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media (min-width: 450px) {
+  #user-layout {
+    flex-direction: row;
+  }
+  #user-side-nav {
+    min-width: 6rem;
+    width: 15rem;
+    max-width: 15rem;
+  }
+  .bio-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
   }
 }
