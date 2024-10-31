@@ -15,6 +15,7 @@ type Product = {
   discountPercent?: number
   discountAbsolute?: number
   sellerId?: number
+  sellerName?: string  
   image: {
     url: string
   }
@@ -36,7 +37,7 @@ export default function ListingPage() {
         category: product.category,
         discountPercent: product.discountPercent,
         discountAbsolute: product.discountAbsolute,
-        sellerId: product.sellerId,
+        sellerName: product.seller?.displayName,
         image: { url: product.image.url },
       }))
 
@@ -101,7 +102,8 @@ export default function ListingPage() {
           <p className={styles.category}>Category: {product.category}</p>
           <p className={styles.description}>{product.description}</p>
           <p className={styles.price}>Price: ${product.price.toFixed(2)}</p>
-          <p className={styles.seller}>Seller ID: {product.sellerId}</p>
+          <p className={styles.discountPercent}>Discount: {product.discountPercent}%</p>
+          <p className={styles.seller}>Seller: {product.sellerName || 'Unknown Seller'}</p>
           <div className={styles.buttonContainer}>
             <button
               onClick={() => handleEditProduct(product.id)}

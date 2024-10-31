@@ -163,10 +163,9 @@ export async function fetchProductAll() {
         category: true,
         discountPercent: true,
         discountAbsolute: true,
-        sellerId: true,
-        image: true,
-      },
-    });
+        image: { select: { url: true } },
+        seller: { select: { displayName: true, id: true } },
+    }});
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;
@@ -174,6 +173,8 @@ export async function fetchProductAll() {
     await prisma.$disconnect();
   }
 }
+
+
 
 // Create a new product in the database
 export async function createNewProduct(productData: {
