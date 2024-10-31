@@ -95,14 +95,21 @@
 }
 /* Login forms */
 .login-form {
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  color: black;
+  display: flex;
+  flex-direction: column;
+  color: var(--primary-fg);
   background-color: #ffffff6a;
+  /* backdrop-filter: blur(10px); */
   padding: 0.5rem;
   border-radius: 0.5rem;
   gap: 1rem;
-  backdrop-filter: blur(10px);
+  align-items: center;
+}
+.login-form > form {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 1rem;
+  background-color: unset;
 }
 .login-form label {
   display: flex;

@@ -10,8 +10,10 @@ export const metadata: Metadata = {
 export default async function Page() {
   return (
     <div id="content">
-      <h2>Seller Sign Up</h2>
-      <SellerSignup />
+      <div className="center-children">
+        <h2>Seller Sign Up</h2>
+        <SellerSignup />
+      </div>
     </div>
   );
 }
