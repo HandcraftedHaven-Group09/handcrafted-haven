@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from 'next/navigation';
 
 type BackButtonProps = {
-  backTo: string; // The route to which the button should redirect
+  backTo: string; 
+  className?: string; 
 };
 
-const BackButton = ({ backTo }: BackButtonProps) => {
+const BackButton = ({ backTo, className }: BackButtonProps) => {
   const router = useRouter();
 
   const handleBack = () => {
@@ -15,7 +15,7 @@ const BackButton = ({ backTo }: BackButtonProps) => {
   };
 
   return (
-    <button onClick={handleBack}>
+    <button onClick={handleBack} className={className}>
       Back
     </button>
   );
