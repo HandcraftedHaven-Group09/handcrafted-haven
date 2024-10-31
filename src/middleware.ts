@@ -24,12 +24,16 @@ export async function middleware(request: NextRequest) {
 
   // Define exact paths restricted by role using RegExp
   const sellerRestrictedPaths = [
+    // Seller allowed
     /^\/products\/listing$/,
     /^\/products\/create$/,
     /^\/products\/\d+\/edit$/,
   ];
-  // const userRestrictedPaths = [/^\/products\/?$/, /^\/products\/\d+$/, /^\/products\/cart$/];
-  const userRestrictedPaths = [/^\/products\/\d+$/, /^\/products\/cart$/];
+  const userRestrictedPaths = [
+    /^\/products\/?$/,
+    /^\/products\/\d+$/,
+    /^\/products\/cart$/,
+  ];
 
   const isSellerRestrictedPage = sellerRestrictedPaths.some((path) =>
     path.test(request.nextUrl.pathname)
