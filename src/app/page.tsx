@@ -14,15 +14,15 @@ export default async function Home() {
         <div id="customers">
           <div>
             <h2>Customers</h2>
-            <Link href="@/login">Login</Link> <br />
-            <Link href="@/customerReg">Registration</Link> <br />
+            <Link href="/users/login">Login</Link> <br />
+            <Link href="/users/signup">Registration</Link> <br />
           </div>
         </div>
         <div id="artisans">
           <div>
             <h2>Artisans</h2>
-            <Link href="@/artisanLogin">Login</Link> <br />
-            <Link href="@/artisanReg">Registration</Link> <br />
+            <Link href="/sellers/login">Login</Link> <br />
+            <Link href="/sellers/signup">Registration</Link> <br />
           </div>
         </div>
       </div>
