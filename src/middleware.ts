@@ -3,12 +3,12 @@ import { getToken } from 'next-auth/jwt';
 
 export const config = {
   matcher: [
-    '/products/listing', 
-    '/products/:id/edit', 
-    '/products/create', 
-    '/products/', 
-    '/products/:id', 
-    '/products/cart'
+    '/products/listing',
+    '/products/:id/edit',
+    '/products/create',
+    '/products/',
+    '/products/:id',
+    '/products/cart',
   ],
 };
 
@@ -23,11 +23,20 @@ export async function middleware(request: NextRequest) {
   const userRole = token?.role;
 
   // Define exact paths restricted by role using RegExp
-  const sellerRestrictedPaths = [/^\/products\/listing$/, /^\/products\/create$/, /^\/products\/\d+\/edit$/];
-  const userRestrictedPaths = [/^\/products\/?$/, /^\/products\/\d+$/, /^\/products\/cart$/];;
+  const sellerRestrictedPaths = [
+    /^\/products\/listing$/,
+    /^\/products\/create$/,
+    /^\/products\/\d+\/edit$/,
+  ];
+  // const userRestrictedPaths = [/^\/products\/?$/, /^\/products\/\d+$/, /^\/products\/cart$/];
+  const userRestrictedPaths = [/^\/products\/\d+$/, /^\/products\/cart$/];
 
-  const isSellerRestrictedPage = sellerRestrictedPaths.some(path => path.test(request.nextUrl.pathname));
-  const isUserRestrictedPage = userRestrictedPaths.some(path => path.test(request.nextUrl.pathname));
+  const isSellerRestrictedPage = sellerRestrictedPaths.some((path) =>
+    path.test(request.nextUrl.pathname)
+  );
+  const isUserRestrictedPage = userRestrictedPaths.some((path) =>
+    path.test(request.nextUrl.pathname)
+  );
 
   if (!isLoggedIn) {
     // Redirect to the appropriate login page based on requested path
