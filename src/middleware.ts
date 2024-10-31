@@ -15,23 +15,22 @@ export const config = {
 export async function middleware(request: NextRequest) {
   console.log('Middleware initializing');
 
-  // Retrieve the token to check if the user is logged in
   const token = await getToken({
     req: request,
     secret: process.env.AUTH_SECRET,
   });
-
-  const isLoggedIn = !!token; // Check if there is a valid token (user is logged in)
+  const isLoggedIn = !!token;
   const userRole = token?.role;
 
   // Define exact paths restricted by role using RegExp
   const sellerRestrictedPaths = [
-    /^\/products\/listing$/,   // Seller-only paths
+    // Seller allowed
+    /^\/products\/listing$/,
     /^\/products\/create$/,
     /^\/products\/\d+\/edit$/,
   ];
   const userRestrictedPaths = [
-    /^\/products\/?$/,         // User-only paths
+    /^\/products\/?$/,
     /^\/products\/\d+$/,
     /^\/products\/cart$/,
   ];
@@ -43,8 +42,8 @@ export async function middleware(request: NextRequest) {
     path.test(request.nextUrl.pathname)
   );
 
-  // If the user is not logged in, redirect them to the appropriate login page
   if (!isLoggedIn) {
+    // Redirect to the appropriate login page based on requested path
     const loginUrl = new URL(
       isSellerRestrictedPage ? '/sellers/login' : '/users/login',
       request.url
@@ -53,15 +52,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // If the user is logged in but tries to access a restricted page for their role
-  if (userRole === 'seller' && !isSellerRestrictedPage && isUserRestrictedPage) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect sellers who try to access user pages
+  // Ensure sellers can only access seller pages
+  if (userRole === 'seller' && !isSellerRestrictedPage) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Block seller from user pages
   }
 
-  if (userRole === 'user' && !isUserRestrictedPage && isSellerRestrictedPage) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect users who try to access seller pages
+  // Ensure users can only access user pages
+  if (userRole === 'user' && !isUserRestrictedPage) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Block user from seller pages
   }
 
-  // Allow the user to proceed if all checks pass
-  return NextResponse.next();
+  return NextResponse.next(); // Allow access if role is appropriate
 }
