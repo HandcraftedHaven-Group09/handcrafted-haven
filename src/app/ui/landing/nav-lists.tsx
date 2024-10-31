@@ -1,8 +1,6 @@
-'use client';
-
 import Burger from '../burger-button/burger-button';
 import UserTag from '@/app/ui/user-tag/user-tag';
-import { useSession } from 'next-auth/react';
+import { auth } from '@/app/auth';
 export type MenuItem = {
   text: string;
   url: string;
@@ -15,14 +13,13 @@ const links: MenuItem[] = [
   { text: 'About', url: '/about' },
 ];
 
-export default function NavLists() {
-  const session = useSession();
+export default async function NavLists() {
+  const session = await auth();
+
   return (
     <nav>
       <Burger rightHanded={true} menuItems={links} />
-      {session.data?.user.id ? (
-        <UserTag userId={session.data?.user.id} />
-      ) : null}
+      {session?.user.id ? <UserTag userId={session.user.id} /> : null}
     </nav>
   );
 }

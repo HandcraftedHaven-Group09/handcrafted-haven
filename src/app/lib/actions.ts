@@ -12,6 +12,7 @@ import {
   createSeller,
   getListsByUser,
   addToUserList,
+  getUserById,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
@@ -175,9 +176,6 @@ export async function fetchProductAll(sellerId?: number) {
     await prisma.$disconnect();
   }
 }
-
-
-
 
 // Create a new product in the database
 export async function createNewProduct(productData: {
@@ -578,4 +576,9 @@ export async function addProductToUserList(listId: number, productId: number) {
   } catch (error) {
     return 'error';
   }
+}
+
+export async function fetchUserById(userId: number) {
+  const user = await getUserById(userId);
+  return user;
 }

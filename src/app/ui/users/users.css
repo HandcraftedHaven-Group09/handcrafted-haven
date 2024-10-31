@@ -35,7 +35,7 @@
   padding: 0.5rem;
   border-radius: 0.5rem;
   gap: 1rem;
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
 }
 .bio-card h3 {
   color: black;

@@ -7,5 +7,40 @@
   border-radius: 20px;
 
   width: 40px;
-  aspect-ratio: 1/1;
+  height: 40px;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.217);
+  overflow: hidden;
+  order: 1;
+  position: fixed;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 100090;
+
+  /* aspect-ratio: 1/1; */
+}
+
+.user-tag img {
+  width: 40px;
+  height: 40px;
+}
+
+.user-tag a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+  font-size: 0.7rem;
+}
+
+.user-tag:hover {
+  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.519);
+}
+
+@media (min-width: 450px) {
+  .user-tag {
+    order: 2;
+  }
 }
