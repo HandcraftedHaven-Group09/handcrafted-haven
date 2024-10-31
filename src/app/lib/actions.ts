@@ -152,9 +152,10 @@ export async function fetchSellerAll() {
 }
 
 // Fetch all products
-export async function fetchProductAll() {
+export async function fetchProductAll(sellerId?: number) {
   try {
     return await prisma.product.findMany({
+      where: sellerId ? { sellerId: sellerId } : {}, // Filter by sellerId if provided
       select: {
         id: true,
         name: true,
@@ -165,7 +166,8 @@ export async function fetchProductAll() {
         discountAbsolute: true,
         image: { select: { url: true } },
         seller: { select: { displayName: true, id: true } },
-    }});
+      },
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;
@@ -173,6 +175,7 @@ export async function fetchProductAll() {
     await prisma.$disconnect();
   }
 }
+
 
 
 

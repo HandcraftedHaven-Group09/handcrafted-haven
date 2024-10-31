@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import styles from './new_product.module.css'
 import { createNewProduct, uploadImage, fetchCategories } from '../../lib/actions'
 import BackButton from './components/back_button'
@@ -15,13 +16,13 @@ function sanitizeInput(input: string): string {
 
 export default function NewProductForm() {
   const router = useRouter()
+  const { data: session } = useSession() // Get session data
   const [productData, setProductData] = useState({
     name: '',
     description: '',
     price: '',
     category: '',
     discountPercent: '',
-    sellerId: 1,
   })
   const [images, setImages] = useState<FileList | null>(null)
   const [categories, setCategories] = useState<string[]>([])
@@ -77,8 +78,9 @@ export default function NewProductForm() {
         price: parseFloat(productData.price),
         discountPercent: parseInt(productData.discountPercent, 10),
         image: imageUrl,
+        sellerId: parseInt(session?.user?.id, 10), // Convert sellerId to number
       }
-
+      
       await createNewProduct(productPayload)
       alert('Product created successfully!')
       router.push('/products/listing')
