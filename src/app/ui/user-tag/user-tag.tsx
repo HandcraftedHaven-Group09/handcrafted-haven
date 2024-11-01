@@ -23,7 +23,10 @@ export default async function UserTag({
   // const image = { url: '/ui/default-user.webp', description: 'Image' };
 
   return (
-    <div className="user-tag">
+    <div
+      className="user-tag"
+      style={isSeller ? { border: '2px solid yellow' } : undefined}
+    >
       <Link href={isSeller ? `/sellers` : `/users/${userId}`}>
         <Image
           src={image?.url || '/default-user.webp'}

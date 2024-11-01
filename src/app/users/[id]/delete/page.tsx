@@ -7,7 +7,10 @@ import Link from 'next/link';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
-
+  // protect page
+  if (session?.user.role == 'seller') {
+    redirect('/sellers');
+  }
   if (session?.user.id) {
     if (params.id != session?.user.id) {
       console.log('user: ', session?.user.id);
