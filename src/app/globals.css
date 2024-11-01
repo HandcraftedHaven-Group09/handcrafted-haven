@@ -185,6 +185,48 @@ footer {
   width: 100%;
 }
 
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer a {
+  padding: 0.6rem;
+}
+
+footer .footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--max-size);
+  padding-bottom: 1rem;
+}
+
+footer .footer-logo {
+  display: flex; 
+  align-items: center; 
+  gap: 1rem; 
+}
+
+footer .social-media {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+footer h1 {
+  margin: 0; 
+  font-size: 1.5rem;
+  color: var(--secondary-fg);
+}
+
+
+
 @media (min-width: 450px) {
   header {
     /* flex-direction: row; */

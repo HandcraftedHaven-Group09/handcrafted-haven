@@ -1,92 +1,112 @@
-/* cart_page.module.css */
-
 .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .header {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  .cartList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .cartItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
-  }
-  
-  .itemImage {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-right: 20px;
-  }
-  
-  .itemTitle {
-    font-size: 1.2rem;
-    flex: 1;
-    margin: 0;
-  }
-  
-  .itemDetails {
-    margin: 5px 0;
-    font-size: 1rem;
-  }
-  
-  .removeButton {
-    padding: 5px 10px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .removeButton:hover {
-    background-color: #ff6666;
-  }
-  
-  .total {
-    text-align: right;
-    font-size: 1.5rem;
-    margin-top: 20px;
-  }
-  
-  .checkoutButton {
-    width: 100%;
-    padding: 15px;
-    background-color: #0070f3;
-    color: white;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .checkoutButton:hover {
-    background-color: #005bb5;
-  }
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  .confirmation {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    border-radius: 5px;
-  }
-  
+.header {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.cartList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.itemImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.itemTitle {
+  font-size: 1.2rem;
+  flex: 1;
+  margin: 0;
+}
+
+.itemDetails {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.removeButton {
+  padding: 10px 15px;
+  background-color: transparent; 
+  color: #e74c3c; 
+  border: 2px solid #e74c3c; 
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.removeButton:hover {
+  background-color: #e74c3c; 
+  color: white; 
+  transform: scale(1.05); 
+}
+
+.backButton {
+  background-color: #007BFF; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 20px;
+  text-decoration: none; 
+  display: inline-block;
+}
+
+.backButton:hover {
+  background-color: #0069d9; 
+  transform: scale(1.05); 
+}
+
+.total {
+  text-align: right;
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
+
+.checkoutButton {
+  width: 100%;
+  padding: 15px;
+  background-color: #0070f3;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.checkoutButton:hover {
+  background-color: #005bb5;
+}
+
+.confirmation {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  border-radius: 5px;
+}

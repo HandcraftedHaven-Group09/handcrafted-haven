@@ -41,24 +41,59 @@ export default async function RootLayout({
       lang="en"
       className={`${titleFont.variable} ${headingFont.variable} ${bodyFont.variable}`}
     >
-      <SessionProvider session={session}>
-        <body className="">
+      <body>
+        <SessionProvider session={session}>
           <header>
             <div className="title-group">
-              <Image
-                width={100}
-                height={100}
-                alt="Logo"
-                src="/ui/logo.svg"
-              ></Image>
+              <Image width={100} height={100} alt="Logo" src="/ui/logo.svg" />
               <h1>Handcrafted Haven</h1>
             </div>
             <NavLists />
           </header>
           <main>{children}</main>
-          <footer>&copy; 2024 Handcrafted Haven</footer>
-        </body>
-      </SessionProvider>
+          <footer>
+            <div className="footer-top">
+              <div className="footer-logo">
+                <Image width={100} height={100} alt="Logo" src="/ui/logo.svg" />
+                <h1>Handcrafted Haven</h1>
+              </div>
+              <div className="social-media">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/ui/facebook.png"
+                    alt="Facebook"
+                    width={24}
+                    height={24}
+                  />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/ui/instagram.png"
+                    alt="Instagram"
+                    width={24}
+                    height={24}
+                  />
+                </a>
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src="/ui/x.png" alt="Twitter" width={24} height={24} />
+                </a>
+              </div>
+            </div>
+          </footer>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

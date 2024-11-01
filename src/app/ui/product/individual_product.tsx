@@ -50,7 +50,6 @@ export default function IndividualProduct({ id }: Props) {
 
   return (
     <div className={styles.container}>
-      <BackButton backTo="/products" />
       {product.image?.url && (
         <Image
           src={product.image.url}
@@ -86,6 +85,7 @@ export default function IndividualProduct({ id }: Props) {
             <p>No comments yet.</p>
           )}
         </div>
+        <BackButton backTo="/products" className={styles.backButton} />
       </div>
     </div>
   )

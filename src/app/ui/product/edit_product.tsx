@@ -84,7 +84,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
   return (
     <div className={styles.formContainer}>
-      <BackButton backTo="/products/listing" /> {/* Button to return to the list of products */}
+      <BackButton backTo='/products/listing' className={styles.backButton} /> {/* Button to return to the list of products */}
       <h1 className={styles.title}>Edit Product</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label htmlFor="name">Name:</label>

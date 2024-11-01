@@ -92,7 +92,7 @@ export default function NewProductForm() {
 
   return (
     <div className={styles.formContainer}>
-      <BackButton backTo='/products/listing' />
+      <BackButton backTo='/products/listing' className={styles.backButton} />
       <h1 className={styles.title}>Create New Product</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label htmlFor="name" className={styles.label}>Name:</label>

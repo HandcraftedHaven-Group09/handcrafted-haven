@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '@/app/products/cart/cart_page.module.css'
+import BackButton from '@/app/ui/product/components/back_button'
 
 type CartItem = {
   id: number
@@ -29,12 +30,13 @@ export default function CartPage() {
   }
 
   const calculateTotal = () => {
-    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
   }
 
   return (
     <div className={styles.container}>
       <h1>Your Cart</h1>
+      <BackButton backTo="/products" className={styles.backButton} />
       {cart.length > 0 ? (
         <>
           <ul className={styles.cartList}>
@@ -52,7 +54,7 @@ export default function CartPage() {
                   <p>Price: ${item.price.toFixed(2)}</p>
                   <p>Quantity: {item.quantity}</p>
                   <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
-                  <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
+                  <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>Remove</button>
                 </div>
               </li>
             ))}
