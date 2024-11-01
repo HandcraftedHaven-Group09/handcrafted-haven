@@ -42,7 +42,7 @@ export default async function RootLayout({
       className={`${titleFont.variable} ${headingFont.variable} ${bodyFont.variable}`}
     >
       <SessionProvider session={session}>
-        <body>
+        <body className="">
           <header>
             <div className="title-group">
               <Image
@@ -56,7 +56,7 @@ export default async function RootLayout({
             <NavLists />
           </header>
           <main>{children}</main>
-          <footer>FOOTER</footer>
+          <footer>&copy; 2024 Handcrafted Haven</footer>
         </body>
       </SessionProvider>
     </html>

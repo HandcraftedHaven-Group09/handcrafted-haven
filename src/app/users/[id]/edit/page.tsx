@@ -8,29 +8,11 @@ export default async function Page({ params }: { params: { id: string } }) {
   // params = await params;
 
   const user = (await getUserById(Number(params.id))) as User;
-  const leftConfig = [
-    {
-      text: 'Back',
-      href: '/users',
-    },
-  ] as ButtonConfig[];
-
-  const rightConfig = [
-    {
-      text: 'Edit',
-      href: `/users/${params.id}/edit`,
-    },
-    {
-      text: 'Delete',
-      href: '/users',
-    },
-  ] as ButtonConfig[];
 
   return (
-    <div>
+    <div className="content">
       <h2>Edit Bio</h2>
       <UserEdit userData={user}></UserEdit>
-      <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
     </div>
   );
 }
