@@ -17,10 +17,10 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     console.log('SEsssion:', session);
     if (session.data?.user.id) {
-      removeUser(session.data.user.id);
+      removeUser(Number(session.data.user.id));
     }
     signOut();
-  });
+  }, []);
 
   return (
     <div className="content">
