@@ -336,5 +336,6 @@ export async function updateUserById(userId: number, userData: UpdateUserData) {
 
 export async function deleteUser(userId: number) {
   console.log('In data', userId);
-  prisma.user.delete({ where: { id: userId } });
+  const result = await prisma.user.delete({ where: { id: userId } });
+  console.log('RESULTS', result);
 }

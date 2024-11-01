@@ -8,16 +8,19 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 // import { signOut } from ''@/app/auth';'
 import { signOut } from 'next-auth/react';
+// import { signOut } from '@/app/auth';
 import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const session = await useSession();
-
-  console.log('SEsssion:', session);
-  if (session.data?.user.id) {
-    removeUser(session.data.user.id);
-  }
-  //   await signOut();
+export default function Page({ params }: { params: { id: string } }) {
+  const session = useSession();
+  useEffect(() => {
+    console.log('SEsssion:', session);
+    if (session.data?.user.id) {
+      removeUser(session.data.user.id);
+    }
+    signOut();
+  });
 
   return (
     <div className="content">
