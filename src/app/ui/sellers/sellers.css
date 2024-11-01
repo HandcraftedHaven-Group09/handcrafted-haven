@@ -2,6 +2,8 @@
 .login-form {
   display: flex;
   flex-direction: column;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   color: black;
   background-color: #ffffff6a;
   /* backdrop-filter: blur(10px); */
