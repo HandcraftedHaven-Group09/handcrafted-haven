@@ -1,5 +1,5 @@
 import { PrismaClient, Product, Seller, Image, UserList } from '@prisma/client';
-import { list } from '@vercel/blob';
+import { list, put } from '@vercel/blob';
 const prisma = new PrismaClient();
 import bcrypt from 'bcrypt';
 
@@ -264,4 +264,78 @@ export async function addToUserList(productId: number, listId: number) {
   });
 
   return result;
+}
+
+export type UpdateUserData = {
+  displayName: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  bio: string | undefined;
+  profilePictureFile: File | undefined;
+};
+
+export async function updateUserById(userId: number, userData: UpdateUserData) {
+  let blobData;
+
+  const prismaData: {
+    displayName: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    bio: string | undefined;
+    profilePicture:
+      | {
+          create: {
+            url: string;
+            description: string;
+          };
+        }
+      | undefined;
+  } = {
+    displayName: userData.displayName,
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    bio: userData.bio,
+    profilePicture: undefined,
+  };
+
+  if (
+    userData.profilePictureFile?.size &&
+    userData.profilePictureFile?.size > 0
+  ) {
+    // If a file was sent for the profile picture
+    blobData = await put(
+      `/profilePictures/${userData.profilePictureFile.name}`,
+      userData.profilePictureFile,
+      {
+        access: 'public',
+      }
+    );
+
+    // Add the new profile pic to the update query
+    prismaData.profilePicture = {
+      create: {
+        url: blobData.url,
+        description: `A picture of ${prismaData.displayName}`,
+      },
+    };
+  } else {
+    console.log('No profile file to update');
+  }
+  const result = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    // data: prismaData,
+    data: prismaData,
+    include: {
+      profilePicture: true,
+    },
+  });
+  return result;
+}
+
+export async function deleteUser(userId: number) {
+  console.log('In data', userId);
+  const result = await prisma.user.delete({ where: { id: userId } });
+  console.log('RESULTS', result);
 }

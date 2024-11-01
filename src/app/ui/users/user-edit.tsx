@@ -2,16 +2,23 @@
 
 import { Image, User } from '@prisma/client';
 // import { getImageById } from '@/app/lib/data';
-import { fetchImageById } from '@/app/lib/actions';
+import { fetchImageById, putUserById } from '@/app/lib/actions';
 import './users.css';
 import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
+import { useActionState } from 'react';
 
 export default function UserBio({ userData }: { userData: User }) {
-  const [displayName, changeDisplayName] = useState(userData.displayName);
-  const [firstName, changeFirstName] = useState(userData.firstName);
-  const [lastName, changeLastName] = useState(userData.lastName);
-  const [bio, changeBio] = useState(userData.bio);
+  const [state, formAction] = useActionState(putUserById, {
+    message: null,
+    formData: {
+      displayName: userData.displayName,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      bio: userData.bio || '',
+    },
+    errors: {},
+  });
 
   const [profilePic, changeProfilePic] = useState({} as Image);
 
@@ -34,7 +41,7 @@ export default function UserBio({ userData }: { userData: User }) {
   }, []); // Do it once
 
   return (
-    <form className="bio-card">
+    <div className="bio-card">
       <NextImage
         src={profilePic?.url || 'error'}
         alt={profilePic?.description || 'error'}
@@ -42,48 +49,47 @@ export default function UserBio({ userData }: { userData: User }) {
         height={200}
         unoptimized
       ></NextImage>
-      <div className="bio-info">
-        <dl>
-          <dt>Display Name</dt>
-          <dd>
-            <input
-              key="displayName"
-              value={displayName}
-              onChange={(event) => {
-                changeDisplayName(event.target.value);
-              }}
-            />
-          </dd>
-          <dt>First Name</dt>
-          <dd>
-            <input
-              key="lastName"
-              value={firstName}
-              onChange={(event) => {
-                changeFirstName(event.target.value);
-              }}
-            />
-          </dd>
-          <dt>Last Name</dt>
-          <dd>
-            <input
-              key="lastName"
-              value={lastName}
-              onChange={(event) => {
-                changeLastName(event.target.value);
-              }}
-            />
-          </dd>
-        </dl>
-        <textarea
+      <form
+        action={formAction}
+        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      >
+        <input type="hidden" name="userId" value={userData.id} />
 
-          key="bio"
-          value={bio ? bio : ''}
-          onChange={(event) => {
-            changeBio(event.target.value);
-          }}
-        />
-      </div>
-    </form>
+        <input type="file" name="profilePicture"></input>
+        <div className="bio-info">
+          <dl>
+            <dt>Display Name</dt>
+            <dd>
+              <input
+                name="displayName"
+                type="text"
+                key="displayName"
+                defaultValue={state.formData?.displayName}
+              />
+            </dd>
+            <dt>First Name</dt>
+            <dd>
+              <input
+                name="firstName"
+                type="text"
+                key="lastName"
+                defaultValue={state.formData?.firstName}
+              />
+            </dd>
+            <dt>Last Name</dt>
+            <dd>
+              <input
+                name="lastName"
+                type="text"
+                key="lastName"
+                defaultValue={state.formData?.lastName}
+              />
+            </dd>
+          </dl>
+          <textarea name="bio" key="bio" defaultValue={state.formData?.bio} />
+        </div>
+        <button className="nav-button right-align">Update</button>
+      </form>
+    </div>
   );
 }

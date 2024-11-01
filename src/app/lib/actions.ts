@@ -13,6 +13,9 @@ import {
   getListsByUser,
   addToUserList,
   getUserById,
+  updateUserById,
+  UpdateUserData,
+  deleteUser,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
@@ -581,4 +584,60 @@ export async function addProductToUserList(listId: number, productId: number) {
 export async function fetchUserById(userId: number) {
   const user = await getUserById(userId);
   return user;
+}
+
+export type UserUpdateFormState = {
+  errors?: {
+    displayName?: string[];
+    firstName?: string[];
+    lastName?: string[];
+    bio?: string[];
+    profilePictureFile?: string[];
+  };
+  formData?: {
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    bio?: string;
+    profilePictureFile?: File;
+  };
+  message?: string | null;
+};
+
+export async function putUserById(
+  prevState: UserUpdateFormState | undefined,
+  formData: FormData
+): Promise<UserUpdateFormState> {
+  console.log('Update User start.');
+  const id = Number(formData.get('userId')?.toString());
+  const userData: UpdateUserData = {
+    displayName: formData.get('displayName')?.toString() || undefined,
+    firstName: formData.get('firstName')?.toString() || undefined,
+    lastName: formData.get('lastName')?.toString() || undefined,
+    bio: formData.get('bio')?.toString() || undefined,
+    profilePictureFile:
+      (formData.get('profilePicture') as File | null) || undefined,
+  };
+
+  console.log('USER DATA', userData, 'ID', id);
+
+  const result = await updateUserById(id, userData);
+  if (result) {
+    redirect(`/users/${id}`);
+    return { message: 'Successfully updated' };
+  }
+  return {
+    message: 'Database Error.',
+    formData: {
+      displayName: userData.displayName,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      bio: userData.bio,
+    },
+  };
+}
+
+export async function removeUser(userId: number) {
+  console.log('DELETING USER');
+  deleteUser(userId);
 }

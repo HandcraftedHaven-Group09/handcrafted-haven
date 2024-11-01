@@ -20,9 +20,10 @@
   color: var(--link-color);
 }
 
-#user-content {
-  /* background-color: red; */
-  padding: 1rem;
+.user-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .bio-card {
@@ -31,6 +32,7 @@
   flex-direction: column;
   width: 100%;
 
+  align-items: center;
   background-color: #ffffff6a;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -44,6 +46,7 @@
 .bio-card img {
   min-width: 5rem;
   width: 100%;
+  max-width: 10rem;
   height: auto;
   border-radius: 0.4rem;
   box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.382);
@@ -93,6 +96,13 @@
   border-radius: 0.5rem;
   height: 10rem;
 }
+.bio-info {
+  display: grid;
+}
+.bio-info dd {
+  margin: 0;
+}
+
 /* Login forms */
 .login-form {
   display: flex;
@@ -191,6 +201,10 @@
   color: var(--secondary-fg);
 }
 
+.right-align {
+  align-self: end;
+}
+
 .user-list > ul > li a:hover {
   background-color: rgba(255, 255, 255, 0.085);
 }
@@ -218,5 +232,9 @@
   .bio-card {
     display: grid;
     grid-template-columns: auto 1fr;
+    align-items: start;
+  }
+  .user-content {
+    flex-direction: row;
   }
 }

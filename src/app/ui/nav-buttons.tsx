@@ -21,6 +21,7 @@ export default async function NavButtons({
 
       <div>
         {right.map((config) => {
+          keyCounter += 1;
           return <NavButton key={keyCounter} config={config}></NavButton>;
         })}
       </div>

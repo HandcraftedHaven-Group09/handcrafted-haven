@@ -3,6 +3,7 @@
   flex-direction: row;
   justify-content: space-between;
   box-sizing: border-box;
+  padding-top: 1rem;
 }
 
 .nav-buttons div:first-child,
@@ -17,9 +18,10 @@
 .nav-button {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: rgb(218, 135, 11);
+  background-color: var(--primary-fg);
   font-weight: bold;
-  color: white;
+  color: var(--primary-bg);
+  text-decoration: none;
 }
 .nav-buttons a:hover {
   background-color: red;

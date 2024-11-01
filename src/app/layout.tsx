@@ -39,7 +39,8 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${titleFont.variable} ${headingFont.variable} ${bodyFont.variable}`}>
+      className={`${titleFont.variable} ${headingFont.variable} ${bodyFont.variable}`}
+    >
       <body>
         <SessionProvider session={session}>
           <header>
@@ -57,13 +58,35 @@ export default async function RootLayout({
                 <h1>Handcrafted Haven</h1>
               </div>
               <div className="social-media">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                  <Image src="/ui/facebook.png" alt="Facebook" width={24} height={24} />
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/ui/facebook.png"
+                    alt="Facebook"
+                    width={24}
+                    height={24}
+                  />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                  <Image src="/ui/instagram.png" alt="Instagram" width={24} height={24} />
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/ui/instagram.png"
+                    alt="Instagram"
+                    width={24}
+                    height={24}
+                  />
                 </a>
-                <a href="https://x.com" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image src="/ui/x.png" alt="Twitter" width={24} height={24} />
                 </a>
               </div>

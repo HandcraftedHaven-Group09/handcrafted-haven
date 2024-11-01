@@ -6,9 +6,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div id="user-layout">
+    <div className="user-content">
       <UserSideNav></UserSideNav>
-      <div>{children}</div>
+      <div id="user-layout">{children}</div>
     </div>
   );
 }

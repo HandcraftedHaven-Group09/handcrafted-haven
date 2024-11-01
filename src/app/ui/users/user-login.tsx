@@ -10,8 +10,6 @@ import { signIn as signInClient } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function UserLogin() {
-  const [email, changeEmail] = useState('');
-  const [password, changePassword] = useState('');
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined

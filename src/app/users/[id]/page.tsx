@@ -7,7 +7,6 @@ import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/app/auth';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  params = params;
   const session = await auth();
 
   if (session?.user.id) {
@@ -27,26 +26,21 @@ export default async function Page({ params }: { params: { id: string } }) {
     console.log('User Found');
   }
 
-  const leftConfig = [
-    {
-      text: 'Back',
-      href: '/users',
-    },
-  ] as ButtonConfig[];
+  const leftConfig = [] as ButtonConfig[];
 
   const rightConfig = [
     {
-      text: 'Edit',
+      text: 'Edit Account',
       href: `/users/${params.id}/edit`,
     },
     {
-      text: 'Delete',
-      href: '/users',
+      text: 'Delete Account',
+      href: `/users/${params.id}/delete`,
     },
   ] as ButtonConfig[];
 
   return (
-    <div>
+    <div className="content">
       <h2>User Bio</h2>
       <UserBio userData={user}></UserBio>
       <NavButtons left={leftConfig} right={rightConfig}></NavButtons>
