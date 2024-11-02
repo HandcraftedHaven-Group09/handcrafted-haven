@@ -16,13 +16,16 @@ export const config = {
 export async function middleware(request: NextRequest) {
   // Gets the authentication token
   let token;
+
   try {
     token = await getToken({
       req: request,
       secret: process.env.AUTH_SECRET,
     });
     console.log('Token:', token);
+    console.log(request);
     console.log('AUTH_URL', process.env.AUTH_URL);
+    console.log('AUTH_SECREt ', process.env.AUTH_SECRET);
   } catch (error) {
     console.log('ERROR: ', error);
   }
