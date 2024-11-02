@@ -98,6 +98,7 @@ nav ul li a:hover {
 
 main {
   display: flex;
+
   box-sizing: border-box;
   /* height: 100%; */
   width: 100%;
@@ -148,15 +149,23 @@ footer {
   align-items: center;
   justify-items: center;
   justify-content: center;
+  justify-self: center;
 }
 
 #login {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
-  gap: 10rem;
-  justify-content: center;
+  /* flex-direction: row; */
+  flex-direction: column;
+  /* gap: 10rem; */
+  gap: 1rem;
+  justify-content: start;
   align-items: baseline;
+  padding: 1rem;
+}
+#featured-products,
+#featured-artisans {
+  padding: 1rem;
 }
 
 .featured-products-grid {
