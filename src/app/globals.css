@@ -111,8 +111,9 @@ h1 {
   /* background-color: var(--secondary-bg); */
   color: var(--secondary-fg);
   font-family: var(--font-title);
-  font-size: xx-large;
+  font-size: 3rem;
   max-width: var(--medium-break);
+  text-align: center;
 }
 
 h2,
