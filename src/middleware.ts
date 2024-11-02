@@ -41,7 +41,12 @@ export async function middleware(request: NextRequest) {
   const isUserRestrictedPage = userRestrictedPaths.some((path) =>
     path.test(request.nextUrl.pathname)
   );
-
+  console.log(
+    'Paths tested. isSellerRestricted? ',
+    isSellerRestrictedPage,
+    '/nisUserRestricted? ',
+    isUserRestrictedPage
+  );
   if (!isLoggedIn) {
     // Redirect to the appropriate login page based on requested path
     const loginUrl = new URL(
