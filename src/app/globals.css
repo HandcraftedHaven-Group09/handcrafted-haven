@@ -107,7 +107,7 @@ main {
 }
 
 h1 {
-  background-color: var(--secondary-bg);
+  /* background-color: var(--secondary-bg); */
   color: var(--secondary-fg);
   font-family: var(--font-title);
   font-size: xx-large;
@@ -196,21 +196,24 @@ footer {
 
 footer a {
   padding: 0.6rem;
+  box-sizing: border-box;
 }
 
 footer .footer-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
   width: 100%;
-  max-width: var(--max-size);
+  /* max-width: var(--max-size); */
   padding-bottom: 1rem;
+  overflow: hidden;
 }
 
 footer .footer-logo {
-  display: flex; 
-  align-items: center; 
-  gap: 1rem; 
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 footer .social-media {
@@ -220,12 +223,10 @@ footer .social-media {
 }
 
 footer h1 {
-  margin: 0; 
+  margin: 0;
   font-size: 1.5rem;
   color: var(--secondary-fg);
 }
-
-
 
 @media (min-width: 450px) {
   header {
