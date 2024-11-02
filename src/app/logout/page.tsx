@@ -1,6 +1,7 @@
 // import { signOut } from '@/auth';
 import { signOut } from '@/app/auth';
 import { redirect } from 'next/navigation';
+import '@/app/ui/nav-buttons.css';
 
 import { Metadata } from 'next';
 export const metadata: Metadata = {
@@ -28,18 +29,7 @@ export default function Page() {
           redirect('/users/login');
         }}
       >
-        <button
-          style={{
-            padding: '.25rem',
-            fontWeight: 'bolder',
-            borderRadius: '.5rem',
-            border: 'unset',
-            backgroundColor: 'var(--link-color)',
-            color: 'white',
-          }}
-        >
-          Continue
-        </button>
+        <button className="nav-button">Continue</button>
       </form>
     </div>
   );
