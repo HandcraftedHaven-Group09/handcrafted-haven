@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { env } from 'process';
 
 export const config = {
   matcher: [
@@ -19,6 +20,7 @@ export async function middleware(request: NextRequest) {
     secret: process.env.AUTH_SECRET,
   });
   console.log('Token:', token);
+  console.log('NEXTAUTH_URL', process.env.NEXTAUTH_URL);
 
   if (!token) {
     // If there is no token, redirects to login
