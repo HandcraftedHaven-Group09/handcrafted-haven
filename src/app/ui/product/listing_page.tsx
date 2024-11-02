@@ -23,44 +23,62 @@ type Product = {
 
 export default function ListingPage() {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession() // Obtendo também o status da sessão
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    if (status === 'loading') {
       setIsLoading(true)
-      let response
-
-      if (session && session.user.role === 'seller') {
-        // Fetch only products for the logged-in seller
-        const sellerId = parseInt(session.user.id, 10) // Convert sellerId to number
-        response = await fetchProductAll(sellerId)
-      } else {
-        // Fetch all products for general users
-        response = await fetchProductAll()
-      }
-
-      const productData = response.map((product) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        category: product.category,
-        discountPercent: product.discountPercent,
-        discountAbsolute: product.discountAbsolute,
-        sellerId: product.seller.id,
-        image: { url: product.image.url },
-      }))
-
-      setProducts(productData)
-      setFilteredProducts(productData)
-      setIsLoading(false)
+      return
     }
 
-    fetchProducts()
-  }, [session])
+    if (status === 'authenticated') {
+      const fetchProducts = async () => {
+        setIsLoading(true)
+        try {
+          let response
+          console.log('Session:', session)
+
+          if (session && session.user.role === 'seller') {
+            // Fetch only products for the logged-in seller
+            const sellerId = parseInt(session.user.id, 10) // Convert sellerId to number
+            response = await fetchProductAll(sellerId)
+          } else {
+            // Fetch all products for general users
+            response = await fetchProductAll()
+          }
+
+          if (response) {
+            const productData = response.map((product) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description,
+              price: product.price,
+              category: product.category,
+              discountPercent: product.discountPercent,
+              discountAbsolute: product.discountAbsolute,
+              sellerId: product.seller.id,
+              image: { url: product.image.url },
+            }))
+  
+            setProducts(productData)
+            setFilteredProducts(productData)
+          } else {
+            console.error('Failed to fetch products: No response')
+          }
+        } catch (error) {
+          console.error('Failed to fetch products:', error)
+        }
+        setIsLoading(false)
+      }
+
+      fetchProducts()
+    } else {
+      setIsLoading(false)
+    }
+  }, [session, status])
 
   const handleSearch = (searchTerm: string) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase()
