@@ -31,6 +31,9 @@
 .productImage {
   border-radius: 8px;
   object-fit: cover;
+  max-width: 20rem;
+  width: 100%;
+  height: auto;
 }
 
 .productDetails {
