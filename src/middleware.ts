@@ -10,7 +10,7 @@ export const config = {
     '/products/:id',
     '/products/cart',
   ],
-}
+};
 
 export async function middleware(request: NextRequest) {
 
