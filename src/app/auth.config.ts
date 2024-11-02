@@ -56,7 +56,7 @@ export const authConfig: NextAuthConfig = {
           }
         }
       }
-      return false;
+      return true; // If credentials
     },
 
     authorized({ auth, request: { nextUrl } }) {
