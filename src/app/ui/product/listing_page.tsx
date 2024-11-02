@@ -29,19 +29,19 @@ export default function ListingPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
+    if (!session) return
+    
     const fetchProducts = async () => {
       setIsLoading(true)
       let response
-
-      if (session && session.user.role === 'seller') {
-        // Fetch only products for the logged-in seller
-        const sellerId = parseInt(session.user.id, 10) // Convert sellerId to number
+  
+      if (session.user.role === 'seller') {
+        const sellerId = parseInt(session.user.id, 10)
         response = await fetchProductAll(sellerId)
       } else {
-        // Fetch all products for general users
         response = await fetchProductAll()
       }
-
+  
       const productData = response.map((product) => ({
         id: product.id,
         name: product.name,
@@ -53,12 +53,12 @@ export default function ListingPage() {
         sellerId: product.seller.id,
         image: { url: product.image.url },
       }))
-
+  
       setProducts(productData)
       setFilteredProducts(productData)
       setIsLoading(false)
     }
-
+  
     fetchProducts()
   }, [session])
 
