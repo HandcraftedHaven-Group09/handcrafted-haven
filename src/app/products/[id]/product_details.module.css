@@ -8,6 +8,12 @@
   margin: 0 auto;
 }
 
+.container img {
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+}
+
 .productDetails h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
@@ -21,7 +27,7 @@
 }
 
 .addToCartButton {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -36,7 +42,7 @@
 }
 
 .backButton {
-  background-color: #007BFF; /* Azul para o botão de voltar */
+  background-color: #007bff; /* Azul para o botão de voltar */
   color: white;
   border: none;
   padding: 10px 20px;
