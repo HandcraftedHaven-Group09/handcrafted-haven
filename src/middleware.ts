@@ -15,12 +15,17 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   // Gets the authentication token
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-  });
-  console.log('Token:', token);
-  console.log('AUTH_URL', process.env.AUTH_URL);
+  let token;
+  try {
+    token = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+    });
+    console.log('Token:', token);
+    console.log('AUTH_URL', process.env.AUTH_URL);
+  } catch (error) {
+    console.log('ERROR: ', error);
+  }
 
   if (!token) {
     // If there is no token, redirects to login
