@@ -50,7 +50,7 @@ const SellerProfile = () => {
   };
 
   // Safely check for session and session.user
-  if (!session || !session.user) {
+  if (!session || !session.user || session.user.role != 'seller') {
     return (
       <div>
         <h1>Please sign in to access your profile.</h1>
