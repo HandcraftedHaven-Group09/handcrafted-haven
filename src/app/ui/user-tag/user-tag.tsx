@@ -14,6 +14,7 @@ export default async function UserTag({
   let user, image;
 
   if (!isSeller) {
+    console.log('USER TAG ID:', userId);
     user = await getUserById(Number(userId));
     image = await getImageById(user?.profilePictureId || 1);
   } else {

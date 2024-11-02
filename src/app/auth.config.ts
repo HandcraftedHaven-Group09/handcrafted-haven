@@ -1,4 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
+import prisma from './lib/prisma';
+import { getUserByEmail, createUser, updateUserById } from './lib/data';
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
@@ -7,6 +9,56 @@ export const authConfig: NextAuthConfig = {
     signIn: '/users/login',
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log('SIGN IN BEING USED');
+      console.log('USER: ', user);
+      console.log('ACCOUNT', account);
+      console.log('PROFILE', profile);
+      if (account?.provider == 'github') {
+        console.log('LOGIN WITH GITHUB');
+        // Check if user email exist in db.
+        const dbUser = await getUserByEmail(user.email || '');
+
+        // If so, remap id.
+        if (dbUser) {
+          user.id = dbUser.id.toString();
+          // Might need to adjust things here.
+          return true;
+        }
+        // If not, create new user..Reroute to finishing page?
+        else {
+          if (user.email && user.name) {
+            const result = await createUser({
+              email: user.email,
+              displayName: user.name,
+              firstName: user.name,
+              lastName: 'of GitHub',
+              password: 'GITHUB',
+            });
+            if (result) {
+              const updateResult = await updateUserById(result.id, {
+                displayName: undefined,
+                firstName: undefined,
+                lastName: undefined,
+                bio: (profile?.bio as string) || '',
+                profilePictureFile: undefined,
+              });
+              user.id = result?.id.toString();
+              console.log('ADDED GITHUB USER');
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            // Not enough info
+            console.log('GITHUB LOGING FAILED: Not enough info');
+            return false;
+          }
+        }
+      }
+      return false;
+    },
+
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user; // Checks if the user is logged in
       const userRole = auth?.user?.role; // Retrieves the user's role
