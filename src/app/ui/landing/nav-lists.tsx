@@ -19,7 +19,12 @@ export default async function NavLists() {
   return (
     <nav>
       <Burger rightHanded={true} menuItems={links} />
-      {session?.user.id ? <UserTag userId={session.user.id} /> : null}
+      {session?.user.id ? (
+        <UserTag
+          userId={session.user.id}
+          isSeller={session.user.role == 'seller' ? true : false}
+        />
+      ) : null}
     </nav>
   );
 }
