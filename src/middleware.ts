@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
   try {
     token = await getToken({
       req: request,
+      cookieName: '__Secure-authjs.session-token',
       secret: process.env.AUTH_SECRET,
     });
     console.log('Token:', token);
