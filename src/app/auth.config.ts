@@ -1,9 +1,10 @@
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig: NextAuthConfig = {
-  secret: process.env.AUTH_SECRET, 
+  secret: process.env.AUTH_SECRET,
+  trustHost: true,
   pages: {
-    signIn: '/users/login', 
+    signIn: '/users/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -12,32 +13,50 @@ export const authConfig: NextAuthConfig = {
 
       if (isLoggedIn) {
         // Define restricted paths for users and sellers
-        const sellerRestrictedPaths = ['/products/listing', '/products/create', '/products/:id/edit'];
-        const userRestrictedPaths = ['/products/', '/products/:id', '/products/cart'];
+        const sellerRestrictedPaths = [
+          '/products/listing',
+          '/products/create',
+          '/products/:id/edit',
+        ];
+        const userRestrictedPaths = [
+          '/products/',
+          '/products/:id',
+          '/products/cart',
+        ];
 
-        const isSellerRestrictedPage = sellerRestrictedPaths.some(path => nextUrl.pathname.startsWith(path));
-        const isUserRestrictedPage = userRestrictedPaths.some(path => nextUrl.pathname.startsWith(path));
+        const isSellerRestrictedPage = sellerRestrictedPaths.some((path) =>
+          nextUrl.pathname.startsWith(path)
+        );
+        const isUserRestrictedPage = userRestrictedPaths.some((path) =>
+          nextUrl.pathname.startsWith(path)
+        );
 
         // Sellers trying to access user-only pages
         if (userRole === 'seller' && isUserRestrictedPage) {
-          return Response.redirect(new URL('/unauthorized', nextUrl.origin)); 
+          return Response.redirect(new URL('/unauthorized', nextUrl.origin));
         }
 
         // Users trying to access seller-only pages
         if (userRole === 'user' && isSellerRestrictedPage) {
-          return Response.redirect(new URL('/unauthorized', nextUrl.origin)); 
+          return Response.redirect(new URL('/unauthorized', nextUrl.origin));
         }
 
         // If the user is logged in as a seller and tries to access `/users/login`, redirect to `/sellers/login`
-        if (userRole === 'seller' && nextUrl.pathname.startsWith('/users/login')) {
+        if (
+          userRole === 'seller' &&
+          nextUrl.pathname.startsWith('/users/login')
+        ) {
           return Response.redirect(new URL('/sellers/login', nextUrl.origin));
         }
 
         // If the user is logged in as a user and tries to access `/sellers/login`, redirect to `/users/login`
-        if (userRole === 'user' && nextUrl.pathname.startsWith('/sellers/login')) {
+        if (
+          userRole === 'user' &&
+          nextUrl.pathname.startsWith('/sellers/login')
+        ) {
           return Response.redirect(new URL('/users/login', nextUrl.origin));
         }
-        
+
         // Allow access if the user is authorized for the page
         return true;
       }
