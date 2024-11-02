@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
 export const config = {
   matcher: [
@@ -10,57 +10,47 @@ export const config = {
     '/products/:id',
     '/products/cart',
   ],
-};
+}
 
 export async function middleware(request: NextRequest) {
-  console.log('Middleware initializing');
-
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-  });
-  const isLoggedIn = !!token;
-  const userRole = token?.role;
-
-  // Define exact paths restricted by role using RegExp
-  const sellerRestrictedPaths = [
-    // Seller allowed
-    /^\/products\/listing$/,
-    /^\/products\/create$/,
-    /^\/products\/\d+\/edit$/,
-  ];
-  const userRestrictedPaths = [
-    /^\/products\/?$/,
-    /^\/products\/\d+$/,
-    /^\/products\/cart$/,
-  ];
-
-  const isSellerRestrictedPage = sellerRestrictedPaths.some((path) =>
-    path.test(request.nextUrl.pathname)
-  );
-  const isUserRestrictedPage = userRestrictedPaths.some((path) =>
-    path.test(request.nextUrl.pathname)
-  );
+  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET })
+  const isLoggedIn = !!token
+  const userRole = token?.role
 
   if (!isLoggedIn) {
     // Redirect to the appropriate login page based on requested path
     const loginUrl = new URL(
-      isSellerRestrictedPage ? '/sellers/login' : '/users/login',
+      request.nextUrl.pathname.includes('/listing') || 
+      request.nextUrl.pathname.includes('/create') || 
+      request.nextUrl.pathname.includes('/edit')
+        ? '/sellers/login'
+        : '/users/login',
       request.url
-    );
-    loginUrl.searchParams.set('callbackUrl', request.url);
-    return NextResponse.redirect(loginUrl);
+    )
+    loginUrl.searchParams.set('callbackUrl', request.url)
+    return NextResponse.redirect(loginUrl)
   }
 
-  // Ensure sellers can only access seller pages
-  if (userRole === 'seller' && !isSellerRestrictedPage) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Block seller from user pages
+  // Restrict access based on user role
+  if (userRole === 'seller') {
+    // Sellers are allowed to access listing, create, and edit pages
+    const sellerAllowedPaths = [
+      '/products/listing',
+      '/products/create',
+      `/products/${request.nextUrl.searchParams.get('id')}/edit`,
+    ]
+    if (!sellerAllowedPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
+    }
   }
 
-  // Ensure users can only access user pages
-  if (userRole === 'user' && !isUserRestrictedPage) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Block user from seller pages
+  if (userRole === 'user') {
+    // Users are allowed to access product list, specific product, and cart pages
+    const userAllowedPaths = ['/products', '/products/:id', '/products/cart']
+    if (!userAllowedPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
+    }
   }
 
-  return NextResponse.next(); // Allow access if role is appropriate
+  return NextResponse.next()
 }
