@@ -1,16 +1,12 @@
 'use client';
 
 import '@/app/ui/sellers/sellers.css';
-import Image from 'next/image';
+
 import { authenticateSeller } from '@/app/lib/actions'; // TODO Get a seller version
 import { useActionState, useState } from 'react';
 import Link from 'next/link';
 
-import { signIn } from 'next-auth/react';
-
 export default function SellerLogin() {
-  const [email, changeEmail] = useState('');
-  const [password, changePassword] = useState('');
   const [errorMessage, formAction, isPending] = useActionState(
     authenticateSeller,
     undefined

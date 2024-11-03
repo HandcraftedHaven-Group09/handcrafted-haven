@@ -7,8 +7,7 @@ import {
   Product,
   Seller,
 } from '@prisma/client';
-import { blob } from 'stream/consumers';
-import { fetchExternalImage } from 'next/dist/server/image-optimizer';
+
 import { createImage } from '@/app/lib/data';
 import bcrypt from 'bcrypt';
 

@@ -1,5 +1,5 @@
-import { PrismaClient, Product, Seller, Image, UserList } from '@prisma/client';
-import { list, put } from '@vercel/blob';
+import { PrismaClient, Product } from '@prisma/client';
+import { put } from '@vercel/blob';
 const prisma = new PrismaClient();
 import bcrypt from 'bcrypt';
 
@@ -338,4 +338,13 @@ export async function deleteUser(userId: number) {
   console.log('In data', userId);
   const result = await prisma.user.delete({ where: { id: userId } });
   console.log('RESULTS', result);
+}
+
+export async function getReviewsByProductId(productId: number) {
+  const ratings = await prisma.review.findMany({
+    where: {
+      productId: productId,
+    },
+  });
+  return ratings;
 }

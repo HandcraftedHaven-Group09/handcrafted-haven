@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { fetchProductById } from '@/app/lib/actions';
 import styles from '@/app/products/[id]/product_details.module.css';
 import BackButton from '@/app/ui/product/components/back_button';
+import RatingsBox from './rating/ratings-box';
+import { useSession } from 'next-auth/react';
 
 type Review = {
   id: number;
@@ -34,6 +36,7 @@ type Props = {
 export default function IndividualProduct({ id }: Props) {
   const [product, setProduct] = useState<Product | null>(null);
 
+  const session = useSession();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -77,6 +80,12 @@ export default function IndividualProduct({ id }: Props) {
         <p>Average Rating: {product.averageRating} / 5</p>
 
         {/* Comment section */}
+        <RatingsBox
+          productId={product.id}
+          // productId={1}
+          userId={session.data?.user.id || 1}
+          // userId={1}
+        />
         <div className={styles.commentsSection}>
           <h2>Comments</h2>
           {product.Reviews.length > 0 ? (

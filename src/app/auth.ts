@@ -6,7 +6,6 @@ import { z } from 'zod';
 import type { User, Seller } from '@prisma/client';
 import { getUserByEmail, getSellerByEmail } from '@/app/lib/data';
 import bcrypt from 'bcrypt';
-import { AdapterUser } from 'next-auth/adapters';
 
 async function getUser(email: string): Promise<User | undefined> {
   try {

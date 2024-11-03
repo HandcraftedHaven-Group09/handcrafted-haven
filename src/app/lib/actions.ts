@@ -16,13 +16,11 @@ import {
   updateUserById,
   UpdateUserData,
   deleteUser,
+  getReviewsByProductId,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
 import { AuthError } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { describe } from 'node:test';
-import { execSync } from 'node:child_process';
 import { redirect } from 'next/navigation';
 
 // For creating a new image record with new image
@@ -640,4 +638,9 @@ export async function putUserById(
 export async function removeUser(userId: number) {
   console.log('DELETING USER');
   deleteUser(userId);
+}
+
+export async function fetchReviewsByProductId(productId: number) {
+  const reviews = getReviewsByProductId(productId);
+  return reviews;
 }

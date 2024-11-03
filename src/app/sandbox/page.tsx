@@ -3,7 +3,6 @@
 import {
   postImage,
   CreateImageState,
-  UserSignupFormState,
   fetchSellerAll,
   fetchProductAll,
   fetchUserListAll,
@@ -11,11 +10,9 @@ import {
 } from '../lib/actions';
 import Burger from '../ui/burger-button/burger-button';
 import { useActionState, useEffect, useState } from 'react';
-import { SessionProvider, useSession } from 'next-auth/react';
-import { getUserListById } from '../lib/data';
+import { useSession } from 'next-auth/react';
+
 import { UserList } from '@prisma/client';
-import { text } from 'stream/consumers';
-import { url } from 'inspector';
 
 export default function Page() {
   const { data: session, status } = useSession();
