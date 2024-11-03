@@ -3,6 +3,7 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import React from 'react';
+import ProductListing from '@/app/ui/product/listing_page';
 
 // This Define the Product type
 interface Product {
@@ -68,9 +69,9 @@ const SellerProfile = () => {
         gap: '1rem',
       }}
     >
-      <h1 style={{ color: 'var(--primary-fg)' }}>
+      <h2 style={{ color: 'var(--primary-fg)' }}>
         Welcome, {session.user.name}!
-      </h1>
+      </h2>
       <h2>Your Seller Profile</h2>
       <div
         style={{
@@ -80,7 +81,9 @@ const SellerProfile = () => {
           boxShadow: '0 .1rem .5rem rgba(0,0,0,.2)',
         }}
       >
-        <h3>Add a Product</h3>
+        <h3>Bio</h3>
+
+        {/* <h3>Add a Product</h3>
 
         <label>Product Description:</label>
         <textarea
@@ -125,7 +128,7 @@ const SellerProfile = () => {
           ))}
         </div>
 
-        <button onClick={handleAddProduct}>Add Product</button>
+        <button onClick={handleAddProduct}>Add Product</button> */}
       </div>
       <div
         style={{
@@ -135,8 +138,9 @@ const SellerProfile = () => {
           boxShadow: '0 .1rem .5rem rgba(0,0,0,.2)',
         }}
       >
-        <h3>Your Products:</h3>
-        <ul>
+        {/* <h3>Your Products:</h3> */}
+        <ProductListing />
+        {/* <ul>
           {products.map((product, index) => (
             <li key={index}>
               <strong>Description:</strong> {product.description} <br />
@@ -146,7 +150,7 @@ const SellerProfile = () => {
           ))}
         </ul>
 
-        <h3>Total Products: {products.length}</h3>
+        <h3>Total Products: {products.length}</h3> */}
       </div>
 
       <button onClick={() => signOut()}>Sign Out</button>
