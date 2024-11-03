@@ -2,7 +2,7 @@
 
 import { put } from '@vercel/blob';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Seller } from '@prisma/client';
 const prisma = new PrismaClient();
 import {
   createImage,
@@ -16,6 +16,7 @@ import {
   updateUserById,
   UpdateUserData,
   deleteUser,
+  getSellerById,
 } from './data';
 // import { signIn } from 'next-auth/react';
 import { signIn } from '../auth';
@@ -640,4 +641,16 @@ export async function putUserById(
 export async function removeUser(userId: number) {
   console.log('DELETING USER');
   deleteUser(userId);
+}
+
+export async function fetchSellerById(
+  sellerId: number
+): Promise<Seller | null> {
+  try {
+    const seller = await getSellerById(sellerId);
+    return seller;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }

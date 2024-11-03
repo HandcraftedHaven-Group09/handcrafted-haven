@@ -1,10 +1,14 @@
-import { User } from '@prisma/client';
+import { Seller } from '@prisma/client';
 import { getImageById } from '@/app/lib/data';
-import './users.css';
+import '@/app/sellers/seller.css';
 import NextImage from 'next/image';
 
-export default async function SellerBio({ userData }: { userData: User }) {
-  const profilePic = await getImageById(userData.profilePictureId || 1);
+export default async function SellerBio({
+  sellerData,
+}: {
+  sellerData: Seller;
+}) {
+  const profilePic = await getImageById(sellerData.profilePictureId || 1);
 
   return (
     <section className="bio-card">
@@ -16,14 +20,14 @@ export default async function SellerBio({ userData }: { userData: User }) {
         unoptimized
       ></NextImage>
       <div className="bio-info">
-        <h3>{userData.displayName}</h3>
+        <h3>{sellerData.displayName}</h3>
         <dl>
           <dt>First Name</dt>
-          <dd>{userData.firstName}</dd>
+          <dd>{sellerData.firstName}</dd>
           <dt>Last Name</dt>
-          <dd>{userData.lastName}</dd>
+          <dd>{sellerData.lastName}</dd>
         </dl>
-        <p>{userData.bio}</p>
+        <p>{sellerData.bio}</p>
       </div>
     </section>
   );

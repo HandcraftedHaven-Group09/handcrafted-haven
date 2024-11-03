@@ -4,6 +4,9 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ProductListing from '@/app/ui/product/listing_page';
+// import SellerBio from '../ui/sellers/seller-bio';
+import { fetchSellerById } from '../lib/actions';
+import { Seller } from '@prisma/client';
 
 // This Define the Product type
 interface Product {
@@ -18,9 +21,14 @@ const SellerProfile = () => {
   const [productCategory, setProductCategory] = useState('');
   const [products, setProducts] = useState<Product[]>([]); // This explicitly defines the state type
   const [productImages, setProductImages] = useState<string[]>([]); // Assuming images are URLs
+  const [sellerData, setSellerData] = useState<Seller | null>(null);
 
   useEffect(() => {
     // This will clean up image URLs on unmount to prevent memory leaks
+    fetchSellerById(session?.user.id | 0).then((fetchedSeller) => {
+      setSellerData(fetchedSeller);
+    });
+
     return () => {
       productImages.forEach((imageUrl) => URL.revokeObjectURL(imageUrl));
     };
@@ -82,6 +90,20 @@ const SellerProfile = () => {
         }}
       >
         <h3>Bio</h3>
+        <dl>
+          <dl>Display Name</dl>
+          <dd>{sellerData?.displayName || ''}</dd>
+          <dl>First Name</dl>
+          <dd>{sellerData?.firstName || ''}</dd>
+          <dl>Last Name</dl>
+          <dd>{sellerData?.lastName || ''}</dd>
+        </dl>
+        <p
+          style={{ backgroundColor: 'rgba(255,255,255,.5)', padding: '.5rem' }}
+        >
+          {sellerData?.bio || 'No Bio'}
+        </p>
+        {/* <SellerBio> */}
 
         {/* <h3>Add a Product</h3>
 
